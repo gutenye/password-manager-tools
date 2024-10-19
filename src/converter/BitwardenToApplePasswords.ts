@@ -1,5 +1,3 @@
-#!/usr/bin/env bun
-
 import fs from 'node:fs/promises'
 import { groupBy, orderBy, partition } from 'lodash-es'
 import Papa from 'papaparse'
@@ -11,8 +9,6 @@ export class BitwardenToApplePasswords {
   async convert(input: string, output: string) {
     const items = await this.read(input)
     const csv = Papa.unparse(items)
-    console.log(':: write', output)
-    console.log(':: output', csv)
     await fs.writeFile(output, csv)
   }
 
@@ -41,7 +37,6 @@ export class BitwardenToApplePasswords {
               return { originInfo }
             }
           })
-          // `${url.protocol}//${url.host}`,
           const [validUrlItems, invalidUrlItems] = partition(urlItems, (urlItem) => urlItem.cleanUrl)
           const [firstUrlItems, ...restUrlItemsItems] = orderBy(
             Object.values(groupBy(validUrlItems, 'domainInfo.domain')),
@@ -62,7 +57,6 @@ export class BitwardenToApplePasswords {
               URL: urlItem.cleanUrl,
               Notes: notes,
             }
-            console.log(output)
             outputs.push(output)
           }
           console.log(':: restUrlItems', restUrlItems)
@@ -70,7 +64,6 @@ export class BitwardenToApplePasswords {
             ':: invalidUrlItems',
             invalidUrlItems.map((v) => v.originInfo.uri),
           )
-          // processLogin(item)
           break
         }
         default: {

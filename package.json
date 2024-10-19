@@ -1,7 +1,19 @@
 {
   "name": "@gutenye/password-manager-tools",
   "version": "0.0.1",
-  "description": "A tool to move/import passwords from one password manager to another, supports Bitwarden, Apple Passwords/iCloud Keychain.",
+  "description": "Easily move/transfer/import/convert passwords from one password manager to another, including Bitwarden and Apple Passwords/iCloud Keychain.",
+  "keywards": [
+    "move passwords",
+    "transfer passwords",
+    "import passwords",
+    "export passwords",
+    "convert passwords",
+    "password manager",
+    "bitwarden",
+    "apple passwords",
+    "icloud keychain",
+    "apple icloud"
+  ],
   "license": "MIT",
   "repository": "github:gutenye/password-manager-tools",
   "type": "module",

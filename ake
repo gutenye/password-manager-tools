@@ -1,5 +1,7 @@
 #!/usr/bin/env nu
 
+# ./cli ..
+
 def help [] {
   $'
 cmd # test 
@@ -19,7 +21,6 @@ def main [
   echo ...$args
 }
 
-def 'main cmd' [] {
-  bun ./bin/password-manager-tools.ts ./src/__tests__/fixtures/bitwarden.json data/output.csv
+def 'main test manual' [] {
+  ./cli convert bitwarden-to-apple ./src/__tests__/fixtures/bitwarden.json data/output.csv
 }
-

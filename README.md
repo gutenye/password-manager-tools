@@ -1,22 +1,31 @@
 # PasswordManagerTools
 
-> Move passwords from one password manager to another, supports Bitwarden, Apple Passwords/iCloud Keychain.",
+> Easily move passwords from one password manager to another, including Bitwarden, Apple Passwords/iCloud Keychain.
 
-1. Open unencrypted data: `vi -u NONE file`
-2. Test Data: 'Hello1'
+**Note**: Currently, only supports move data from Bitwarden to Apple Passwords.
+
+## Features
+
+- Preserve Bitwarden notes, custom fields, multiple websites, password history
 
 ## Getting Started
 
-### Export Data
+### 1) Export Data
 
-- [Bitwarden export json data](https://bitwarden.com/help/export-your-data)
+- [Bitwarden](https://bitwarden.com/help/export-your-data): export `.json` file
 
-### Convert Data
+- BitWarden export does not contain file attachments.
+
+### 2) Convert Data
+
+- [Install Bun](https://bun.sh/docs/installation)
 
 ```sh
-bunx @gutenye/password-manager-tools convert bitwarden-to-apple input.json output.csv
+bunx @gutenye/password-manager-tools convert bitwarden-to-apple <input.json> <output.csv>
 ```
 
-### Import Data
+### 3) Import Data
 
-- [Apple Passwords import csv data]
+- [Apple Passwords](https://support.apple.com/guide/passwords/import-mchl2f1a184c/1.0/mac): import `.csv` file
+
+- Multiple websites with same domain are handled correctly, with differnt domains, open the Apple Passwords app to edit it manually.

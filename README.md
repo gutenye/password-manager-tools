@@ -15,7 +15,7 @@
 ### Convert Data
 
 ```sh
-bunx password-manager-tools bitwarden-to-apple input.json output.csv
+bunx @gutenye/password-manager-tools convert bitwarden-to-apple input.json output.csv
 ```
 
 ### Import Data

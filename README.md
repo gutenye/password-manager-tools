@@ -6,7 +6,10 @@
 
 ## Features
 
-- Preserve Bitwarden notes, custom fields, multiple websites, password history
+- Comprehensive Data Preservation: transfer all Bitwarden notes, custom fields, multiple URLs, and password history.
+- Selective Transfer (TODO): Filter passwords by name or URL to move only what you need.
+- In-Depth End Report (TODO): Receive a detailed summary highlighting items not moved and guidance for manual fixes.
+- Encrypted Bitwarden File Support (TODO): Ensure secure transfers with support for encrypted Bitwarden files.
 
 ## Getting Started
 

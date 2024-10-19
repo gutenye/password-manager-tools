@@ -1,6 +1,6 @@
 # PasswordManagerTools
 
-> Easily move passwords from one password manager to another, including Bitwarden, Apple Passwords/iCloud Keychain.
+> Easily transfer passwords from one password manager to another, including Bitwarden, Apple Passwords/iCloud Keychain.
 
 **Note**: Currently, only supports move data from Bitwarden to Apple Passwords.
 

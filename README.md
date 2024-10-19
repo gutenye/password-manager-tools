@@ -1,10 +1,9 @@
 # PasswordManagerTools
 
-> Import and export data between different password managers, Bitwarden, Apple Passwords, iCloud Keychain
+> Move passwords from one password manager to another, supports Bitwarden, Apple Passwords/iCloud Keychain.",
 
 1. Open unencrypted data: `vi -u NONE file`
 2. Test Data: 'Hello1'
-
 
 ## Getting Started
 

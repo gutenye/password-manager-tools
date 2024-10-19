@@ -1,13 +1,18 @@
 {
   "name": "@gutenye/password-manager-tools",
   "version": "0.0.1",
-  "module": "index.ts",
+  "description": "A tool to move/import passwords from one password manager to another, supports Bitwarden, Apple Passwords/iCloud Keychain.",
+  "license": "MIT",
+  "repository": "github:gutenye/password-manager-tools",
   "type": "module",
+  "bin": "src/cli/cli.ts",
+  "files": ["tsconfig.json", "src", "!__tests__"],
   "scripts": {
     "test": "bun test"
   },
-  "bin": "src/cli/cli.ts",
-  "files": ["tsconfig.json", "src", "!__tests__"],
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
   "dependencies": {
     "ink": "^5.0.1",
     "lodash-es": "^4.17.21",
@@ -16,9 +21,6 @@
     "react": "^18.3.1",
     "tldts": "^6.1.52",
     "zod": "^3.23.8"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

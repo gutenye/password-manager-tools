@@ -1,0 +1,23 @@
+{
+  "name": "password-manager-tools",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "bun test"
+  },
+  "files": ["src", "bin", "!__tests__"],
+  "dependencies": {
+    "lodash-es": "^4.17.21",
+    "papaparse": "^5.4.1",
+    "tldts": "^6.1.52"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/bun": "latest",
+    "@types/lodash-es": "^4.17.12",
+    "@types/papaparse": "^5.3.15"
+  }
+}

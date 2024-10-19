@@ -1,0 +1,25 @@
+#!/usr/bin/env nu
+
+def help [] {
+  $'
+cmd # test 
+  '
+  | str trim
+}
+
+def main [
+  -h
+  ...args: string
+] {
+  if $h {
+    help | less --RAW-CONTROL-CHARS
+    return
+  }
+
+  echo ...$args
+}
+
+def 'main cmd' [] {
+  bun ./bin/password-manager-tools.ts ./src/__tests__/fixtures/bitwarden.json data/output.csv
+}
+

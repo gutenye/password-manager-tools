@@ -5,7 +5,8 @@
   "scripts": {
     "test": "bun test"
   },
-  "files": ["src", "bin", "!__tests__"],
+  "bin": "src/cli/cli.ts",
+  "files": ["tsconfig.json", "src", "!__tests__"],
   "dependencies": {
     "ink": "^5.0.1",
     "lodash-es": "^4.17.21",

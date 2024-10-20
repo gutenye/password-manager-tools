@@ -6,10 +6,11 @@
 
 ## Features
 
-- Comprehensive Data Preservation: transfer all Bitwarden notes, custom fields, multiple URLs, and password history.
+- Comprehensive Data Preservation: transfer everything, all Bitwarden notes, custom fields, multiple URLs, and password history.
 - Selective Transfer (TODO): Filter passwords by name or URL to move only what you need.
+- Incremental Transfer (TODO): Move passwords in batches at your convenience, with remaining passwords securely stored for seamless future transfers until all are moved.
+- Reverse Transfer (TODO): Seamlessly transfer passwords from Apple Passwords back to Bitwarden, while accurately setting custom fields, multiple URLs, and maintaining password history to ensure data integrity.
 - In-Depth End Report (TODO): Receive a detailed summary highlighting items not moved and guidance for manual fixes.
-- Encrypted Bitwarden File Support (TODO): Ensure secure transfers with support for encrypted Bitwarden files.
 
 ## Getting Started
 

@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "ink": "^5.0.1",
+    "invariant": "^2.2.4",
     "lodash-es": "^4.17.21",
     "papaparse": "^5.4.1",
     "pastel": "^3.0.0",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/bun": "latest",
+    "@types/invariant": "^2.2.37",
     "@types/lodash-es": "^4.17.12",
     "@types/papaparse": "^5.3.15",
     "@types/react": "^18.3.11"

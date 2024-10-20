@@ -1,6 +1,6 @@
-export type Export = Array<Item>
+export type Root = Array<Item>
 
-export interface Item {
+export type Item = {
   Title?: string
   URL?: string
   Username?: string

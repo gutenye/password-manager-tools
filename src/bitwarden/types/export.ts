@@ -1,6 +1,6 @@
 import { invert } from 'lodash-es'
 
-export interface Export {
+export interface Root {
   encrypted: boolean
   folders?: Array<Folder>
   collections?: Array<Collection>
@@ -45,6 +45,10 @@ export interface LoginItem extends BaseItem {
     password?: string
     totp?: string
     uris: Array<Uri>
+    __sameHostnames__?: {
+      value: string[]
+      hasMore: boolean
+    }
     fido2Credentials: []
   }
 }
@@ -124,7 +128,7 @@ export interface PasswordHistory {
 }
 
 export interface Uri {
-  match: UriMatch | null
+  match: TUriMatch
   uri: string
 }
 
@@ -140,4 +144,4 @@ export const UriMatch = {
 
 export type TUriMatch = (typeof UriMatch)[keyof typeof UriMatch]
 
-export const UriMatchReverse = invert(UriMatch)
+export const UriMatchReverse = invert(UriMatch) as { null: string; [key: number]: string }

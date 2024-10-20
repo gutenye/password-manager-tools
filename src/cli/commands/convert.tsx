@@ -2,7 +2,7 @@ import { Text } from 'ink'
 import { argument } from 'pastel'
 import React, { useState, useEffect } from 'react'
 import zod from 'zod'
-import { BitwardenToApplePasswords } from '#/converter'
+import { getConverter } from '#/converter'
 
 export const options = zod.object({
   name: zod.string().describe('Describe1').default('default1'),
@@ -22,22 +22,15 @@ type Props = {
 }
 
 export default function Convert({ options, args }: Props) {
-  const [type, input, output] = args
+  const [name, input, output] = args
   const [result, setResult] = useState('')
 
   useEffect(() => {
     ;(async () => {
-      switch (type) {
-        case 'bitwarden-to-apple': {
-          await new BitwardenToApplePasswords().convert(input, output)
-          setResult(`\noutput '${output}'`)
-          break
-        }
-        default:
-          throw new Error(`app1-to-app2 '${type}' is not supported`)
-      }
+      await getConverter(name)(input, output)
+      setResult(`\noutput '${output}'`)
     })()
-  }, [setResult])
+  }, [input, output, name])
 
   return <Text>{result || 'converting'}</Text>
 }

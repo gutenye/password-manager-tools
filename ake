@@ -4,7 +4,7 @@
 
 def help [] {
   $'
-cmd # test 
+test manual
   '
   | str trim
 }

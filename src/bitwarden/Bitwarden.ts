@@ -26,11 +26,41 @@ export class Bitwarden {
   }
 
   normalize() {
-    this.normalizeUris()
+    this.#normalizeUris()
+  }
+
+  serializeRest(item: BitwardenExport.Item) {
+    const outs = []
+    outs.push(this.#serializeSection('FIELDS', this.#seriaizeFields(item.fields)))
+    outs.push(this.#serializeSection('NOTES', this.#serializeNotes(item.notes)))
+    outs.push(this.#serializeSection('PASSWORD_HISTORY', this.#serializePasswordHistory(item.passwordHistory)))
+    if (item.type === BitwardenExport.ItemType.Login && item.login.__sameHostnames__?.hasMore) {
+      outs.push(this.#serializeSection('URIS', this.#serializeUris(item.login.uris)))
+    }
+    return outs.join('\n\n')
+  }
+
+  includeUris(domains: string[]) {
+    const parts = partition(this.#root.items, (item) => {
+      return (
+        item.type === BitwardenExport.ItemType.Login &&
+        item.login.uris.some((uriItem) => {
+          return domains.some((domain) => uriItem.uri.includes(domain))
+        })
+      )
+    })
+    return parts.map((items) => {
+      return items.length > 0 ? new Bitwarden({ ...this.#root, items }) : null
+    })
+  }
+
+  async export(output: string) {
+    const json = JSON.stringify(this.#root, null, 2)
+    await fs.writeFile(output, json)
   }
 
   // add __sameHostnames__
-  normalizeUris() {
+  #normalizeUris() {
     const supportedUriMatches = [
       BitwardenExport.UriMatch.Default,
       BitwardenExport.UriMatch.BaseDomain,
@@ -72,25 +102,14 @@ export class Bitwarden {
     }
   }
 
-  serializeRest(item: BitwardenExport.Item) {
-    const outs = []
-    outs.push(this.serializeSection('FIELDS', this.seriaizeFields(item.fields)))
-    outs.push(this.serializeSection('NOTES', this.serializeNotes(item.notes)))
-    outs.push(this.serializeSection('PASSWORD_HISTORY', this.serializePasswordHistory(item.passwordHistory)))
-    if (item.type === BitwardenExport.ItemType.Login && item.login.__sameHostnames__?.hasMore) {
-      outs.push(this.serializeSection('URIS', this.serializeUris(item.login.uris)))
-    }
-    return outs.join('\n\n')
-  }
-
-  serializeSection(title: string, value: string) {
+  #serializeSection(title: string, value: string) {
     if (!value) {
       return ''
     }
     return `# ${title} #\n${value}`
   }
 
-  seriaizeFields(fields?: BitwardenExport.Field[]) {
+  #seriaizeFields(fields?: BitwardenExport.Field[]) {
     if (!fields) {
       return ''
     }
@@ -107,11 +126,11 @@ export class Bitwarden {
     return outFields.join('\n')
   }
 
-  serializeNotes(notes?: string) {
+  #serializeNotes(notes?: string) {
     return notes || ''
   }
 
-  serializePasswordHistory(passwordHistory?: BitwardenExport.PasswordHistory[]) {
+  #serializePasswordHistory(passwordHistory?: BitwardenExport.PasswordHistory[]) {
     if (!passwordHistory) {
       return ''
     }
@@ -122,7 +141,7 @@ export class Bitwarden {
       .join('\n')
   }
 
-  serializeUris(uris?: BitwardenExport.Uri[]) {
+  #serializeUris(uris?: BitwardenExport.Uri[]) {
     if (!uris) {
       return ''
     }

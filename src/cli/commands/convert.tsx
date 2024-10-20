@@ -1,11 +1,12 @@
 import { Text } from 'ink'
+import { omit } from 'lodash-es'
 import { argument } from 'pastel'
 import React, { useState, useEffect } from 'react'
 import zod from 'zod'
 import { getConverter } from '#/converter'
 
 export const options = zod.object({
-  name: zod.string().describe('Describe1').default('default1'),
+  includeUris: zod.string().describe('Include domains (example: a.com,b.com)'),
 })
 
 export const args = zod.tuple([
@@ -16,21 +17,27 @@ export const args = zod.tuple([
   zod.string().describe(argument({ name: 'output', description: 'Output file' })),
 ])
 
+export type ConvertOptions = zod.infer<typeof options>
+
 type Props = {
-  options: zod.infer<typeof options>
+  options: ConvertOptions
   args: zod.infer<typeof args>
 }
 
 export default function Convert({ options, args }: Props) {
   const [name, input, output] = args
-  const [result, setResult] = useState('')
+  const [result, setResult] = useState('converting')
 
   useEffect(() => {
     ;(async () => {
-      await getConverter(name)(input, output)
-      setResult(`\noutput '${output}'`)
+      const newOptions = {
+        ...omit(options, 'includeUris'),
+        includeUris: options.includeUris?.split(',') ?? [],
+      }
+      await getConverter(name)(input, output, newOptions)
+      setResult('')
     })()
-  }, [input, output, name])
+  }, [options, input, output, name])
 
-  return <Text>{result || 'converting'}</Text>
+  return <Text>{result}</Text>
 }

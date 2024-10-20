@@ -24,10 +24,23 @@
 
 - [Install Bun](https://bun.sh/docs/installation)
 
+#### One time Transfer
+
 ```sh
 bunx @gutenye/password-manager-tools convert bitwarden-to-apple <input.json> <output.csv>
-  --include-uris a.com,b.com # Selective Transfer
 ```
+
+#### Incremental Transfer
+
+```sh
+cp input.json input.json.bak  # backup orignal file, will be overwritten later
+bunx @gutenye/password-manager-tools encrypt input.json # encrypte the file, to be used in the future
+bunx @gutenye/password-manager-tools convert bitwarden-to-apple input.json output.csv --include-uris a.com,b.com
+#-> creates output.csv
+#-> override input.json, items with url contains a.com or b.com are removed
+```
+
+  --include-uris a.com,b.com # Selective Transfer
 
 ### 3) Import Data
 

@@ -1,8 +1,11 @@
 # PasswordManagerTools
 
-> Easily transfer passwords from one password manager to another, including Bitwarden, Apple Passwords/iCloud Keychain.
+> Easily transfer passwords from Bitwarden to Apple Passwords
 
 **Note: Currently, only supports transfer data from Bitwarden to Apple Passwords.**
+
+TODO:
+	- github actions: test, release
 
 ## Features
 
@@ -52,3 +55,7 @@ bunx @gutenye/password-manager-tools encrypt input.json # you can use the file a
 - [Apple Passwords](https://support.apple.com/guide/passwords/import-mchl2f1a184c/1.0/mac): import `.csv` file
 
 - Multiple websites with same domain are handled correctly, with differnt domains, open the Apple Passwords app to edit it manually.
+
+### Special thanks
+
+- [warden](https://github.com/thewh1teagle/warden): offline bitwarden viewer

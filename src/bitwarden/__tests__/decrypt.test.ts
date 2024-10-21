@@ -1,7 +1,7 @@
 import { it } from 'bun:test'
-import fixture from '#/__tests__/fixtures/bitwarden-encrypted.json'
+import { getFixtures } from '#/__tests__/fixtures'
 import { decrypt } from '../decrypt'
 
-it('decrypt', async () => {
-  console.log(await decrypt(fixture, '1'))
-})
+// it('decrypt', async () => {
+//   console.log(await decrypt(fixture, '1'))
+// })

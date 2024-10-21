@@ -1,7 +1,9 @@
 import type { ConvertOptions as RawConvertOptions } from './convert'
 
-type ConvertOptions = Omit<RawConvertOptions, 'includeUris'> & {
-  includeUris: string[]
-}
+type ConvertOptions = Partial<
+  Omit<RawConvertOptions, 'includeUris'> & {
+    includeUris: string[]
+  }
+>
 
 export type { ConvertOptions }

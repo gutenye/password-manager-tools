@@ -6,7 +6,7 @@ import zod from 'zod'
 import { getConverter } from '#/converter'
 
 export const options = zod.object({
-  includeUris: zod.string().describe('Include domains (example: a.com,b.com)'),
+  includeUris: zod.string().optional().describe('Include domains (example: a.com,b.com)'),
 })
 
 export const args = zod.tuple([
@@ -32,7 +32,7 @@ export default function Convert({ options, args }: Props) {
     ;(async () => {
       const newOptions = {
         ...omit(options, 'includeUris'),
-        includeUris: options.includeUris?.split(',') ?? [],
+        includeUris: options.includeUris?.split(','),
       }
       await getConverter(name)(input, output, newOptions)
       setResult('')

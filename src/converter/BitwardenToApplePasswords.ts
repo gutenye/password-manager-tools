@@ -1,8 +1,9 @@
 import { ApplePasswords } from '#/applePasswords'
 import { Bitwarden } from '#/bitwarden'
+import b from '#/cli/commands/__tests__/a'
 import type { ConvertOptions } from '#/types'
 
-export async function bitwardenToApplePasswords(input: string, output: string, options: ConvertOptions) {
+export async function bitwardenToApplePasswords(input: string, output: string, options: ConvertOptions = {}) {
   const bitwarden = await Bitwarden.import(input)
   let found: Bitwarden | null = bitwarden
   let rest: Bitwarden | null = null

@@ -12,4 +12,4 @@ export function getConverter(name: string) {
   return converter
 }
 
-export type convert = (input: string, output: string, options: ConvertOptions) => Promise<void>
+export type convert = (input: string, output: string, options?: ConvertOptions) => Promise<void>

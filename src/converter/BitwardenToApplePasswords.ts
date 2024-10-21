@@ -1,6 +1,5 @@
 import { ApplePasswords } from '#/applePasswords'
 import { Bitwarden } from '#/bitwarden'
-import b from '#/cli/commands/__tests__/a'
 import type { ConvertOptions } from '#/types'
 
 export async function bitwardenToApplePasswords(input: string, output: string, options: ConvertOptions = {}) {

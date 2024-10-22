@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import { groupBy, orderBy, partition } from 'lodash-es'
 import tldts from 'tldts'
 import { BitwardenExport } from '#/types'
+import { omitByDeep } from '#/utils'
 
 export class Bitwarden {
   static async import(input: string) {
@@ -55,8 +56,10 @@ export class Bitwarden {
   }
 
   async export(output: string) {
-    // remove __ hacks
-    const json = JSON.stringify(this.#root, null, 2)
+    const newRoot = omitByDeep(this.#root, (_, key) => {
+      return Boolean(key.match(/^__.*__$/))
+    })
+    const json = JSON.stringify(newRoot, null, 2)
     await fs.writeFile(output, json)
   }
 

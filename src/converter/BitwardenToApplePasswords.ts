@@ -15,12 +15,11 @@ export async function bitwardenToApplePasswords(input: string, output: string, o
     console.log('error: no items found')
     return
   }
-  const applePasswords = await ApplePasswords.from(bitwarden)
+  const applePasswords = await ApplePasswords.from(found)
   await applePasswords.export(output)
   console.log(`output: '${output}'`)
   if (rest) {
-    const restOutput = input.replace('.json', '-rest.json')
-    await rest.export(restOutput)
-    console.log(`output:' ${restOutput}'`)
+    await rest.export(input)
+    console.log(`overwrite: '${input}'`)
   }
 }

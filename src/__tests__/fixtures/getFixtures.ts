@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import nodePath from 'node:path'
+import Papa from 'papaparse'
 
 export async function getFixtures() {
   const fixtures: Fixtures = {}
@@ -8,7 +9,7 @@ export async function getFixtures() {
     const { name, ext } = nodePath.parse(filename)
     const path = `${__dirname}/${filename}`
     const text = await fs.readFile(path, 'utf8')
-    const data = ext === '.json' ? JSON.parse(text) : text
+    const data = ext === '.json' ? JSON.parse(text) : ext === '.csv' ? Papa.parse(text, { header: true }).data : text
     fixtures[name] = { text, data }
   }
   return fixtures

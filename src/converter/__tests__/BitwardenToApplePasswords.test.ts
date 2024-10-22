@@ -19,11 +19,12 @@ afterEach(() => {
 })
 
 it('convert all passwords', async () => {
-  const output = await runConvert(fixtures.bitwarden.data)
-  expect(output).toEqual(fixtures.applePasswords.text)
+  const { output, rest } = await runConvert(fixtures.bitwarden.data)
+  expect(output).toEqual(fixtures.applePasswords.data)
+  expect(rest).toEqual(null)
 })
 
-it.only('convert selected passwords', async () => {
+it('convert selected passwords', async () => {
   const data = {
     items: [
       {
@@ -62,7 +63,7 @@ async function runConvert(input: any, options: ConvertOptions = {}) {
   const output = Papa.parse(outputText, { header: true }).data as ApplePasswordsExport.Root
 
   const restText = (await fs.readFile('/input.json', 'utf8')) as string
-  const rest = JSON.parse(restText) as BitwardenExport.Root
+  const rest = restText ? (JSON.parse(restText) as BitwardenExport.Root) : null
 
   return { output, rest }
 }

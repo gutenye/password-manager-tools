@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises'
 import { ApplePasswords } from '#/applePasswords'
 import { Bitwarden } from '#/bitwarden'
 import type { ConvertOptions } from '#/types'
@@ -20,6 +21,8 @@ export async function bitwardenToApplePasswords(input: string, output: string, o
   console.log(`output: '${output}'`)
   if (rest) {
     await rest.export(input)
-    console.log(`overwrite: '${input}'`)
+  } else {
+    await fs.writeFile(input, '')
   }
+  console.log(`overwrite: '${input}'`)
 }

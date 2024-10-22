@@ -4,9 +4,6 @@
 
 **Note: Currently, only supports transfer data from Bitwarden to Apple Passwords.**
 
-TODO:
-	- github actions: test, release
-
 ## Features
 
 - Comprehensive Data Preservation: transfer everything, all Bitwarden notes, custom fields, multiple URLs, and password history.

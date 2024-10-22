@@ -37,7 +37,7 @@ export class Bitwarden {
     if (item.type === BitwardenExport.ItemType.Login && item.login.__sameHostnames__?.hasMore) {
       outs.push(this.#serializeSection('URIS', this.#serializeUris(item.login.uris)))
     }
-    return outs.join('\n\n')
+    return outs.filter(Boolean).join('\n\n')
   }
 
   includeUris(domains: string[]) {
@@ -55,6 +55,7 @@ export class Bitwarden {
   }
 
   async export(output: string) {
+    // remove __ hacks
     const json = JSON.stringify(this.#root, null, 2)
     await fs.writeFile(output, json)
   }
@@ -77,13 +78,13 @@ export class Bitwarden {
                 const domainInfo = tldts.parse(originInfo.uri)
                 return { hostname: urlInfo.hostname, domain: domainInfo.domain }
               } catch {
-                return {}
+                return
               }
             } else {
-              return {}
+              return
             }
           })
-          const [validUrlItems, invalidUrlItems] = partition(urlItems, (urlItem) => urlItem.hostname) as unknown as [
+          const [validUrlItems, invalidUrlItems] = partition(urlItems, (urlItem) => urlItem?.hostname) as unknown as [
             { hostname: string; domain: string }[],
             { hostname: undefined }[],
           ]

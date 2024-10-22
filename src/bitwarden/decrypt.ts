@@ -5,7 +5,8 @@ export async function decrypt(input: Record<string, any>, password: string) {
   const master = await pbkdf2(password, salt, 'sha256', Number(kdfIterations))
   const stretchedKey = await hkdfExpand(master, 'enc', 32, 'sha256')
   const stretchedMacKey = await hkdfExpand(master, 'mac', 32, 'sha256')
-  return await decryptCipherString(data, stretchedKey, stretchedMacKey)
+  const decrypted = await decryptCipherString(data, stretchedKey, stretchedMacKey)
+  return JSON.parse(decrypted)
 }
 
 async function pbkdf2(password: string, salt: string, algorithm: string, iterations: number) {

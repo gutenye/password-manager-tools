@@ -1,24 +1,15 @@
-import { afterEach, beforeAll, expect, it, mock } from 'bun:test'
+import { expect, it } from 'bun:test'
 import { partition } from 'lodash-es'
 import memfs from 'memfs'
 import Papa from 'papaparse'
-import { createApplePasswords, createBitwarden, getFixtures } from '#/__tests__/fixtures'
+import { createApplePasswords, createBitwarden } from '#/__tests__/fixtures'
 import type { ApplePasswordsExport, BitwardenExport, ConvertOptions, Fixtures } from '#/types'
 import { bitwardenToApplePasswords } from '../BitwardenToApplePasswords'
 
 const fs = memfs.fs.promises
-let fixtures: Fixtures
-
-beforeAll(async () => {
-  fixtures = await getFixtures()
-  mock.module('node:fs/promises', () => ({ default: fs }))
-})
-
-afterEach(() => {
-  memfs.vol.reset()
-})
 
 it('convert all passwords', async () => {
+  const { fixtures } = globalThis.__TEST__
   const { output, rest } = await runConvert(fixtures.bitwarden.data)
   expect(output).toEqual(fixtures.applePasswords.data)
   expect(rest).toEqual(null)

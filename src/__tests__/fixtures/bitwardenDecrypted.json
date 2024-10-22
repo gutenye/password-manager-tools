@@ -1,0 +1,29 @@
+{
+  "encrypted": false,
+  "folders": [],
+  "items": [
+    {
+      "passwordHistory": null,
+      "revisionDate": "2024-10-20T22:06:02.886Z",
+      "creationDate": "2024-10-20T22:06:02.886Z",
+      "deletedDate": null,
+      "id": "9cf12332-3a8b-46ec-99b9-b20f016c35c4",
+      "organizationId": null,
+      "folderId": null,
+      "type": 1,
+      "reprompt": 1,
+      "name": "HelloLogin1",
+      "notes": "notes1",
+      "favorite": false,
+      "fields": [{ "name": "field1", "value": "value1", "type": 0, "linkedId": null }],
+      "login": {
+        "fido2Credentials": [],
+        "uris": [{ "match": null, "uri": "a.com" }],
+        "username": "username1",
+        "password": "password1",
+        "totp": null
+      },
+      "collectionIds": null
+    }
+  ]
+}

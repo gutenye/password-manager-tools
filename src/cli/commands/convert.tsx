@@ -1,4 +1,6 @@
-import { Text } from 'ink'
+import { Box, Text } from 'ink'
+import { useInput } from 'ink'
+import TextInput, { UncontrolledTextInput } from 'ink-text-input'
 import { omit } from 'lodash-es'
 import { argument } from 'pastel'
 import React, { useState, useEffect } from 'react'
@@ -25,7 +27,7 @@ type Props = {
 }
 
 export default function Convert({ options, args }: Props) {
-  const [name, input, output] = args
+  const [name, inputPath, outputPath] = args
   const [result, setResult] = useState('converting')
 
   useEffect(() => {
@@ -34,10 +36,14 @@ export default function Convert({ options, args }: Props) {
         ...omit(options, 'includeUris'),
         includeUris: options.includeUris?.split(','),
       }
-      await getConverter(name)(input, output, newOptions)
+      await getConverter(name)(inputPath, outputPath, newOptions)
       setResult('')
     })()
-  }, [options, input, output, name])
+  }, [options, inputPath, outputPath, name])
 
-  return <Text>{result}</Text>
+  return (
+    <Box>
+      <Text>{result || 'loading'}</Text>
+    </Box>
+  )
 }

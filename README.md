@@ -16,7 +16,7 @@
 
 ### 1) Export Data
 
-- [Bitwarden](https://bitwarden.com/help/export-your-data): export `.json` file
+- [Bitwarden](https://bitwarden.com/help/export-your-data): export `.json` file, supports both encrypted and unencrypted format.
 
 - BitWarden export does not contain file attachments.
 

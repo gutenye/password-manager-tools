@@ -2,31 +2,26 @@ const { crypto } = globalThis
 
 export async function decrypt(input: Record<string, any>, password: string) {
   const { salt, kdfIterations, data } = input
-  const master = await pbkdf2(password, salt, 'sha256', Number(kdfIterations))
-  const stretchedKey = await hkdfExpand(master, 'enc', 32, 'sha256')
-  const stretchedMacKey = await hkdfExpand(master, 'mac', 32, 'sha256')
+  const masterKey = await pbkdf2(password, salt, 'sha256', Number(kdfIterations))
+  const stretchedKey = await hkdfExpand(masterKey, 'enc', 32, 'sha256')
+  const stretchedMacKey = await hkdfExpand(masterKey, 'mac', 32, 'sha256')
   const decrypted = await decryptCipherString(data, stretchedKey, stretchedMacKey)
   return JSON.parse(decrypted)
 }
 
+// derive password to key
 async function pbkdf2(password: string, salt: string, algorithm: string, iterations: number) {
   const wcLen = algorithm === 'sha256' ? 256 : 512
-  const passwordBuf = toBuf(password)
-  const saltBuf = toBuf(salt)
-
+  const passwordBuf = Buffer.from(password)
+  const saltBuf = Buffer.from(salt)
   const pbkdf2Params = {
     name: 'PBKDF2',
     salt: saltBuf,
     iterations: iterations,
     hash: { name: toWebCryptoAlgorithm(algorithm) },
   }
-
   const impKey = await crypto.subtle.importKey('raw', passwordBuf, { name: 'PBKDF2' }, false, ['deriveBits'])
   return await crypto.subtle.deriveBits(pbkdf2Params, impKey, wcLen)
-}
-
-function toBuf(value: string) {
-  return fromUtf8ToArray(value).buffer as ArrayBuffer
 }
 
 function toWebCryptoAlgorithm(algorithm: string) {
@@ -34,15 +29,6 @@ function toWebCryptoAlgorithm(algorithm: string) {
     throw new Error('MD5 is not supported in WebCrypto.')
   }
   return algorithm === 'sha1' ? 'SHA-1' : algorithm === 'sha256' ? 'SHA-256' : 'SHA-512'
-}
-
-function fromUtf8ToArray(str: string) {
-  const strUtf8 = unescape(encodeURIComponent(str))
-  const arr = new Uint8Array(strUtf8.length)
-  for (let i = 0; i < strUtf8.length; i++) {
-    arr[i] = strUtf8.charCodeAt(i)
-  }
-  return arr
 }
 
 async function hkdfExpand(prk: ArrayBuffer, info: string, outputByteSize: number, algorithm: string) {
@@ -54,7 +40,7 @@ async function hkdfExpand(prk: ArrayBuffer, info: string, outputByteSize: number
   if (prkArr.length < hashLen) {
     throw new Error('prk is too small.')
   }
-  const infoBuf = toBuf(info)
+  const infoBuf = Buffer.from(info)
   const infoArr = new Uint8Array(infoBuf)
   let runningOkmLength = 0
   let previousT = new Uint8Array(0)
@@ -80,16 +66,13 @@ async function hmac(value: ArrayBuffer, key: ArrayBuffer, algorithm: string) {
     name: 'HMAC',
     hash: { name: toWebCryptoAlgorithm(algorithm) },
   }
-
   const impKey = await crypto.subtle.importKey('raw', key, signingAlgorithm, false, ['sign'])
   return await crypto.subtle.sign(signingAlgorithm, impKey, value)
 }
 
 async function decryptCipherString(data: string, key: ArrayBuffer, _macKey: ArrayBuffer) {
   const parts = data.split('.')[1].split('|').slice(0, 3)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [iv, cipherText, _mac] = parts.map((part) => base64ToArrayBuffer(part))
-
   const clear = await aesDecrypt(cipherText, iv, key)
   return new TextDecoder().decode(clear)
 }

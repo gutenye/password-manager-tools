@@ -3,8 +3,8 @@ import { ApplePasswords } from '#/applePasswords'
 import { Bitwarden } from '#/bitwarden'
 import type { ConvertOptions } from '#/types'
 
-export async function bitwardenToApplePasswords(input: string, output: string, options: ConvertOptions = {}) {
-  const bitwarden = await Bitwarden.import(input)
+export async function bitwardenToApplePasswords(inputPath: string, outputPath: string, options: ConvertOptions = {}) {
+  const bitwarden = await Bitwarden.import(inputPath)
   let found: Bitwarden | null = bitwarden
   let rest: Bitwarden | null = null
   if (options.includeUris) {
@@ -17,12 +17,12 @@ export async function bitwardenToApplePasswords(input: string, output: string, o
     return
   }
   const applePasswords = await ApplePasswords.from(found)
-  await applePasswords.export(output)
-  console.log(`output: '${output}'`)
+  await applePasswords.export(outputPath)
+  console.log(`output: '${outputPath}'`)
   if (rest) {
-    await rest.export(input)
+    await rest.export(inputPath)
   } else {
-    await fs.writeFile(input, '')
+    await fs.writeFile(inputPath, '')
   }
-  console.log(`overwrite: '${input}'`)
+  console.log(`overwrite: '${inputPath}'`)
 }

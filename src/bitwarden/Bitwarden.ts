@@ -3,13 +3,14 @@ import { groupBy, orderBy, partition } from 'lodash-es'
 import tldts from 'tldts'
 import { BitwardenExport } from '#/types'
 import { omitByDeep } from '#/utils'
+import { decrypt } from './decrypt'
 
 export class Bitwarden {
-  static async import(input: string) {
-    const text = await fs.readFile(input, 'utf8')
-    const root: BitwardenExport.Root = JSON.parse(text)
+  static async import(inputPath: string) {
+    const text = await fs.readFile(inputPath, 'utf8')
+    let root: BitwardenExport.Root = JSON.parse(text)
     if (root.encrypted) {
-      throw new Error(`Encrypted file '${input}' is not supported`)
+      root = await decrypt(root, 'password')
     }
     const app = new Bitwarden(root)
     app.normalize()

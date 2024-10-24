@@ -28,24 +28,32 @@ type Props = {
 
 export default function Convert({ options, args }: Props) {
   const [name, inputPath, outputPath] = args
-  const [result, setResult] = useState('converting')
+  const [result, setResult] = useState<string | Error>('converting')
   const { input, inputElement } = useInput()
 
   useEffect(() => {
     ;(async () => {
-      const newOptions = {
-        ...omit(options, 'includeUris'),
-        includeUris: options.includeUris?.split(','),
-        input,
+      try {
+        const newOptions = {
+          ...omit(options, 'includeUris'),
+          includeUris: options.includeUris?.split(','),
+          input,
+        }
+        await getConverter(name)(inputPath, outputPath, newOptions)
+        setResult('')
+      } catch (error) {
+        if (error instanceof Error) {
+          setResult(error)
+          process.exit(1)
+        }
+        throw error
       }
-      await getConverter(name)(inputPath, outputPath, newOptions)
-      setResult('')
     })()
   }, [options, inputPath, outputPath, name, input])
 
   return (
     <>
-      <Text>{result || 'loading'}</Text>
+      {result instanceof Error ? <Text color="red">Error: {result.message}</Text> : <Text>{result || 'loading'}</Text>}
       {inputElement}
     </>
   )

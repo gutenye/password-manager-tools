@@ -1,12 +1,21 @@
 const { crypto } = globalThis
 
 export async function decrypt(input: Record<string, any>, password: string) {
-  const { salt, kdfIterations, data } = input
-  const masterKey = await pbkdf2(password, salt, 'sha256', Number(kdfIterations))
-  const stretchedKey = await hkdfExpand(masterKey, 'enc', 32, 'sha256')
-  const stretchedMacKey = await hkdfExpand(masterKey, 'mac', 32, 'sha256')
-  const decrypted = await decryptCipherString(data, stretchedKey, stretchedMacKey)
-  return JSON.parse(decrypted)
+  try {
+    const { salt, kdfIterations, data } = input
+    const masterKey = await pbkdf2(password, salt, 'sha256', Number(kdfIterations))
+    const stretchedKey = await hkdfExpand(masterKey, 'enc', 32, 'sha256')
+    const stretchedMacKey = await hkdfExpand(masterKey, 'mac', 32, 'sha256')
+    const decrypted = await decryptCipherString(data, stretchedKey, stretchedMacKey)
+    return JSON.parse(decrypted)
+  } catch (err) {
+    if (err instanceof Error) {
+      if (err.message.match(/bad decrypt/)) {
+        throw new Error('Incorrect password.')
+      }
+    }
+    throw err
+  }
 }
 
 // derive password to key

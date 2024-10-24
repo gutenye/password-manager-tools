@@ -1,15 +1,19 @@
-import type { Data, Item } from './types'
+import type { Item } from './types'
 
-export function createBitwarden({ items = [] }: Data = {}) {
+export function createBitwarden(items: Item[] = []) {
   return {
     encrypted: false,
     folders: [],
     collections: [],
-    items: items.map((item, index) => createLoginItem(index, item)),
+    items: items.map((item, index) => createLoginItem(index, item)).filter(Boolean),
   }
 }
 
-function createLoginItem(index: number, { uris = [], fields = [], passwordHistory = [] }: Item = {}) {
+function createLoginItem(index: number, item: Item) {
+  if (!item) {
+    return
+  }
+  const { uris = [], fields = [], passwordHistory = [] } = item
   const suffix = index + 1
   return {
     id: '',

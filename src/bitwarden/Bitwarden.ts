@@ -95,7 +95,6 @@ export class Bitwarden {
             { hostname: string; domain: string }[],
             { hostname: undefined }[],
           ]
-          console.log(':: validUrlItems', validUrlItems)
           const [firstValidUrlItems, ...restValidUrlItemsItems] = orderBy(
             Object.values(groupBy(validUrlItems, 'domain')),
             'length',

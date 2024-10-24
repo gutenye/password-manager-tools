@@ -8,13 +8,13 @@ export async function decrypt(input: Record<string, any>, password: string) {
     const stretchedMacKey = await hkdfExpand(masterKey, 'mac', 32, 'sha256')
     const decrypted = await decryptCipherString(data, stretchedKey, stretchedMacKey)
     return JSON.parse(decrypted)
-  } catch (err) {
-    if (err instanceof Error) {
-      if (err.message.match(/bad decrypt/)) {
-        throw new Error('Incorrect password.')
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.cause?.message?.match(/bad decrypt/)) {
+        throw new Error('Incorrect password')
       }
     }
-    throw err
+    throw error
   }
 }
 

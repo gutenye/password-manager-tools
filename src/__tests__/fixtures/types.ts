@@ -1,8 +1,4 @@
-export type Data = {
-  items?: Item[]
-}
-
-export type Item = {
+export type Item = null | {
   uris?: string[]
   fields?: any[]
   passwordHistory?: any[]

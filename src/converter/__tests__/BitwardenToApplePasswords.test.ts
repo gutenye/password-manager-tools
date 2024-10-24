@@ -15,9 +15,13 @@ it('convert all passwords', async () => {
   expect(rest).toEqual(null)
 })
 
+it('uris empty', async () => {})
+
+it('uris a.com', async () => {})
+
 it('convert selected passwords', async () => {
-  const data = {
-    items: [
+  const { output, rest, outputExpected, restExpected } = await runTest({
+    inputItems: [
       {
         uris: ['https://1.a.com'],
       },
@@ -25,26 +29,32 @@ it('convert selected passwords', async () => {
         uris: ['https://c.com'],
       },
     ],
-  }
-  const options: ConvertOptions = {
-    includeUris: ['a.com'],
-  }
-  const [outputItems, restItems] = partition(data.items, (item) =>
-    item.uris.some((uri) => options.includeUris?.some((includeUri) => uri.includes(includeUri))),
-  )
-  const input = createBitwarden(data)
-  const { output, rest } = await runConvert(input, options)
-  const outputExpected = createApplePasswords({
-    ...data,
-    items: outputItems,
+    options: {
+      includeUris: ['a.com'],
+    },
+    outputItems: [
+      {
+        uris: ['https://1.a.com'],
+      },
+    ],
+    restItems: [
+      undefined, // preserve index
+      {
+        uris: ['https://c.com'],
+      },
+    ],
   })
   expect(output).toEqual(outputExpected)
-  const restExpected = createBitwarden(data)
-  restExpected.items = restExpected.items.filter((item) =>
-    item.login.uris?.some((uriItem) => options.includeUris?.some((includeUri) => !uriItem.uri.includes(includeUri))),
-  )
   expect(rest).toEqual(restExpected)
 })
+
+async function runTest({ inputItems, options, outputItems, restItems }) {
+  const input = createBitwarden(inputItems)
+  const { output, rest } = await runConvert(input, options)
+  const outputExpected = createApplePasswords(outputItems)
+  const restExpected = createBitwarden(restItems)
+  return { output, rest, outputExpected, restExpected }
+}
 
 async function runConvert(input: any, options: ConvertOptions = {}) {
   await fs.writeFile('/input.json', JSON.stringify(input))

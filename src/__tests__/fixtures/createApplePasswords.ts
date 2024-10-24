@@ -1,11 +1,12 @@
-import type { Item } from './types'
+import type { Item } from '#/__tests__/types'
+import type { ApplePasswordsExport } from '#/types'
 
 export function createApplePasswords(items: Item[] = []) {
-  return items.flatMap((item, index) => createItem(index, item)).filter(Boolean)
+  return items.flatMap((item, index) => createItem(index, item)).filter((v) => v !== undefined)
 }
 
-function createItem(index: number, item: Item) {
-  if (!item) {
+function createItem(index: number, item: Item): ApplePasswordsExport.Item[] | undefined {
+  if (item === null) {
     return
   }
   const { uris = [] } = item

@@ -1,16 +1,17 @@
-import type { Item } from './types'
+import type { Item } from '#/__tests__/types'
+import type { BitwardenExport } from '#/types'
 
 export function createBitwarden(items: Item[] = []) {
   return {
     encrypted: false,
     folders: [],
     collections: [],
-    items: items.map((item, index) => createLoginItem(index, item)).filter(Boolean),
+    items: items.map((item, index) => createLoginItem(index, item)).filter((v) => v !== undefined),
   }
 }
 
-function createLoginItem(index: number, item: Item) {
-  if (!item) {
+function createLoginItem(index: number, item: Item): BitwardenExport.Item | undefined {
+  if (item === null) {
     return
   }
   const { uris = [], fields = [], passwordHistory = [] } = item

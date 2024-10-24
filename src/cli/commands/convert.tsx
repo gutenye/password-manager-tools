@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react'
 import zod from 'zod'
 import { useInput } from '#/cli/hooks'
 import { getConverter } from '#/converter'
+import { AppError } from '#/errors'
 
 export const options = zod.object({
   includeUris: zod.string().optional().describe('Include domains (example: a.com,b.com)'),
@@ -42,7 +43,7 @@ export default function Convert({ options, args }: Props) {
         await getConverter(name)(inputPath, outputPath, newOptions)
         setResult('')
       } catch (error) {
-        if (error instanceof Error) {
+        if (error instanceof AppError) {
           setResult(error)
           process.exit(1)
         }

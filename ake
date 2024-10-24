@@ -30,7 +30,8 @@ def 'main t watch' [...args: string] {
 }
 
 def 'main t manual reset' [] {
-  cp src/__tests__/fixtures/bitwarden.json data/bitwarden.json
+  cp src/__tests__/fixtures/bitwarden.json data
+  cp src/__tests__/fixtures/bitwardenEncrypted.json data
 }
 
 def 'main t manual' [] {

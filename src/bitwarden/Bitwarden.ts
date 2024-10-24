@@ -10,13 +10,11 @@ export class Bitwarden {
   static async import(inputPath: string, options: ConvertOptions = {}) {
     const { input } = options
     const text = await fs.readFile(inputPath, 'utf8')
-    const root: BitwardenExport.Root = JSON.parse(text)
+    let root: BitwardenExport.Root = JSON.parse(text)
     if (root.encrypted) {
       const password = await input({ label: 'Enter password', type: 'password' })
       root = await decrypt(root, password)
-      console.log(':: root', root)
     }
-    return
     const app = new Bitwarden(root)
     app.normalize()
     return app
@@ -97,6 +95,7 @@ export class Bitwarden {
             { hostname: string; domain: string }[],
             { hostname: undefined }[],
           ]
+          console.log(':: validUrlItems', validUrlItems)
           const [firstValidUrlItems, ...restValidUrlItemsItems] = orderBy(
             Object.values(groupBy(validUrlItems, 'domain')),
             'length',

@@ -1,4 +1,5 @@
 const { crypto } = globalThis
+import { AppError } from '#/errors'
 
 export async function decrypt(input: Record<string, any>, password: string) {
   try {
@@ -11,7 +12,7 @@ export async function decrypt(input: Record<string, any>, password: string) {
   } catch (error) {
     if (error instanceof Error) {
       if (error.cause?.message?.match(/bad decrypt/)) {
-        throw new Error('Incorrect password')
+        throw new AppError('Incorrect password')
       }
     }
     throw error

@@ -29,6 +29,10 @@ def 'main t watch' [...args: string] {
   bun run test --watch ...$args
 }
 
+def 'main t manual reset' [] {
+  cp src/__tests__/fixtures/bitwarden.json data/bitwarden.json
+}
+
 def 'main t manual' [] {
-  ./cli convert bitwarden-to-apple ./src/__tests__/fixtures/bitwarden.json data/output.csv
+  ./cli convert bitwarden-to-apple data/bitwarden.json data/output.csv 
 }

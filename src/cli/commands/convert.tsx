@@ -1,10 +1,10 @@
 import { Box, Text } from 'ink'
-import { useInput } from 'ink'
 import TextInput, { UncontrolledTextInput } from 'ink-text-input'
 import { omit } from 'lodash-es'
 import { argument } from 'pastel'
 import React, { useState, useEffect } from 'react'
 import zod from 'zod'
+import { useInput } from '#/cli/hooks'
 import { getConverter } from '#/converter'
 
 export const options = zod.object({
@@ -29,21 +29,24 @@ type Props = {
 export default function Convert({ options, args }: Props) {
   const [name, inputPath, outputPath] = args
   const [result, setResult] = useState('converting')
+  const { input, inputElement } = useInput()
 
   useEffect(() => {
     ;(async () => {
       const newOptions = {
         ...omit(options, 'includeUris'),
         includeUris: options.includeUris?.split(','),
+        input,
       }
       await getConverter(name)(inputPath, outputPath, newOptions)
       setResult('')
     })()
-  }, [options, inputPath, outputPath, name])
+  }, [options, inputPath, outputPath, name, input])
 
   return (
-    <Box>
+    <>
       <Text>{result || 'loading'}</Text>
-    </Box>
+      {inputElement}
+    </>
   )
 }

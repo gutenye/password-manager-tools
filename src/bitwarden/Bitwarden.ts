@@ -2,16 +2,21 @@ import fs from 'node:fs/promises'
 import { groupBy, orderBy, partition } from 'lodash-es'
 import tldts from 'tldts'
 import { BitwardenExport } from '#/types'
+import type { ConvertOptions } from '#/types'
 import { omitByDeep } from '#/utils'
 import { decrypt } from './decrypt'
 
 export class Bitwarden {
-  static async import(inputPath: string) {
+  static async import(inputPath: string, options: ConvertOptions = {}) {
+    const { input } = options
     const text = await fs.readFile(inputPath, 'utf8')
-    let root: BitwardenExport.Root = JSON.parse(text)
+    const root: BitwardenExport.Root = JSON.parse(text)
     if (root.encrypted) {
-      root = await decrypt(root, 'password')
+      const password = await input({ label: 'Enter password', type: 'password' })
+      root = await decrypt(root, password)
+      console.log(':: root', root)
     }
+    return
     const app = new Bitwarden(root)
     app.normalize()
     return app

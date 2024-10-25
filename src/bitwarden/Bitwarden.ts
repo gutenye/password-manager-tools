@@ -99,6 +99,9 @@ export class Bitwarden {
               return
             }
           })
+          if (urlItems.length === 0) {
+            continue
+          }
           const [validUrlItems, invalidUrlItems] = partition(urlItems, (urlItem) => urlItem?.hostname) as unknown as [
             { hostname: string; domain: string }[],
             { hostname: undefined }[],

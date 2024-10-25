@@ -1,5 +1,7 @@
 #!/usr/bin/env nu
 
+use utils.nu *
+
 # ./cli ..
 
 def help [] {
@@ -21,6 +23,10 @@ def main [
   echo ...$args
 }
 
+def 'main edit' [path: string] {
+  vi -u NONE -U NONE $path
+}
+
 def 'main t' [...args: string] {
   bun run test ...$args
 }
@@ -35,5 +41,15 @@ def 'main t reset' [] {
 }
 
 def 'main t manual' [] {
-  ./cli convert bitwarden-to-apple data/bitwarden.json data/output.csv 
+  ./cli convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/output.csv 
+}
+
+def 'main convert' [includeUris: string] {
+  let cmd = "./cli convert bitwarden-to-apple data/bitwarden.json data/output.csv"
+
+  if $includeUris != null {
+    run-cmd $'($cmd) --include-uris $includeUris'
+  } else {
+    run-cmd $cmd 
+  }
 }

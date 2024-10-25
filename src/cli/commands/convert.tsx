@@ -10,10 +10,12 @@ import type { InputFn } from '#/types'
 
 export const options = zod.object({
   includeUris: zod.string().optional().describe('Include domains (example: a.com,b.com)'),
+  overwrite: zod.boolean().default(false).describe('Overwrite input file'),
 })
 
 export type ConvertOptions = {
   includeUris?: string[]
+  overwrite?: boolean
   input: InputFn
 }
 

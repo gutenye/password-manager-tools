@@ -48,12 +48,12 @@ function createUri(uri: string) {
   }
 }
 
-function createField() {
+function createField({ name, value, type = 0, linkedId = null }: BitwardenExport.Field) {
   return {
-    // name: 'Text',
-    // value: 'text',
-    // type: 0,
-    // linkedId: null,
+    name,
+    value,
+    type,
+    linkedId,
   }
 }
 

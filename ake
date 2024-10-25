@@ -48,7 +48,7 @@ def 'main convert' [includeUris: string] {
   let cmd = "./cli convert bitwarden-to-apple data/bitwarden.json data/output.csv"
 
   if $includeUris != null {
-    run-cmd $'($cmd) --include-uris $includeUris'
+    run-cmd $'($cmd) --include-uris ($includeUris)'
   } else {
     run-cmd $cmd 
   }

@@ -132,7 +132,7 @@ export class Bitwarden {
     if (!value) {
       return ''
     }
-    return `# ${title} #\n${value}`
+    return `[${title}]\n${value}`
   }
 
   #seriaizeFields(fields?: BitwardenExport.Field[]) {
@@ -140,7 +140,12 @@ export class Bitwarden {
       return ''
     }
     const outFields = fields.map((field) => {
-      let out = `${field.name}: ${field.value || ''}`
+      const name = this.#escapeField(field.name)
+      let out = `${name} =`
+      if (field.value) {
+        const value = this.#escapeField(field.value)
+        out = `${out} ${value}`
+      }
       if (field.type !== BitwardenExport.FieldType.Text) {
         out = `${out} TYPE=${BitwardenExport.FieldType[field.type]}`
       }
@@ -150,6 +155,10 @@ export class Bitwarden {
       return out
     })
     return outFields.join('\n')
+  }
+
+  #escapeField(name: string) {
+    return name.replaceAll('=', '=')
   }
 
   #serializeNotes(notes?: string) {
@@ -162,7 +171,7 @@ export class Bitwarden {
     }
     return passwordHistory
       .map((history) => {
-        return `${history.lastUsedDate}: ${history.password}`
+        return `${history.lastUsedDate} = ${history.password}`
       })
       .join('\n')
   }
@@ -173,7 +182,7 @@ export class Bitwarden {
     }
     return uris
       .map((uri) => {
-        return `${BitwardenExport.UriMatchReverse[uri.match]}: ${uri.uri}`
+        return `${BitwardenExport.UriMatchReverse[uri.match]} = ${uri.uri}`
       })
       .join('\n')
   }

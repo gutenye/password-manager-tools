@@ -37,10 +37,26 @@ it('items: empty', async () => {
   expect(rest).toEqual(restExpected)
 })
 
+it.only('uris: empty', async () => {
+  const { output, rest, outputExpected, restExpected } = await runTest([{}])
+  expect(output).toEqual(outputExpected)
+  expect(rest).toEqual(restExpected)
+})
+
 it('uri: a.com', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest([
     {
       uris: ['a.com'],
+    },
+  ])
+  expect(output).toEqual(outputExpected)
+  expect(rest).toEqual(restExpected)
+})
+
+it('uri: invalid', async () => {
+  const { output, rest, outputExpected, restExpected } = await runTest([
+    {
+      uris: ['http-invalid'],
     },
   ])
   expect(output).toEqual(outputExpected)

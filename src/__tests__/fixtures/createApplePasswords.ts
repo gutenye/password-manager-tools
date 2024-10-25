@@ -10,7 +10,7 @@ function createItem(index: number, item: Item): ApplePasswordsExport.Item[] | un
   if (item === null) {
     return
   }
-  const { uris = [] } = item
+  const { uris = [undefined] } = item
   const suffix = index + 1
   return uris.map((uri) => {
     return {
@@ -18,7 +18,7 @@ function createItem(index: number, item: Item): ApplePasswordsExport.Item[] | un
       Username: `username${suffix}`,
       Password: `password${suffix}`,
       OTPAuth: `totp${suffix}`,
-      URL: new URL(prefixHttps(uri)).hostname,
+      URL: uri ? new URL(prefixHttps(uri)).hostname : '',
       Notes: '',
     }
   })

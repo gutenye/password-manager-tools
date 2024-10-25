@@ -29,7 +29,7 @@ def 'main t watch' [...args: string] {
   bun run test --watch ...$args
 }
 
-def 'main t manual reset' [] {
+def 'main t reset' [] {
   cp src/__tests__/fixtures/bitwarden.json data
   cp src/__tests__/fixtures/bitwardenEncrypted.json data
 }

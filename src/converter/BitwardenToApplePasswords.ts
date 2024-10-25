@@ -6,7 +6,7 @@ import type { ConvertOptions } from '#/types'
 export async function bitwardenToApplePasswords(inputPath: string, outputPath: string, options: ConvertOptions = {}) {
   const bitwarden = await Bitwarden.import(inputPath, options)
   let found: Bitwarden | null = bitwarden
-  let rest: Bitwarden | null = null
+  let rest: Bitwarden = new Bitwarden({ ...bitwarden.root, items: [] })
   if (options.includeUris) {
     const parts = bitwarden.includeUris(options.includeUris)
     found = parts[0]

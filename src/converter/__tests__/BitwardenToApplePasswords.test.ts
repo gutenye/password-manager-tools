@@ -111,7 +111,7 @@ it('escape: title, field', async () => {
   expect(rest).toEqual(restExpected)
 })
 
-async function runTest(items: Item[], rawOptions: ConvertOptions = {}) {
+async function runTest(items: Item[], rawOptions: Partial<ConvertOptions> = {}) {
   const options = {
     ...rawOptions,
     overwrite: rawOptions.overwrite === undefined ? true : rawOptions.overwrite,

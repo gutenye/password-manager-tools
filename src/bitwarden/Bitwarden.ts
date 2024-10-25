@@ -4,7 +4,7 @@ import tldts from 'tldts'
 import { BitwardenExport } from '#/types'
 import type { ConvertOptions } from '#/types'
 import { omitByDeep, prefixHttps } from '#/utils'
-import { decrypt } from './decrypt'
+import { decrypt } from './encryptDecrypt'
 
 export class Bitwarden {
   static async import(inputPath: string, options: ConvertOptions = {}) {

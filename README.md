@@ -32,20 +32,21 @@ cp input.json input.bak.json.bak  # input.json will be overwritten later
 
 3. Convert passwords
 
+**Transfer all passwords**
+
 ```sh
-# transfer all passwords
 bunx @gutenye/password-manager-tools convert bitwarden-to-apple <input.json> <output.csv>
-# selective transfer
+```
+
+**Incremental transfer**
+
+```
+# select some domains to transfer
 bunx @gutenye/password-manager-tools convert bitwarden-to-apple input.json output.csv --include-uris a.com,b.com
 #-> creates output.csv
 #-> override input.json, remaining data, items in the output are removed
-```
-
-4. Encrypt original file
-
-```sh
-bunx @gutenye/password-manager-tools encrypt input.json # you can use the file again later
-```
+# input.json will be encrypted again for next time use if you exported encrypted format
+``
 
 ### 3) Import Data
 

@@ -7,24 +7,26 @@ type Options = {
   type?: 'password'
 }
 
+export type InputFn = (options?: Options) => Promise<string>
+
 export function useInput() {
   const [handleSubmit, setHandleSubmit] = useState(null)
   const [options, setOptions] = useState<Options>({})
   const { label, type } = options
   const mask = type === 'password' ? '*' : undefined
 
-  const input = useCallback(async (options = {}) => {
+  const input: InputFn = useCallback(async (options = {}) => {
     setOptions(options)
     const result = await new Promise((resolve) => {
       setHandleSubmit(
         () =>
-          function handleSubmit(value) {
+          function handleSubmit(value: string) {
             resolve(value)
             setHandleSubmit(null)
           },
       )
     })
-    return result
+    return result as string
   }, [])
 
   const inputElement = (

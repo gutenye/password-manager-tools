@@ -9,11 +9,18 @@ import { bitwardenToApplePasswords } from '../BitwardenToApplePasswords'
 
 const fs = memfs.fs.promises
 
-it('items: all', async () => {
+it.only('encrypted: false', async () => {
   const { fixtures } = globalThis.__TEST__
   const { output, rest } = await runConvert(fixtures.bitwarden.data)
   expect(output).toEqual(fixtures.applePasswords.data)
   expect(rest).toEqual({ ...fixtures.bitwarden.data, items: [] })
+})
+
+it('encrypted: true', async () => {
+  const { fixtures } = globalThis.__TEST__
+  const { output, rest } = await runConvert(fixtures.bitwarden.data, { password: '1' })
+  expect(output).toEqual([])
+  // expect(result).toEqual({})
 })
 
 it('items: empty', async () => {

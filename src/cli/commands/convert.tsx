@@ -1,5 +1,4 @@
 import { Box, Text } from 'ink'
-import TextInput, { UncontrolledTextInput } from 'ink-text-input'
 import { omit } from 'lodash-es'
 import { argument } from 'pastel'
 import React, { useState, useEffect } from 'react'
@@ -7,10 +6,18 @@ import zod from 'zod'
 import { useInput } from '#/cli/hooks'
 import { getConverter } from '#/converter'
 import { AppError } from '#/errors'
+import type { InputFn } from '#/types'
 
 export const options = zod.object({
   includeUris: zod.string().optional().describe('Include domains (example: a.com,b.com)'),
 })
+
+export type ConvertOptions = {
+  includeUris?: string[]
+  input: InputFn
+}
+
+export type CLIConvertOptions = zod.infer<typeof options>
 
 export const args = zod.tuple([
   zod
@@ -20,10 +27,8 @@ export const args = zod.tuple([
   zod.string().describe(argument({ name: 'output', description: 'Output file' })),
 ])
 
-export type ConvertOptions = zod.infer<typeof options>
-
 type Props = {
-  options: ConvertOptions
+  options: CLIConvertOptions
   args: zod.infer<typeof args>
 }
 
@@ -35,7 +40,7 @@ export default function Convert({ options, args }: Props) {
   useEffect(() => {
     ;(async () => {
       try {
-        const newOptions = {
+        const newOptions: ConvertOptions = {
           ...omit(options, 'includeUris'),
           includeUris: options.includeUris?.split(','),
           input,

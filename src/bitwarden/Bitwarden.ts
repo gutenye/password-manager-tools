@@ -10,11 +10,14 @@ export class Bitwarden {
   static async import(inputPath: string, options: ConvertOptions) {
     const { input } = options
     const text = await fs.readFile(inputPath, 'utf8')
-    let root: BitwardenExport.Root = JSON.parse(text)
+    const fileData: BitwardenExport.File = JSON.parse(text)
+    let root: BitwardenExport.Root
     let password = ''
-    if (root.encrypted) {
+    if (fileData.encrypted) {
       password = await input({ label: 'Enter password', type: 'password' })
-      root = await decrypt(root, password)
+      root = await decrypt(fileData, password)
+    } else {
+      root = fileData
     }
     const app = new Bitwarden(root)
     app.normalize()

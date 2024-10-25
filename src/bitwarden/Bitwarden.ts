@@ -3,7 +3,7 @@ import { groupBy, orderBy, partition } from 'lodash-es'
 import tldts from 'tldts'
 import { BitwardenExport } from '#/types'
 import type { ConvertOptions } from '#/types'
-import { omitByDeep } from '#/utils'
+import { omitByDeep, prefixHttps } from '#/utils'
 import { decrypt } from './decrypt'
 
 export class Bitwarden {
@@ -55,7 +55,7 @@ export class Bitwarden {
       )
     })
     return parts.map((items) => {
-      return items.length > 0 ? new Bitwarden({ ...this.#root, items }) : null
+      return new Bitwarden({ ...this.#root, items })
     })
   }
 
@@ -81,7 +81,7 @@ export class Bitwarden {
           const urlItems = login.uris.map((originInfo) => {
             if (supportedUriMatches.includes(originInfo.match)) {
               try {
-                const urlInfo = new URL(originInfo.uri)
+                const urlInfo = new URL(prefixHttps(originInfo.uri))
                 const domainInfo = tldts.parse(originInfo.uri)
                 return { hostname: urlInfo.hostname, domain: domainInfo.domain }
               } catch {

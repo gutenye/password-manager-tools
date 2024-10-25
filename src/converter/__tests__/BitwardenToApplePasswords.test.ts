@@ -9,18 +9,26 @@ import { bitwardenToApplePasswords } from '../BitwardenToApplePasswords'
 
 const fs = memfs.fs.promises
 
-it.only('encrypted: false', async () => {
+it('encrypted: false', async () => {
   const { fixtures } = globalThis.__TEST__
   const { output, rest } = await runConvert(fixtures.bitwarden.data)
-  expect(output).toEqual(fixtures.applePasswords.data)
+  expect(output).toEqual(fixtures.bitwardenToApplePasswords.data)
   expect(rest).toEqual({ ...fixtures.bitwarden.data, items: [] })
 })
 
 it('encrypted: true', async () => {
   const { fixtures } = globalThis.__TEST__
-  const { output, rest } = await runConvert(fixtures.bitwarden.data, { password: '1' })
-  expect(output).toEqual([])
-  // expect(result).toEqual({})
+  const { output, rest } = await runConvert(fixtures.bitwardenEncrypted.data, { input: () => '1' })
+  expect(output).toEqual(fixtures.bitwardenEncryptedToApplePasswords.data)
+  expect(rest).toEqual({
+    data: expect.any(String),
+    encKeyValidation_DO_NOT_EDIT: '',
+    encrypted: true,
+    kdfIterations: 600000,
+    kdfType: 0,
+    passwordProtected: true,
+    salt: expect.any(String),
+  })
 })
 
 it('items: empty', async () => {
@@ -74,7 +82,7 @@ async function runConvert(input: any, options: ConvertOptions = {}) {
   const output = Papa.parse(outputText, { header: true }).data as ApplePasswordsExport.Root
 
   const restText = (await fs.readFile('/input.json', 'utf8')) as string
-  const rest = restText ? (JSON.parse(restText) as BitwardenExport.Root) : null
+  const rest = restText ? (JSON.parse(restText) as BitwardenExport.File) : null
 
   return { output, rest }
 }

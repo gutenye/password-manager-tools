@@ -1,10 +1,22 @@
 import { invert } from 'lodash-es'
 
+export type File = Root | RootEncrypted
+
 export interface Root {
-  encrypted: boolean
+  encrypted: false
   folders?: Array<Folder>
   collections?: Array<Collection>
   items: Array<Item>
+}
+
+export interface RootEncrypted {
+  encrypted: true
+  data: string
+  salt: string
+  kdfType: 0
+  kdfIterations: number
+  encKeyValidation_DO_NOT_EDIT: string
+  passwordProtected: true
 }
 
 export interface Folder {

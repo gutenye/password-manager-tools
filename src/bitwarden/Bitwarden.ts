@@ -102,19 +102,26 @@ export class Bitwarden {
           if (urlItems.length === 0) {
             continue
           }
+          // vaidUrlItems: [], ivalidUrlItems [ undefined ]
           const [validUrlItems, invalidUrlItems] = partition(urlItems, (urlItem) => urlItem?.hostname) as unknown as [
             { hostname: string; domain: string }[],
             { hostname: undefined }[],
           ]
-          const [firstValidUrlItems, ...restValidUrlItemsItems] = orderBy(
-            Object.values(groupBy(validUrlItems, 'domain')),
-            'length',
-            'desc',
-          )
-          const restValidUrlItems = restValidUrlItemsItems.flat(Number.POSITIVE_INFINITY)
-          login.__sameHostnames__ = {
-            value: firstValidUrlItems.map((v) => v.hostname),
-            hasMore: restValidUrlItems.length > 0 || invalidUrlItems.length > 0,
+          if (validUrlItems.length === 0) {
+            login.__sameHostnames__ = {
+              hasMore: true,
+            }
+          } else {
+            const [firstValidUrlItems, ...restValidUrlItemsItems] = orderBy(
+              Object.values(groupBy(validUrlItems, 'domain')),
+              'length',
+              'desc',
+            )
+            const restValidUrlItems = restValidUrlItemsItems.flat(Number.POSITIVE_INFINITY)
+            login.__sameHostnames__ = {
+              value: firstValidUrlItems.map((v) => v.hostname),
+              hasMore: restValidUrlItems.length > 0 || invalidUrlItems.length > 0,
+            }
           }
         }
       }

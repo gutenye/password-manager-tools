@@ -37,7 +37,7 @@ it('items: empty', async () => {
   expect(rest).toEqual(restExpected)
 })
 
-it.only('uris: empty', async () => {
+it('uris: empty', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest([{}])
   expect(output).toEqual(outputExpected)
   expect(rest).toEqual(restExpected)
@@ -57,6 +57,9 @@ it('uri: invalid', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest([
     {
       uris: ['http-invalid'],
+      __output__: {
+        notes: '# URIS #\nDefault: http-invalid',
+      },
     },
   ])
   expect(output).toEqual(outputExpected)
@@ -71,7 +74,7 @@ it('option: includeUris', async () => {
       },
       {
         uris: ['https://c.com'],
-        output: false,
+        __output__: false,
       },
     ],
     {
@@ -85,8 +88,8 @@ it('option: includeUris', async () => {
 async function runTest(items: Item[], options: ConvertOptions = {}) {
   const input = createBitwarden(items)
   const { output, rest } = await runConvert(input, options)
-  const outputExpected = createApplePasswords(items.filter((item) => item?.output !== false))
-  const restExpected = createBitwarden(items.map((item) => (item?.output === false ? item : null)))
+  const outputExpected = createApplePasswords(items.filter((item) => item?.__output__ !== false))
+  const restExpected = createBitwarden(items.map((item) => (item?.__output__ === false ? item : null)))
   return { output, rest, outputExpected, restExpected }
 }
 

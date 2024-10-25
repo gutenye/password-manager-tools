@@ -31,6 +31,19 @@ it('encrypted: true', async () => {
   })
 })
 
+it('overwrite: false', async () => {
+  const { output, rest, outputExpected, restExpected } = await runTest(
+    [
+      {
+        uris: ['a.com'],
+      },
+    ],
+    { overwrite: false },
+  )
+  expect(output).toEqual(outputExpected)
+  expect(rest).toEqual(restExpected)
+})
+
 it('items: empty', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest([])
   expect(output).toEqual(outputExpected)
@@ -58,7 +71,7 @@ it('uri: invalid', async () => {
     {
       uris: ['http-invalid'],
       __output__: {
-        notes: '# URIS #\nDefault: http-invalid',
+        notes: '[URIS]\nDefault = http-invalid',
       },
     },
   ])
@@ -85,23 +98,44 @@ it('option: includeUris', async () => {
   expect(rest).toEqual(restExpected)
 })
 
-async function runTest(items: Item[], options: ConvertOptions = {}) {
+it('escape: title, field', async () => {
+  const { output, rest, outputExpected, restExpected } = await runTest([
+    {
+      fields: [{ name: '=name', value: '=value' }],
+      __output__: {
+        notes: '[FIELDS]\n=name = =value',
+      },
+    },
+  ])
+  expect(output).toEqual(outputExpected)
+  expect(rest).toEqual(restExpected)
+})
+
+async function runTest(items: Item[], rawOptions: ConvertOptions = {}) {
+  const options = {
+    ...rawOptions,
+    overwrite: rawOptions.overwrite === undefined ? true : rawOptions.overwrite,
+  }
   const input = createBitwarden(items)
   const { output, rest } = await runConvert(input, options)
   const outputExpected = createApplePasswords(items.filter((item) => item?.__output__ !== false))
-  const restExpected = createBitwarden(items.map((item) => (item?.__output__ === false ? item : null)))
+  let restExpected = input
+  if (options.overwrite) {
+    restExpected = createBitwarden(items.map((item) => (item?.__output__ === false ? item : null)))
+  }
   return { output, rest, outputExpected, restExpected }
 }
 
-async function runConvert(input: any, options: ConvertOptions = {}) {
+async function runConvert(input: any, rawOptions: ConvertOptions = {}) {
+  const options = {
+    ...rawOptions,
+    overwrite: rawOptions.overwrite === undefined ? true : rawOptions.overwrite,
+  }
   await fs.writeFile('/input.json', JSON.stringify(input))
   await bitwardenToApplePasswords('/input.json', '/output.csv', options)
-
   const outputText = (await fs.readFile('/output.csv', 'utf8')) as string
   const output = Papa.parse(outputText, { header: true }).data as ApplePasswordsExport.Root
-
   const restText = (await fs.readFile('/input.json', 'utf8')) as string
   const rest = restText ? (JSON.parse(restText) as BitwardenExport.File) : null
-
   return { output, rest }
 }

@@ -24,11 +24,6 @@
 
 1. [Install Bun](https://bun.sh/docs/installation)
 
-2. Backup original file
-
-```sh
-cp input.json input.bak.json.bak  # input.json will be overwritten later
-```
 
 3. Convert passwords
 
@@ -41,8 +36,9 @@ bunx @gutenye/password-manager-tools convert bitwarden-to-apple <input.json> <ou
 **Incremental transfer**
 
 ```
+cp input.json input.bak.json.bak  # input.json will be overwritten later
 # select some domains to transfer
-bunx @gutenye/password-manager-tools convert bitwarden-to-apple input.json output.csv --include-uris a.com,b.com
+bunx @gutenye/password-manager-tools convert bitwarden-to-apple input.json output.csv --include-uris a.com,b.com --overwrite
 #-> creates output.csv
 #-> override input.json, remaining data, items in the output are removed
 # input.json will be encrypted again for next time use if you exported encrypted format

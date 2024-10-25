@@ -4,20 +4,21 @@ import tldts from 'tldts'
 import { BitwardenExport } from '#/types'
 import type { ConvertOptions } from '#/types'
 import { omitByDeep, prefixHttps } from '#/utils'
-import { decrypt } from './encryptDecrypt'
+import { decrypt, encrypt } from './encryptDecrypt'
 
 export class Bitwarden {
-  static async import(inputPath: string, options: ConvertOptions = {}) {
+  static async import(inputPath: string, options: ConvertOptions) {
     const { input } = options
     const text = await fs.readFile(inputPath, 'utf8')
     let root: BitwardenExport.Root = JSON.parse(text)
+    let password = ''
     if (root.encrypted) {
-      const password = await input({ label: 'Enter password', type: 'password' })
+      password = await input({ label: 'Enter password', type: 'password' })
       root = await decrypt(root, password)
     }
     const app = new Bitwarden(root)
     app.normalize()
-    return app
+    return { bitwarden: app, password }
   }
 
   #root: BitwardenExport.Root
@@ -59,12 +60,16 @@ export class Bitwarden {
     })
   }
 
-  async export(output: string) {
+  async export(output: string, { password }: { password?: string } = {}) {
     const newRoot = omitByDeep(this.#root, (_, key) => {
       return Boolean(key.match(/^__.*__$/))
     })
-    const json = JSON.stringify(newRoot, null, 2)
-    await fs.writeFile(output, json)
+    let result: any = newRoot
+    if (password) {
+      result = await encrypt(result, password)
+    }
+    const text = JSON.stringify(result, null, 2)
+    await fs.writeFile(output, text)
   }
 
   // add __sameHostnames__

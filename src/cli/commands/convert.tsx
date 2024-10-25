@@ -46,7 +46,7 @@ export default function Convert({ options, args }: Props) {
           input,
         }
         await getConverter(name)(inputPath, outputPath, newOptions)
-        setResult('')
+        setResult(' ')
       } catch (error) {
         if (error instanceof AppError) {
           setResult(error)

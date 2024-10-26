@@ -75,7 +75,7 @@ const ReportComponent = ({ reportData }: Props) => {
 | 🚫 Skipped Items Overwritten In | ${markdownEscape(overwritePath || '')}   |
 
 
-Thank you for using our CLI app! Please [start the project](https://github.com/gutenye/password-manager-tools) on the Github if you like it. If you have any questions, please refer to the documentation or report an issue on the github.
+Thank you for using our CLI app! Please [star the project](https://github.com/gutenye/password-manager-tools) on the Github if you like it. If you have any questions, please refer to the documentation or report an issue on the github.
 `}
       </Markdown>
     </>

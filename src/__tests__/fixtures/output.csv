@@ -1,0 +1,57 @@
+Title,Username,Password,OTPAuth,URL,Notes
+HelloLogin1,username,password,totp,a.com,"[FIELDS]
+Text = text
+Hidden = hidden TYPE=Hidden
+Boolean = true TYPE=Boolean
+Linked Password = TYPE=Linked LINKED_ID=Password
+Linked Username = TYPE=Linked LINKED_ID=Username
+
+[NOTES]
+note
+b
+
+- hello
+
+a
+
+[PASSWORD_HISTORY]
+2024-02-24T02:56:29.772Z = OldPassword
+
+[URIS]
+Default = https://a.com
+Default = https://1.a.com/b?c=1
+Default = https://b.com
+BaseDomain = BaseDomain
+Host = Host
+StartsWith = StartsWith
+Exact = Exact
+RegularExpression = RegularExpression
+Never = Never"
+HelloLogin1,username,password,totp,1.a.com,"[FIELDS]
+Text = text
+Hidden = hidden TYPE=Hidden
+Boolean = true TYPE=Boolean
+Linked Password = TYPE=Linked LINKED_ID=Password
+Linked Username = TYPE=Linked LINKED_ID=Username
+
+[NOTES]
+note
+b
+
+- hello
+
+a
+
+[PASSWORD_HISTORY]
+2024-02-24T02:56:29.772Z = OldPassword
+
+[URIS]
+Default = https://a.com
+Default = https://1.a.com/b?c=1
+Default = https://b.com
+BaseDomain = BaseDomain
+Host = Host
+StartsWith = StartsWith
+Exact = Exact
+RegularExpression = RegularExpression
+Never = Never"

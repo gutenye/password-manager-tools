@@ -7,7 +7,7 @@ type Options = {
   type?: 'password'
 }
 
-export type InputFn = (options?: Options) => Promise<string>
+export type InputFn = (options?: Options) => Promise<string> | string
 
 export function useInput() {
   const [handleSubmit, setHandleSubmit] = useState(null)

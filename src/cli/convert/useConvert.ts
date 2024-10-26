@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useInput } from '#/cli/hooks'
+import { useInput, useLogger } from '#/cli/hooks'
 import { getConverter } from '#/converter'
 import { AppError } from '#/errors'
 import type { ConvertOptions } from '#/types'
@@ -9,11 +9,29 @@ export function useConvert({ args, options }: Props) {
   const [name, inputPath, outputPath] = args
   const [result, setResult] = useState<ResultType>('converting')
   const { input, inputElement } = useInput()
-  useRunConvert({ options, name, input, inputPath, outputPath, setResult })
-  return { inputElement, result }
+  const { logger, loggerElement } = useLogger()
+  useRunConvert({
+    options,
+    name,
+    input,
+    logger,
+    inputPath,
+    outputPath,
+    setResult,
+  })
+  return { inputElement, result, loggerElement }
 }
 
-function useRunConvert({ options, name, input, inputPath, outputPath, setResult }: UseRunConvert) {
+function useRunConvert({
+  options,
+  name,
+  input,
+  logger,
+  inputPath,
+  outputPath,
+  setResult,
+}: UseRunConvert) {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     ;(async () => {
       try {
@@ -21,7 +39,9 @@ function useRunConvert({ options, name, input, inputPath, outputPath, setResult 
           ...options,
           includeUris: options.includeUris?.split(','),
           input,
+          logger,
         }
+
         await getConverter(name)(inputPath, outputPath, newOptions)
         setResult(' ')
       } catch (error) {
@@ -32,7 +52,7 @@ function useRunConvert({ options, name, input, inputPath, outputPath, setResult 
         throw error
       }
     })()
-  }, [options, inputPath, outputPath, name, input, setResult])
+  }, [])
 }
 
 type ResultType = string | Error
@@ -44,4 +64,5 @@ type UseRunConvert = {
   inputPath: string
   outputPath: string
   setResult: React.Dispatch<React.SetStateAction<ResultType>>
+  logger: ReturnType<typeof useLogger>['logger']
 }

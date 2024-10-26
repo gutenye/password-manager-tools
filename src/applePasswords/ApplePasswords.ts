@@ -19,7 +19,7 @@ export class ApplePasswords {
           for (const hostname of hostnames) {
             const notes = app.serializeCommon(item)
             let name = item.name
-            if (login.__sameHostnames__?.hasMore) {
+            if (login.__sameHostnames__?.needsFix) {
               name = `${name} FIXWEBSITE`
               requireFixCount++
             }

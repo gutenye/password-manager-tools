@@ -1,7 +1,7 @@
 import { expect, it } from 'bun:test'
 import { runConvert, runTest } from './runTests'
 
-it.only('encrypted: false', async () => {
+it('encrypted: false', async () => {
   const { fixtures } = globalThis.__TEST__
   const { output, rest } = await runConvert(fixtures.bitwarden.data)
   expect(output).toEqual(fixtures.bitwardenToApplePasswords.data)
@@ -59,13 +59,27 @@ it('uris: empty', async () => {
   expect(rest).toEqual(restExpected)
 })
 
-it('uris: hasMore', async () => {
+it('uris: needsFix with vaild uri', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest([
     {
       uris: [{ uri: 'a.com' }, { uri: 'b.com', __output__: false }],
       __output__: {
         notes: '[URIS]\nDefault = a.com\nDefault = b.com',
         title: 'name1 FIXWEBSITE',
+      },
+    },
+  ])
+  expect(output).toEqual(outputExpected)
+  expect(rest).toEqual(restExpected)
+})
+
+it('uris: needsFix with invalid uri', async () => {
+  const { output, rest, outputExpected, restExpected } = await runTest([
+    {
+      uris: [{ uri: 'a.com' }, { uri: 'http-invalid', __output__: false }],
+      __output__: {
+        notes: '[URIS]\nDefault = a.com\nDefault = http-invalid',
+        title: 'name1',
       },
     },
   ])
@@ -88,7 +102,7 @@ it('uri: invalid', async () => {
     {
       uris: [{ uri: 'http-invalid' }],
       __output__: {
-        title: 'name1 FIXWEBSITE',
+        title: 'name1',
         notes: '[URIS]\nDefault = http-invalid',
       },
     },

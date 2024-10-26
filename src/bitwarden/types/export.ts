@@ -59,7 +59,8 @@ export interface LoginItem extends BaseItem {
     uris: Array<Uri>
     __sameHostnames__?: {
       value?: string[]
-      hasMore: boolean
+      needsFix?: boolean
+      needsNote?: boolean
     }
     fido2Credentials: []
   }

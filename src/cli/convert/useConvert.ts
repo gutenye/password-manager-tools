@@ -1,9 +1,8 @@
-import { omit } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import { useInput } from '#/cli/hooks'
 import { getConverter } from '#/converter'
 import { AppError } from '#/errors'
-import type { ConvertOptions, InputFn } from '#/types'
+import type { ConvertOptions } from '#/types'
 import type { Props } from './types'
 
 export function useConvert({ args, options }: Props) {
@@ -19,7 +18,7 @@ function useRunConvert({ options, name, input, inputPath, outputPath, setResult 
     ;(async () => {
       try {
         const newOptions: ConvertOptions = {
-          ...omit(options, 'includeUris'),
+          ...options,
           includeUris: options.includeUris?.split(','),
           input,
         }

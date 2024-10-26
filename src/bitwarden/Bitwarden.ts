@@ -45,7 +45,13 @@ export class Bitwarden {
     outs.push(
       this.#serializeSection('FIELDS', this.#seriaizeFields(item.fields)),
     )
-    outs.push(this.#serializeSection('NOTES', this.#serializeNotes(item.notes)))
+    if (item.type === BitwardenExport.ItemType.SecureNote) {
+      outs.push(this.#serializeNotes(item.notes))
+    } else {
+      outs.push(
+        this.#serializeSection('NOTES', this.#serializeNotes(item.notes)),
+      )
+    }
     outs.push(
       this.#serializeSection(
         'PASSWORD_HISTORY',

@@ -35,6 +35,15 @@ export class ApplePasswords {
           }
           break
         }
+        case BitwardenExport.ItemType.SecureNote: {
+          const notes = app.serializeRest(item)
+          const output: ApplePasswordsExport.Item = {
+            Title: item.name,
+            Notes: notes,
+          }
+          outputs.push(output)
+          break
+        }
         default: {
           skippedCount++
           continue

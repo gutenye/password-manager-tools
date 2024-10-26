@@ -44,7 +44,7 @@ function useRunConvert({
           logger,
           report,
         }
-        // await getConverter(name)(inputPath, outputPath, newOptions, context)
+        await getConverter(name)(inputPath, outputPath, newOptions, context)
         report.done()
       } catch (error) {
         if (error instanceof AppError) {

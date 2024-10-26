@@ -17,8 +17,8 @@ export async function bitwardenToApplePasswords(
     const parts = bitwarden.includeUris(options.includeUris)
     found = parts[0]
     rest = parts[1]
+    report.set('skippedCount', rest.root.items.length)
   }
-  report.set('processedCount', found.root.items.length)
   const applePasswords = await ApplePasswords.from(found, context)
   await applePasswords.export(outputPath)
   report.set('outputPath', outputPath)

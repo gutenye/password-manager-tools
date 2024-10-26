@@ -8,7 +8,7 @@ import { decrypt, encrypt } from './encryptDecrypt'
 
 export class Bitwarden {
   static async import(inputPath: string, context: Context) {
-    const { input } = context
+    const { input, logger } = context
     const text = await fs.readFile(inputPath, 'utf8')
     const fileData: BitwardenExport.File = JSON.parse(text)
     let root: BitwardenExport.Root

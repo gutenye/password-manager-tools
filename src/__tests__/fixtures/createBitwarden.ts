@@ -1,4 +1,4 @@
-import type { Item } from '#/__tests__/types'
+import type { Item, Uri } from '#/__tests__/types'
 import type { BitwardenExport } from '#/types'
 
 export function createBitwarden(items: Item[] = []) {
@@ -6,11 +6,16 @@ export function createBitwarden(items: Item[] = []) {
     encrypted: false,
     folders: [],
     collections: [],
-    items: items.map((item, index) => createLoginItem(index, item)).filter((v) => v !== undefined),
+    items: items
+      .map((item, index) => createLoginItem(index, item))
+      .filter((v) => v !== undefined),
   }
 }
 
-function createLoginItem(index: number, item: Item): BitwardenExport.Item | undefined {
+function createLoginItem(
+  index: number,
+  item: Item,
+): BitwardenExport.Item | undefined {
   if (item === null) {
     return
   }
@@ -41,14 +46,19 @@ function createLoginItem(index: number, item: Item): BitwardenExport.Item | unde
   }
 }
 
-function createUri(uri: string) {
+function createUri(uri: Uri) {
   return {
-    uri,
+    uri: uri.uri,
     match: null,
   }
 }
 
-function createField({ name, value, type = 0, linkedId = null }: BitwardenExport.Field) {
+function createField({
+  name,
+  value,
+  type = 0,
+  linkedId = null,
+}: BitwardenExport.Field) {
   return {
     name,
     value,

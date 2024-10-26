@@ -14,13 +14,17 @@ export class ApplePasswords {
       switch (item.type) {
         case BitwardenExport.ItemType.Login: {
           processedCount++
-          console.log(processedCount)
           const login = item.login
           const hostnames = login.__sameHostnames__?.value ?? [undefined]
           for (const hostname of hostnames) {
             const notes = app.serializeRest(item)
+            let name = item.name
+            if (login.__sameHostnames__?.hasMore) {
+              name = `${name} FIXWEBSITE`
+              requireFixCount++
+            }
             const output: ApplePasswordsExport.Item = {
-              Title: item.name,
+              Title: name,
               Username: login.username,
               Password: login.password,
               OTPAuth: login.totp,
@@ -28,9 +32,6 @@ export class ApplePasswords {
               Notes: notes,
             }
             outputs.push(output)
-          }
-          if (login.__sameHostnames__?.hasMore) {
-            requireFixCount++
           }
           break
         }
@@ -40,7 +41,6 @@ export class ApplePasswords {
         }
       }
     }
-    console.log(processedCount)
     report.set('processedCount', processedCount)
     report.set('skippedCount', report.data.skippedCount + skippedCount)
     report.set('requireFixCount', requireFixCount)

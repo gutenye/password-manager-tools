@@ -17,7 +17,7 @@ export class ApplePasswords {
           const login = item.login
           const hostnames = login.__sameHostnames__?.value ?? [undefined]
           for (const hostname of hostnames) {
-            const notes = app.serializeRest(item)
+            const notes = app.serializeCommon(item)
             let name = item.name
             if (login.__sameHostnames__?.hasMore) {
               name = `${name} FIXWEBSITE`
@@ -36,9 +36,18 @@ export class ApplePasswords {
           break
         }
         case BitwardenExport.ItemType.SecureNote: {
-          const notes = app.serializeRest(item)
+          const notes = app.serializeCommon(item)
           const output: ApplePasswordsExport.Item = {
-            Title: item.name,
+            Title: `${item.name} (SecureNote)`,
+            Notes: notes,
+          }
+          outputs.push(output)
+          break
+        }
+        case BitwardenExport.ItemType.Card: {
+          const notes = app.serializeCard(item)
+          const output: ApplePasswordsExport.Item = {
+            Title: `${item.name} (Card)`,
             Notes: notes,
           }
           outputs.push(output)
@@ -69,7 +78,9 @@ export class ApplePasswords {
   }
 
   async export(output: string) {
-    const csv = Papa.unparse(this.#root)
+    const csv = Papa.unparse(this.#root, {
+      columns: ['Title', 'Username', 'Password', 'OTPAuth', 'URL', 'Notes'],
+    })
     await fs.writeFile(output, csv)
   }
 }

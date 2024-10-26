@@ -40,7 +40,7 @@ export class Bitwarden {
     this.#normalizeUris()
   }
 
-  serializeRest(item: BitwardenExport.Item) {
+  serializeCommon(item: BitwardenExport.Item) {
     const outs = []
     outs.push(
       this.#serializeSection('FIELDS', this.#seriaizeFields(item.fields)),
@@ -66,7 +66,26 @@ export class Bitwarden {
         this.#serializeSection('URIS', this.#serializeUris(item.login.uris)),
       )
     }
-    return outs.filter(Boolean).join('\n\n')
+    return outs.filter(Boolean).join('\n\n').trim()
+  }
+
+  serializeCard(item: BitwardenExport.Item) {
+    if (item.type !== BitwardenExport.ItemType.Card) {
+      throw new Error(
+        `[bitwarden.serializeCard] type '${BitwardenExport.ItemType[item.type]}' is not supported`,
+      )
+    }
+
+    const items = []
+    for (const [key, value] of Object.entries(item.card)) {
+      if (value) {
+        items.push(`${key} = ${value}`)
+      }
+    }
+    const card = items.join('\n')
+
+    const common = this.serializeCommon(item)
+    return `${card}\n${common}`.trim()
   }
 
   includeUris(domains: string[]) {

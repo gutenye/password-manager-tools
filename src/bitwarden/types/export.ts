@@ -156,4 +156,7 @@ export const UriMatch = {
 
 export type TUriMatch = (typeof UriMatch)[keyof typeof UriMatch]
 
-export const UriMatchReverse = invert(UriMatch) as { null: string; [key: number]: string }
+export const UriMatchReverse = invert(UriMatch) as {
+  null: string
+  [key: number]: string
+}

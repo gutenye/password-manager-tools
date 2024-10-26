@@ -3,6 +3,7 @@ import memfs from 'memfs'
 import Papa from 'papaparse'
 import { createApplePasswords, createBitwarden } from '#/__tests__/fixtures'
 import type { Item } from '#/__tests__/types'
+import { Report } from '#/cli/hooks/useReport'
 import type {
   ApplePasswordsExport,
   BitwardenExport,
@@ -21,6 +22,7 @@ const CONTEXT: Context = {
     error: () => null,
   },
   input: () => '',
+  report: new Report({}, () => null),
 }
 
 it('encrypted: false', async () => {
@@ -60,7 +62,7 @@ it('overwrite: false', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest(
     [
       {
-        uris: ['a.com'],
+        uris: [{ uri: 'a.com' }],
       },
     ],
     { overwrite: false },
@@ -81,10 +83,24 @@ it('uris: empty', async () => {
   expect(rest).toEqual(restExpected)
 })
 
+it('uris: hasMore', async () => {
+  const { output, rest, outputExpected, restExpected } = await runTest([
+    {
+      uris: [{ uri: 'a.com' }, { uri: 'b.com', __output__: false }],
+      __output__: {
+        notes: '[URIS]\nDefault = a.com\nDefault = b.com',
+        title: 'name1 FIXWEBSITE',
+      },
+    },
+  ])
+  expect(output).toEqual(outputExpected)
+  expect(rest).toEqual(restExpected)
+})
+
 it('uri: a.com', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest([
     {
-      uris: ['a.com'],
+      uris: [{ uri: 'a.com' }],
     },
   ])
   expect(output).toEqual(outputExpected)
@@ -94,8 +110,9 @@ it('uri: a.com', async () => {
 it('uri: invalid', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest([
     {
-      uris: ['http-invalid'],
+      uris: [{ uri: 'http-invalid' }],
       __output__: {
+        title: 'name1 FIXWEBSITE',
         notes: '[URIS]\nDefault = http-invalid',
       },
     },
@@ -108,10 +125,10 @@ it('option: includeUris', async () => {
   const { output, rest, outputExpected, restExpected } = await runTest(
     [
       {
-        uris: ['https://1.a.com'],
+        uris: [{ uri: 'https://1.a.com' }],
       },
       {
-        uris: ['https://c.com'],
+        uris: [{ uri: 'https://c.com' }],
         __output__: false,
       },
     ],

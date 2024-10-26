@@ -61,7 +61,10 @@ const ReportComponent = ({ reportData }: Props) => {
       <Text />
       <Text bold>1. ✅ Successfully Processed Items</Text>
       <Text />
-      <Text>n items have been exported without issues.</Text>
+      <Text>
+        n items have been exported without issues. Saved in output.csv. Open
+        Apple Passwords app, File - Import password
+      </Text>
 
       <Text />
       <Text bold>2. 🚫 Skipped Items</Text>

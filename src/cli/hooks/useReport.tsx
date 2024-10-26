@@ -62,8 +62,6 @@ const ReportComponent = ({ reportData }: Props) => {
 
 \`${skippedCount}\` remaining items have been overwritten in \`${overwritePath}\`, password encrypted **yes/no**, can be used next for incremential export
 
-The following item types were skipped because they are not supported: Secure Note, Card, Identity, Please consider handling these items manually if needed.
-
 **Note:** Press keep this file secure and password protected**
 
 # 📊 Summary 📊

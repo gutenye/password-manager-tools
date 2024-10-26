@@ -5,7 +5,7 @@ import { BitwardenExport } from '#/types'
 
 export class ApplePasswords {
   static async from(app: Bitwarden, context: Context) {
-    const { logger } = context
+    const { report } = context
     const outputs = []
     for (const item of app.root.items) {
       switch (item.type) {
@@ -25,14 +25,12 @@ export class ApplePasswords {
             outputs.push(output)
           }
           if (login.__sameHostnames__?.hasMore) {
-            logger.warn('URLs needs manual fixing: ', item.name)
+            report.add('itemsHasMultipleDomains', item.name)
           }
           break
         }
         default: {
-          logger.warn(
-            `Skiped unsupported item type: ${BitwardenExport.ItemType[item.type]}`,
-          )
+          report.add('skipedItemTypes', BitwardenExport.ItemType[item.type])
           continue
         }
       }

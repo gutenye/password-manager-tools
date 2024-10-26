@@ -1,4 +1,5 @@
-import { Box, Text } from 'ink'
+import chalk from 'chalk'
+import { Text } from 'ink'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 
@@ -31,73 +32,53 @@ const ReportComponent = ({ reportData }: Props) => {
     return <Text color="red">Error: {reportData.error.message}</Text>
   }
   const {
-    processedCount,
     outputPath,
     overwritePath,
-    itemsHasMultipleDomains,
-    skipedItemTypes,
+    processedCount,
+    skippedCount,
+    requireFixCount,
   } = reportData
   return (
     <>
-      {skipedItemTypes.size > 0 && (
-        <Text>
-          Items with type '{Array.from(skipedItemTypes).join(', ')}' are skipped
-        </Text>
-      )}
-      {itemsHasMultipleDomains.length > 0 && (
-        <Text>
-          Items has multiple domains require manual fixing:{' '}
-          {itemsHasMultipleDomains.join(', ')}
-        </Text>
-      )}
-      <Text>Processed {processedCount} items </Text>
-      {overwritePath && (
-        <Text>The rest items are overwriten in '{overwritePath}'</Text>
-      )}
-      <Text>Exported passwords are saved in '{outputPath}'</Text>
-
-      <Markdown>
+      <Markdown strong={chalk.red.bold}>
         {`
 # 📋 Final Report 📋
 
-## 1. ✅ Successfully Processed Items
+## 1.  ✅ Exported Passwords
 
-n items have been exported without issues. Saved in output.csv. Open Apple Passwords app, File - Import password
+\`${processedCount}\` items have been exported without issues. Saved in \`${outputPath}\`. Open \`Passwords\` app, use \`File - Import password\` to import them.
 
-## 2. 🚫 Skipped Items
+**Note:** After it's used, please remove this file for saftely**
+
+## 2. ⚠️ Items Requiring Manual Fixes
+
+\`${requireFixCount}\` items have multiple domains and require your attention:
+
+1. \`Open\` the \`Passwords\` app.
+2. \`Find\` items ends with \`FIXDOMAIN\`
+3. \`Add\` the corresponding website information from the notes field.
+
+## 3. 🚫 Skipped Items
+
+\`${skippedCount}\` remaining items have been overwritten in \`${overwritePath}\`, password encrypted **yes/no**, can be used next for incremential export
 
 The following item types were skipped because they are not supported: Secure Note, Card, Identity, Please consider handling these items manually if needed.
 
-## 3. ⚠️ Items Requiring Manual Fixes
-
-n items have multiple domains and require your attention:
-
-1. **Open** the **Passwords** app.
-2. **Find** items ends with 'FIXDOMAIN'
-3. **Add** the corresponding website information  from the notes field.
-
-## 4. 🚫 Skipped Items
-
-The remaining items have been overwritten in 'input.csv', password encrypted **yes/no** can be used next for incremential export
-
 **Note:** Press keep this file secure and password protected**
-
-## 5. ✅ Exported Passwords
-
-passwords have been successfully exported to src/__tests__/fixtures/output.csv
-
-**Note:** Are it's used, please remove this file for saftely**
 
 # 📊 Summary 📊
 
-- ⚠️️ Items Requiring Manual Fixes: n
-- 🚫 Skipped Items: n logins, n secure notes/cards/identities
-- 🚫 Skipped Items Overwritten In: path
-- ✅ Exported Items: n 
-- ✅ Exported Items Saved In: path 
+|                                 |                    |
+| ------------------------------- | ------------------ |
+| ✅ Exported Items               | ${processedCount}  |
+| ✅ Exported Items Saved In      | ${markdownEscape(outputPath)}      |
+| ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
+| 🚫 Skipped Items                | ${skippedCount}    |
+| 🚫 Skipped Items Overwritten In | ${markdownEscape(overwritePath || '')}   |
 
-Thank you for using our CLI app! Please [start the project](link) on the github if you like. If you have any questions, please refer to the documentation or report an issue on the github.
-`.trim()}
+
+Thank you for using our CLI app! Please [start the project](https://github.com/gutenye/password-manager-tools) on the Github if you like it. If you have any questions, please refer to the documentation or report an issue on the github.
+`}
       </Markdown>
     </>
   )
@@ -148,23 +129,23 @@ export class Report {
 }
 
 const initialReport: ReportData = {
-  processedCount: 0,
   done: false,
   error: undefined,
   outputPath: '',
   overwritePath: undefined,
-  itemsHasMultipleDomains: [],
-  skipedItemTypes: new Set(),
+  processedCount: 0,
+  skippedCount: 0,
+  requireFixCount: 0,
 }
 
 type ReportData = {
-  processedCount: number
   done: boolean
   error?: Error
   outputPath: string
   overwritePath?: string
-  itemsHasMultipleDomains: string[]
-  skipedItemTypes: Set<string>
+  processedCount: number
+  skippedCount: number
+  requireFixCount: number
 }
 
 type Key = keyof ReportData
@@ -174,3 +155,7 @@ type Props = {
 }
 
 type SetReportData = React.Dispatch<React.SetStateAction<ReportData>>
+
+function markdownEscape(text: string) {
+  return text.replaceAll('__', '\\_\\_')
+}

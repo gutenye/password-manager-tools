@@ -7,9 +7,14 @@ export class ApplePasswords {
   static async from(app: Bitwarden, context: Context) {
     const { report } = context
     const outputs = []
+    let processedCount = 0
+    let skippedCount = 0
+    let requireFixCount = 0
     for (const item of app.root.items) {
       switch (item.type) {
         case BitwardenExport.ItemType.Login: {
+          processedCount++
+          console.log(processedCount)
           const login = item.login
           const hostnames = login.__sameHostnames__?.value ?? [undefined]
           for (const hostname of hostnames) {
@@ -25,16 +30,20 @@ export class ApplePasswords {
             outputs.push(output)
           }
           if (login.__sameHostnames__?.hasMore) {
-            report.add('itemsHasMultipleDomains', item.name)
+            requireFixCount++
           }
           break
         }
         default: {
-          report.add('skipedItemTypes', BitwardenExport.ItemType[item.type])
+          skippedCount++
           continue
         }
       }
     }
+    console.log(processedCount)
+    report.set('processedCount', processedCount)
+    report.set('skippedCount', report.data.skippedCount + skippedCount)
+    report.set('requireFixCount', requireFixCount)
     return new ApplePasswords(outputs, context)
   }
 

@@ -2,73 +2,145 @@
   "encrypted": false,
   "folders": [
     {
-      "id": "4E862651-3737-4742-B9FC-1B1C8D0275B8",
-      "name": "Folder1"
-    }
-  ],
-  "collections": [
-    {
-      "id": "1D4DB229-19E0-4F9A-BE86-D46FD8B0713A",
-      "organizationId": "71C036FB-9415-4158-A8A2-F1ED947AD4E8",
-      "name": "Collection1",
-      "externalId": null
+      "id": "bba7a536-bae8-42de-964a-b21500e8b919",
+      "name": "Folder"
     }
   ],
   "items": [
     {
-      "id": "3CDBC67C-E462-4B77-B6A0-E8DCEC59B799",
-      "folderId": "4E862651-3737-4742-B9FC-1B1C8D0275B8",
+      "passwordHistory": null,
+      "revisionDate": "2024-10-26T14:06:01.050Z",
+      "creationDate": "2024-10-26T14:06:01.050Z",
+      "deletedDate": null,
+      "id": "21f01a73-01dc-4b6e-b78b-b21500e85d9d",
       "organizationId": null,
-      "collectionIds": null,
-      "name": "HelloLogin1",
-      "notes": "note\nb\n\n- hello\n\na",
-      "type": 1,
-      "login": {
-        "username": "username",
-        "password": "password",
-        "uris": [
-          {
-            "uri": "https://a.com",
-            "match": null
-          },
-          {
-            "uri": "https://1.a.com/b?c=1",
-            "match": null
-          },
-          {
-            "uri": "https://b.com",
-            "match": null
-          },
-          {
-            "uri": "BaseDomain",
-            "match": 0
-          },
-          {
-            "uri": "Host",
-            "match": 1
-          },
-          {
-            "uri": "StartsWith",
-            "match": 2
-          },
-          {
-            "uri": "Exact",
-            "match": 3
-          },
-          {
-            "uri": "RegularExpression",
-            "match": 4
-          },
-          {
-            "uri": "Never",
-            "match": 5
-          }
-        ],
-        "totp": "totp",
-        "fido2Credentials": []
-      },
-      "favorite": true,
+      "folderId": null,
+      "type": 3,
       "reprompt": 0,
+      "name": "HelloCard",
+      "notes": "notes",
+      "favorite": false,
+      "card": {
+        "cardholderName": "cardholderName",
+        "brand": "Visa",
+        "number": "1",
+        "expMonth": "1",
+        "expYear": "2001",
+        "code": "2"
+      },
+      "collectionIds": null
+    },
+    {
+      "passwordHistory": null,
+      "revisionDate": "2024-10-26T14:04:49.843Z",
+      "creationDate": "2024-10-26T14:04:49.843Z",
+      "deletedDate": null,
+      "id": "62065c4f-424b-4ea4-99ce-b21500e80a2a",
+      "organizationId": null,
+      "folderId": null,
+      "type": 3,
+      "reprompt": 0,
+      "name": "HelloCardEmpty",
+      "notes": null,
+      "favorite": false,
+      "card": {
+        "cardholderName": null,
+        "brand": null,
+        "number": null,
+        "expMonth": null,
+        "expYear": null,
+        "code": null
+      },
+      "collectionIds": null
+    },
+    {
+      "passwordHistory": null,
+      "revisionDate": "2024-10-26T14:04:19.913Z",
+      "creationDate": "2024-10-26T14:04:09.883Z",
+      "deletedDate": null,
+      "id": "52cbd47a-00dc-4b07-9f09-b21500e7db57",
+      "organizationId": null,
+      "folderId": null,
+      "type": 4,
+      "reprompt": 0,
+      "name": "HelloIdentity",
+      "notes": "notes",
+      "favorite": false,
+      "identity": {
+        "title": "Mr",
+        "firstName": "firstName",
+        "middleName": "middleName",
+        "lastName": "lastName",
+        "address1": "address1",
+        "address2": "address2",
+        "address3": "address3",
+        "city": "city",
+        "state": "state",
+        "postalCode": "zip",
+        "country": "country",
+        "company": "company",
+        "email": "email",
+        "phone": "phone",
+        "ssn": "socialSecurityNumber",
+        "username": "username",
+        "passportNumber": "passportNumber",
+        "licenseNumber": "licenseNumber"
+      },
+      "collectionIds": null
+    },
+    {
+      "passwordHistory": null,
+      "revisionDate": "2024-10-26T14:02:41.533Z",
+      "creationDate": "2024-10-26T14:02:41.533Z",
+      "deletedDate": null,
+      "id": "8f0cc635-61d7-4106-b723-b21500e773cd",
+      "organizationId": null,
+      "folderId": null,
+      "type": 4,
+      "reprompt": 0,
+      "name": "HelloIdentityEmpty",
+      "notes": null,
+      "favorite": false,
+      "identity": {
+        "title": null,
+        "firstName": null,
+        "middleName": null,
+        "lastName": null,
+        "address1": null,
+        "address2": null,
+        "address3": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": null,
+        "company": null,
+        "email": null,
+        "phone": null,
+        "ssn": null,
+        "username": null,
+        "passportNumber": null,
+        "licenseNumber": null
+      },
+      "collectionIds": null
+    },
+    {
+      "passwordHistory": [
+        {
+          "lastUsedDate": "2024-10-26T13:56:05.849Z",
+          "password": "password1"
+        }
+      ],
+      "revisionDate": "2024-10-26T14:11:53.738Z",
+      "creationDate": "2024-10-26T14:11:53.738Z",
+      "deletedDate": null,
+      "id": "ced29d72-9217-4441-91fb-b21500e9faec",
+      "organizationId": null,
+      "folderId": "bba7a536-bae8-42de-964a-b21500e8b919",
+      "type": 1,
+      "reprompt": 0,
+      "name": "HelloLogin",
+      "notes": "a\nb\n\n- hello\n\na",
+      "favorite": false,
       "fields": [
         {
           "name": "Text",
@@ -101,91 +173,87 @@
           "linkedId": 100
         }
       ],
-      "passwordHistory": [
-        {
-          "lastUsedDate": "2024-02-24T02:56:29.772Z",
-          "password": "OldPassword"
-        }
-      ],
-      "revisionDate": "2024-10-19T00:08:08.486000061Z",
-      "creationDate": "2024-07-07T04:50:27.513000011Z",
-      "deletedDate": null
+      "login": {
+        "fido2Credentials": [],
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://host.com"
+          },
+          {
+            "match": null,
+            "uri": "https://sub.host.com"
+          },
+          {
+            "match": 0,
+            "uri": "BaseDomain"
+          },
+          {
+            "match": 1,
+            "uri": "Host"
+          },
+          {
+            "match": 2,
+            "uri": "StartsWith"
+          },
+          {
+            "match": 3,
+            "uri": "Exact"
+          },
+          {
+            "match": 4,
+            "uri": "RegularExpression"
+          },
+          {
+            "match": 5,
+            "uri": "Never"
+          }
+        ],
+        "username": "username",
+        "password": "password",
+        "totp": "totp"
+      },
+      "collectionIds": null
     },
     {
-      "id": "FD93FD1B-967B-4DFF-9C4E-A31FD2B9FFE9",
-      "folderId": null,
+      "passwordHistory": null,
+      "revisionDate": "2024-10-26T14:02:25.326Z",
+      "creationDate": "2024-10-26T14:02:25.326Z",
+      "deletedDate": null,
+      "id": "7319f494-a857-4ecf-9793-b21500e760d0",
       "organizationId": null,
-      "collectionIds": null,
-      "name": "HelloSecureNote1",
+      "folderId": null,
+      "type": 1,
+      "reprompt": 0,
+      "name": "HelloLoginEmpty",
       "notes": null,
+      "favorite": false,
+      "login": {
+        "fido2Credentials": [],
+        "uris": [],
+        "username": null,
+        "password": null,
+        "totp": null
+      },
+      "collectionIds": null
+    },
+    {
+      "passwordHistory": null,
+      "revisionDate": "2024-10-26T14:04:35.706Z",
+      "creationDate": "2024-10-26T14:02:02.596Z",
+      "deletedDate": null,
+      "id": "54a306f4-4994-454a-9b40-b21500e7462c",
+      "organizationId": null,
+      "folderId": null,
       "type": 2,
+      "reprompt": 0,
+      "name": "HelloSecureNote",
+      "notes": "notes",
+      "favorite": false,
       "secureNote": {
         "type": 0
       },
-      "favorite": false,
-      "reprompt": 0,
-      "passwordHistory": null,
-      "revisionDate": "2024-10-19T00:01:25.782999992Z",
-      "creationDate": "2024-10-19T00:01:25.782999992Z",
-      "deletedDate": null
-    },
-    {
-      "id": "4AD7B2CC-8B2B-4175-8CC7-901D1CA31B70",
-      "folderId": null,
-      "organizationId": null,
-      "collectionIds": null,
-      "name": "HelloCard1",
-      "notes": null,
-      "type": 3,
-      "card": {
-        "cardholderName": null,
-        "expMonth": null,
-        "expYear": null,
-        "code": null,
-        "brand": null,
-        "number": null
-      },
-      "favorite": false,
-      "reprompt": 0,
-      "passwordHistory": null,
-      "revisionDate": "2024-10-19T00:00:44.842999935Z",
-      "creationDate": "2024-10-19T00:00:44.842999935Z",
-      "deletedDate": null
-    },
-    {
-      "id": "7DCBE29E-F8D0-418E-BB46-75F1193D35B1",
-      "folderId": null,
-      "organizationId": null,
-      "collectionIds": null,
-      "name": "HelloIdentify1",
-      "notes": null,
-      "type": 4,
-      "identity": {
-        "title": null,
-        "firstName": null,
-        "middleName": null,
-        "lastName": null,
-        "address1": null,
-        "address2": null,
-        "address3": null,
-        "city": null,
-        "state": null,
-        "postalCode": null,
-        "country": null,
-        "company": null,
-        "email": null,
-        "phone": null,
-        "ssn": null,
-        "username": null,
-        "passportNumber": null,
-        "licenseNumber": null
-      },
-      "favorite": false,
-      "reprompt": 0,
-      "passwordHistory": null,
-      "revisionDate": "2024-10-19T00:01:03.635999917Z",
-      "creationDate": "2024-10-19T00:01:03.635999917Z",
-      "deletedDate": null
+      "collectionIds": null
     }
   ]
 }

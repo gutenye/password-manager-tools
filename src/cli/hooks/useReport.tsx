@@ -2,6 +2,8 @@ import { Box, Text } from 'ink'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 
+const { default: Markdown } = await import('ink-markdown')
+
 export function useReport() {
   const [reportData, setReportData] = useState<ReportData>(initialReport)
 
@@ -141,6 +143,9 @@ const ReportComponent = ({ reportData }: Props) => {
           '\nThank you for using our CLI app! Please [start the project](link) on the github if you like. If you have any questions, please refer to the documentation or report an issue on the github.'
         }
       </Text>
+      <Markdown>{`
+# hello
+			`}</Markdown>
     </>
   )
 }

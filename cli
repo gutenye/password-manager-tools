@@ -4,4 +4,5 @@ __dirname=$(dirname $(realpath ${BASH_SOURCE[0]}))
 
 cd $__dirname
 
-tsx src/cli/cli.ts "$@"
+#tsx src/cli/cli.ts "$@"
+bun src/cli/cli.ts "$@"

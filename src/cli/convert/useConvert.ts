@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useInput, useLogger } from '#/cli/hooks'
 import { getConverter } from '#/converter'
 import { AppError } from '#/errors'
-import type { ConvertOptions } from '#/types'
+import type { Context, ConvertOptions } from '#/types'
 import type { Props } from './types'
 
 export function useConvert({ args, options }: Props) {
@@ -38,11 +38,12 @@ function useRunConvert({
         const newOptions: ConvertOptions = {
           ...options,
           includeUris: options.includeUris?.split(','),
+        }
+        const context: Context = {
           input,
           logger,
         }
-
-        await getConverter(name)(inputPath, outputPath, newOptions)
+        await getConverter(name)(inputPath, outputPath, newOptions, context)
         setResult(' ')
       } catch (error) {
         if (error instanceof AppError) {

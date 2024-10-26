@@ -7,7 +7,7 @@ type Options = {
   type?: 'password'
 }
 
-export type InputFn = (options?: Options) => Promise<string> | string
+export type Input = (options?: Options) => Promise<string> | string
 
 export function useInput() {
   const [handleSubmit, setHandleSubmit] = useState(null)
@@ -15,7 +15,7 @@ export function useInput() {
   const { label, type } = options
   const mask = type === 'password' ? '*' : undefined
 
-  const input: InputFn = useCallback(async (options = {}) => {
+  const input: Input = useCallback(async (options = {}) => {
     setOptions(options)
     const result = await new Promise((resolve) => {
       setHandleSubmit(

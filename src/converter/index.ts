@@ -1,5 +1,5 @@
 import invariant from 'invariant'
-import type { ConvertOptions } from '#/types'
+import type { Context, ConvertOptions } from '#/types'
 import { bitwardenToApplePasswords } from './BitwardenToApplePasswords'
 
 const converters: Record<string, convert | undefined> = {
@@ -12,4 +12,9 @@ export function getConverter(name: string) {
   return converter
 }
 
-export type convert = (input: string, output: string, options?: ConvertOptions) => Promise<void>
+export type convert = (
+  input: string,
+  output: string,
+  options: ConvertOptions,
+  context: Context,
+) => Promise<void>

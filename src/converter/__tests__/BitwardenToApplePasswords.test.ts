@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test'
+import { expect, it } from 'bun:test'
 import memfs from 'memfs'
 import Papa from 'papaparse'
 import { createApplePasswords, createBitwarden } from '#/__tests__/fixtures'
@@ -6,12 +6,22 @@ import type { Item } from '#/__tests__/types'
 import type {
   ApplePasswordsExport,
   BitwardenExport,
+  Context,
   ConvertOptions,
 } from '#/types'
 
 import { bitwardenToApplePasswords } from '../BitwardenToApplePasswords'
 
 const fs = memfs.fs.promises
+
+const CONTEXT: Context = {
+  logger: {
+    log: () => null,
+    warn: () => null,
+    error: () => null,
+  },
+  input: () => '',
+}
 
 it('encrypted: false', async () => {
   const { fixtures } = globalThis.__TEST__
@@ -23,7 +33,7 @@ it('encrypted: false', async () => {
 it('encrypted: true', async () => {
   const { fixtures } = globalThis.__TEST__
   const { output, rest } = await runConvert(fixtures.bitwardenEncrypted.data, {
-    input: () => '1',
+    password: '1',
   })
   expect(output).toEqual(fixtures.bitwardenEncryptedToApplePasswords.data)
   expect(rest).toEqual({
@@ -35,6 +45,15 @@ it('encrypted: true', async () => {
     passwordProtected: true,
     salt: expect.any(String),
   })
+})
+
+it('encrypted: wrong password', async () => {
+  const { fixtures } = globalThis.__TEST__
+  await expect(
+    runConvert(fixtures.bitwardenEncrypted.data, {
+      password: 'incorrect',
+    }),
+  ).rejects.toThrow('Incorrect password')
 })
 
 it('overwrite: false', async () => {
@@ -117,10 +136,7 @@ it('escape: title, field', async () => {
   expect(rest).toEqual(restExpected)
 })
 
-async function runTest(
-  items: Item[],
-  rawOptions: Partial<ConvertOptions> = {},
-) {
+async function runTest(items: Item[], rawOptions: RunConvertOptions = {}) {
   const options = {
     ...rawOptions,
     overwrite: rawOptions.overwrite === undefined ? true : rawOptions.overwrite,
@@ -139,24 +155,31 @@ async function runTest(
   return { output, rest, outputExpected, restExpected }
 }
 
-async function runConvert(
-  input: any,
-  rawOptions: Partial<ConvertOptions> = {},
-) {
+async function runConvert(input: any, rawOptions: RunConvertOptions = {}) {
+  const { password, ...restOptions } = rawOptions
   const options: ConvertOptions = {
-    logger: {
-      log: () => null,
-    },
-    input: () => '',
-    ...rawOptions,
+    ...restOptions,
     overwrite: rawOptions.overwrite === undefined ? true : rawOptions.overwrite,
   }
+  const context: Context = {
+    ...CONTEXT,
+    input: () => password || '',
+  }
   await fs.writeFile('/input.json', JSON.stringify(input))
-  await bitwardenToApplePasswords('/input.json', '/output.csv', options)
+  await bitwardenToApplePasswords(
+    '/input.json',
+    '/output.csv',
+    options,
+    context,
+  )
   const outputText = (await fs.readFile('/output.csv', 'utf8')) as string
   const output = Papa.parse(outputText, { header: true })
     .data as ApplePasswordsExport.Root
   const restText = (await fs.readFile('/input.json', 'utf8')) as string
   const rest = restText ? (JSON.parse(restText) as BitwardenExport.File) : null
   return { output, rest }
+}
+
+interface RunConvertOptions extends Partial<ConvertOptions> {
+  password?: string
 }

@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises'
 import Papa from 'papaparse'
-import type { ApplePasswordsExport, Bitwarden } from '#/types'
+import type { ApplePasswordsExport, Bitwarden, Context } from '#/types'
 import { BitwardenExport } from '#/types'
 
 export class ApplePasswords {
-  static async from(app: Bitwarden) {
+  static async from(app: Bitwarden, context: Context) {
+    const { logger } = context
     const outputs = []
     for (const item of app.root.items) {
       switch (item.type) {
@@ -24,23 +25,27 @@ export class ApplePasswords {
             outputs.push(output)
           }
           if (login.__sameHostnames__?.hasMore) {
-            // console.log('URLs needs manual fixing: ', item.name)
+            logger.warn('URLs needs manual fixing: ', item.name)
           }
           break
         }
         default: {
-          // console.warn(`skiped unsupported item type: ${BitwardenExport.ItemType[item.type]}`)
+          logger.warn(
+            `Skiped unsupported item type: ${BitwardenExport.ItemType[item.type]}`,
+          )
           continue
         }
       }
     }
-    return new ApplePasswords(outputs)
+    return new ApplePasswords(outputs, context)
   }
 
   #root: ApplePasswordsExport.Root
+  #context: Context
 
-  constructor(root: ApplePasswordsExport.Root) {
+  constructor(root: ApplePasswordsExport.Root, context: Context) {
     this.#root = root
+    this.#context = context
   }
 
   get root() {

@@ -60,7 +60,7 @@ export class Bitwarden {
     )
     if (
       item.type === BitwardenExport.ItemType.Login &&
-      item.login.__sameHostnames__?.hasMore
+      item.login.__sameHostnames__?.needsNote
     ) {
       outs.push(
         this.#serializeSection('URIS', this.#serializeUris(item.login.uris)),
@@ -154,7 +154,11 @@ export class Bitwarden {
             { hostname: string; domain: string }[],
             { hostname: undefined }[],
           ]
+          const needsNote = invalidUrlItems.length > 0
           if (validUrlItems.length === 0) {
+            login.__sameHostnames__ = {
+              needsNote,
+            }
           } else {
             const [firstValidUrlItems, ...restValidUrlItemsItems] = orderBy(
               Object.values(groupBy(validUrlItems, 'domain')),
@@ -164,9 +168,11 @@ export class Bitwarden {
             const restValidUrlItems = restValidUrlItemsItems.flat(
               Number.POSITIVE_INFINITY,
             )
+            const needsFix = restValidUrlItems.length > 0
             login.__sameHostnames__ = {
               value: firstValidUrlItems.map((v) => v.hostname),
-              hasMore: restValidUrlItems.length > 0,
+              needsFix,
+              needsNote: needsNote || needsFix,
             }
           }
         }

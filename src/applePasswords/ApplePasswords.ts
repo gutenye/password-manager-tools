@@ -5,7 +5,7 @@ import { BitwardenExport } from '#/types'
 
 export class ApplePasswords {
   static async from(app: Bitwarden, context: Context) {
-    const { report } = context
+    const { report, logger } = context
     const outputs = []
     let processedCount = 0
     let skippedCount = 0
@@ -44,16 +44,20 @@ export class ApplePasswords {
           outputs.push(output)
           break
         }
-        case BitwardenExport.ItemType.Card: {
-          const notes = app.serializeCard(item)
+        case BitwardenExport.ItemType.Card:
+        case BitwardenExport.ItemType.Identity: {
+          const type = BitwardenExport.ItemType[item.type]
+          const notes = app.serializeOther(item)
           const output: ApplePasswordsExport.Item = {
-            Title: `${item.name} (Card)`,
+            Title: `${item.name} (${type})`,
             Notes: notes,
           }
           outputs.push(output)
           break
         }
         default: {
+          const { type, name } = item as BitwardenExport.Item
+          logger.error(`Type '${type}' from '${name}' is not supported`)
           skippedCount++
           continue
         }

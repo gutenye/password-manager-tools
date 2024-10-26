@@ -67,7 +67,6 @@ export async function runConvert(
     context,
   )
   const outputText = (await fs.readFile('/output.csv', 'utf8')) as string
-  console.log(outputText)
   const output = Papa.parse(outputText, { header: true })
     .data as ApplePasswordsExport.Root
   const restText = (await fs.readFile('/input.json', 'utf8')) as string

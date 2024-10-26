@@ -19,9 +19,13 @@ export function useLogger() {
   const logger = useMemo(() => {
     const createLogFn = (level: Level) => {
       return function log(...messages: any[]) {
+        let message = messages.join(' ')
+        if (level === 'error') {
+          message = `Error: ${message}`
+        }
         addItem({
           level,
-          message: messages.join(' '),
+          message,
         })
       }
     }

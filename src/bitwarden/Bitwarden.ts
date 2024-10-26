@@ -69,23 +69,28 @@ export class Bitwarden {
     return outs.filter(Boolean).join('\n\n').trim()
   }
 
-  serializeCard(item: BitwardenExport.Item) {
-    if (item.type !== BitwardenExport.ItemType.Card) {
+  serializeOther(item: BitwardenExport.Item) {
+    let data: Record<string, any>
+    if (item.type === BitwardenExport.ItemType.Card) {
+      data = item.card
+    } else if (item.type === BitwardenExport.ItemType.Identity) {
+      data = item.identity
+    } else {
       throw new Error(
-        `[bitwarden.serializeCard] type '${BitwardenExport.ItemType[item.type]}' is not supported`,
+        `[bitwarden.serializeOther] type '${BitwardenExport.ItemType[item.type]}' is not supported`,
       )
     }
 
     const items = []
-    for (const [key, value] of Object.entries(item.card)) {
+    for (const [key, value] of Object.entries(data)) {
       if (value) {
         items.push(`${key} = ${value}`)
       }
     }
-    const card = items.join('\n')
+    const text = items.join('\n')
 
     const common = this.serializeCommon(item)
-    return `${card}\n${common}`.trim()
+    return `${text}\n\n${common}`.trim()
   }
 
   includeUris(domains: string[]) {
@@ -150,9 +155,6 @@ export class Bitwarden {
             { hostname: undefined }[],
           ]
           if (validUrlItems.length === 0) {
-            login.__sameHostnames__ = {
-              hasMore: true,
-            }
           } else {
             const [firstValidUrlItems, ...restValidUrlItemsItems] = orderBy(
               Object.values(groupBy(validUrlItems, 'domain')),
@@ -164,8 +166,7 @@ export class Bitwarden {
             )
             login.__sameHostnames__ = {
               value: firstValidUrlItems.map((v) => v.hostname),
-              hasMore:
-                restValidUrlItems.length > 0 || invalidUrlItems.length > 0,
+              hasMore: restValidUrlItems.length > 0,
             }
           }
         }

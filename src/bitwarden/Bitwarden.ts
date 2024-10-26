@@ -2,13 +2,13 @@ import fs from 'node:fs/promises'
 import { groupBy, orderBy, partition } from 'lodash-es'
 import tldts from 'tldts'
 import { BitwardenExport } from '#/types'
-import type { ConvertOptions } from '#/types'
+import type { Context } from '#/types'
 import { omitByDeep, prefixHttps } from '#/utils'
 import { decrypt, encrypt } from './encryptDecrypt'
 
 export class Bitwarden {
-  static async import(inputPath: string, options: ConvertOptions) {
-    const { input } = options
+  static async import(inputPath: string, context: Context) {
+    const { input } = context
     const text = await fs.readFile(inputPath, 'utf8')
     const fileData: BitwardenExport.File = JSON.parse(text)
     let root: BitwardenExport.Root
@@ -19,14 +19,16 @@ export class Bitwarden {
     } else {
       root = fileData
     }
-    const app = new Bitwarden(root)
+    const app = new Bitwarden(root, context)
     app.normalize()
     return { bitwarden: app, password }
   }
 
   #root: BitwardenExport.Root
+  #context: Context
 
-  constructor(root: BitwardenExport.Root) {
+  constructor(root: BitwardenExport.Root, context: Context) {
+    this.#context = context
     this.#root = root
   }
 
@@ -40,11 +42,23 @@ export class Bitwarden {
 
   serializeRest(item: BitwardenExport.Item) {
     const outs = []
-    outs.push(this.#serializeSection('FIELDS', this.#seriaizeFields(item.fields)))
+    outs.push(
+      this.#serializeSection('FIELDS', this.#seriaizeFields(item.fields)),
+    )
     outs.push(this.#serializeSection('NOTES', this.#serializeNotes(item.notes)))
-    outs.push(this.#serializeSection('PASSWORD_HISTORY', this.#serializePasswordHistory(item.passwordHistory)))
-    if (item.type === BitwardenExport.ItemType.Login && item.login.__sameHostnames__?.hasMore) {
-      outs.push(this.#serializeSection('URIS', this.#serializeUris(item.login.uris)))
+    outs.push(
+      this.#serializeSection(
+        'PASSWORD_HISTORY',
+        this.#serializePasswordHistory(item.passwordHistory),
+      ),
+    )
+    if (
+      item.type === BitwardenExport.ItemType.Login &&
+      item.login.__sameHostnames__?.hasMore
+    ) {
+      outs.push(
+        this.#serializeSection('URIS', this.#serializeUris(item.login.uris)),
+      )
     }
     return outs.filter(Boolean).join('\n\n')
   }
@@ -103,7 +117,10 @@ export class Bitwarden {
             continue
           }
           // vaidUrlItems: [], ivalidUrlItems [ undefined ]
-          const [validUrlItems, invalidUrlItems] = partition(urlItems, (urlItem) => urlItem?.hostname) as unknown as [
+          const [validUrlItems, invalidUrlItems] = partition(
+            urlItems,
+            (urlItem) => urlItem?.hostname,
+          ) as unknown as [
             { hostname: string; domain: string }[],
             { hostname: undefined }[],
           ]
@@ -117,10 +134,13 @@ export class Bitwarden {
               'length',
               'desc',
             )
-            const restValidUrlItems = restValidUrlItemsItems.flat(Number.POSITIVE_INFINITY)
+            const restValidUrlItems = restValidUrlItemsItems.flat(
+              Number.POSITIVE_INFINITY,
+            )
             login.__sameHostnames__ = {
               value: firstValidUrlItems.map((v) => v.hostname),
-              hasMore: restValidUrlItems.length > 0 || invalidUrlItems.length > 0,
+              hasMore:
+                restValidUrlItems.length > 0 || invalidUrlItems.length > 0,
             }
           }
         }
@@ -165,7 +185,9 @@ export class Bitwarden {
     return notes || ''
   }
 
-  #serializePasswordHistory(passwordHistory?: BitwardenExport.PasswordHistory[]) {
+  #serializePasswordHistory(
+    passwordHistory?: BitwardenExport.PasswordHistory[],
+  ) {
     if (!passwordHistory) {
       return ''
     }

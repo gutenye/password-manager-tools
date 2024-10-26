@@ -4,7 +4,11 @@ import { AppError } from '#/errors'
 const ITERLATIONS = 600000
 
 export async function decrypt(
-  { data, salt, kdfIterations }: { data: string; salt: string; kdfIterations: number },
+  {
+    data,
+    salt,
+    kdfIterations,
+  }: { data: string; salt: string; kdfIterations: number },
   password: string,
 ) {
   try {
@@ -17,7 +21,7 @@ export async function decrypt(
     return JSON.parse(decrypted)
   } catch (error) {
     if (error instanceof Error) {
-      if (error.cause?.message?.match(/bad decrypt/)) {
+      if (error.name === 'OperationError') {
         throw new AppError('Incorrect password')
       }
     }
@@ -56,7 +60,12 @@ async function deriveKey({
 }
 
 // derive password to key
-async function pbkdf2(password: ArrayBufferView, salt: ArrayBufferView, algorithm: string, iterations: number) {
+async function pbkdf2(
+  password: ArrayBufferView,
+  salt: ArrayBufferView,
+  algorithm: string,
+  iterations: number,
+) {
   const wcLen = algorithm === 'sha256' ? 256 : 512
   const pbkdf2Params = {
     name: 'PBKDF2',
@@ -64,18 +73,35 @@ async function pbkdf2(password: ArrayBufferView, salt: ArrayBufferView, algorith
     iterations: iterations,
     hash: { name: toWebCryptoAlgorithm(algorithm) },
   }
-  const cryptoKey = await crypto.subtle.importKey('raw', password, { name: 'PBKDF2' }, false, ['deriveBits'])
-  return new Uint8Array(await crypto.subtle.deriveBits(pbkdf2Params, cryptoKey, wcLen))
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw',
+    password,
+    { name: 'PBKDF2' },
+    false,
+    ['deriveBits'],
+  )
+  return new Uint8Array(
+    await crypto.subtle.deriveBits(pbkdf2Params, cryptoKey, wcLen),
+  )
 }
 
 function toWebCryptoAlgorithm(algorithm: string) {
   if (algorithm === 'md5') {
     throw new Error('MD5 is not supported in WebCrypto.')
   }
-  return algorithm === 'sha1' ? 'SHA-1' : algorithm === 'sha256' ? 'SHA-256' : 'SHA-512'
+  return algorithm === 'sha1'
+    ? 'SHA-1'
+    : algorithm === 'sha256'
+      ? 'SHA-256'
+      : 'SHA-512'
 }
 
-async function hkdfExpand(prk: Uint8Array, info: string, outputByteSize: number, algorithm: string) {
+async function hkdfExpand(
+  prk: Uint8Array,
+  info: string,
+  outputByteSize: number,
+  algorithm: string,
+) {
   const hashLen = algorithm === 'sha256' ? 32 : 64
   if (outputByteSize > 255 * hashLen) {
     throw new Error('outputByteSize is too large.')
@@ -103,13 +129,25 @@ async function hkdfExpand(prk: Uint8Array, info: string, outputByteSize: number,
   return okm.slice(0, outputByteSize)
 }
 
-async function hmac(value: ArrayBufferView, key: ArrayBufferView, algorithm: string) {
+async function hmac(
+  value: ArrayBufferView,
+  key: ArrayBufferView,
+  algorithm: string,
+) {
   const signingAlgorithm = {
     name: 'HMAC',
     hash: { name: toWebCryptoAlgorithm(algorithm) },
   }
-  const cryptoKey = await crypto.subtle.importKey('raw', key, signingAlgorithm, false, ['sign'])
-  return new Uint8Array(await crypto.subtle.sign(signingAlgorithm, cryptoKey, value))
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw',
+    key,
+    signingAlgorithm,
+    false,
+    ['sign'],
+  )
+  return new Uint8Array(
+    await crypto.subtle.sign(signingAlgorithm, cryptoKey, value),
+  )
 }
 
 async function decryptText(text: string, key: ArrayBufferView) {
@@ -121,19 +159,41 @@ async function decryptText(text: string, key: ArrayBufferView) {
 
 async function encryptText(text: string, key: ArrayBufferView) {
   const { iv, encryptedData } = await aesEncrypt(Buffer.from(text), key)
-  const outputs = [iv, encryptedData].map((part) => Buffer.from(part).toString('base64'))
+  const outputs = [iv, encryptedData].map((part) =>
+    Buffer.from(part).toString('base64'),
+  )
   return `2.${outputs.join('|')}`
 }
 
-async function aesDecrypt(data: ArrayBufferView, iv: ArrayBufferView, key: ArrayBufferView) {
-  const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-CBC' }, false, ['decrypt'])
+async function aesDecrypt(
+  data: ArrayBufferView,
+  iv: ArrayBufferView,
+  key: ArrayBufferView,
+) {
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw',
+    key,
+    { name: 'AES-CBC' },
+    false,
+    ['decrypt'],
+  )
   return await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, cryptoKey, data)
 }
 
 async function aesEncrypt(data: ArrayBufferView, key: ArrayBufferView) {
   const iv = crypto.getRandomValues(new Uint8Array(16))
-  const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-CBC' }, false, ['encrypt'])
-  const encryptedData = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, cryptoKey, data)
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw',
+    key,
+    { name: 'AES-CBC' },
+    false,
+    ['encrypt'],
+  )
+  const encryptedData = await crypto.subtle.encrypt(
+    { name: 'AES-CBC', iv },
+    cryptoKey,
+    data,
+  )
   return { iv, encryptedData: new Uint8Array(encryptedData) }
 }
 
@@ -143,10 +203,16 @@ function generateSalt(length = 16) {
   return stringToUint8Array(uint8ArrayToString(array, 'base64'))
 }
 
-function stringToUint8Array(text: string, encoding: BufferEncoding | undefined = undefined) {
+function stringToUint8Array(
+  text: string,
+  encoding: BufferEncoding | undefined = undefined,
+) {
   return new Uint8Array(Buffer.from(text, encoding))
 }
 
-function uint8ArrayToString(buffer: Uint8Array, encoding: BufferEncoding | undefined = undefined) {
+function uint8ArrayToString(
+  buffer: Uint8Array,
+  encoding: BufferEncoding | undefined = undefined,
+) {
   return Buffer.from(buffer).toString(encoding)
 }

@@ -24,12 +24,12 @@ export class ApplePasswords {
             outputs.push(output)
           }
           if (login.__sameHostnames__?.hasMore) {
-            console.log('URLs needs manual fixing: ', item.name)
+            // console.log('URLs needs manual fixing: ', item.name)
           }
           break
         }
         default: {
-          console.warn(`skiped unsupported item type: ${BitwardenExport.ItemType[item.type]}`)
+          // console.warn(`skiped unsupported item type: ${BitwardenExport.ItemType[item.type]}`)
           continue
         }
       }

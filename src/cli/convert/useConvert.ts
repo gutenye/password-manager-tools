@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useInput, useLogger } from '#/cli/hooks'
+import { useEffect } from 'react'
+import { useInput, useLogger, useReport } from '#/cli/hooks'
 import { getConverter } from '#/converter'
 import { AppError } from '#/errors'
 import type { Context, ConvertOptions } from '#/types'
@@ -7,9 +7,9 @@ import type { Props } from './types'
 
 export function useConvert({ args, options }: Props) {
   const [name, inputPath, outputPath] = args
-  const [result, setResult] = useState<ResultType>('converting')
   const { input, inputElement } = useInput()
   const { logger, loggerElement } = useLogger()
+  const { report, reportElement } = useReport()
   useRunConvert({
     options,
     name,
@@ -17,9 +17,9 @@ export function useConvert({ args, options }: Props) {
     logger,
     inputPath,
     outputPath,
-    setResult,
+    report,
   })
-  return { inputElement, result, loggerElement }
+  return { inputElement, loggerElement, reportElement }
 }
 
 function useRunConvert({
@@ -29,7 +29,7 @@ function useRunConvert({
   logger,
   inputPath,
   outputPath,
-  setResult,
+  report,
 }: UseRunConvert) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -42,13 +42,13 @@ function useRunConvert({
         const context: Context = {
           input,
           logger,
+          report,
         }
         await getConverter(name)(inputPath, outputPath, newOptions, context)
-        setResult(' ')
+        report.done()
       } catch (error) {
         if (error instanceof AppError) {
-          setResult(error)
-          process.exit(1)
+          report.exit(error)
         }
         throw error
       }
@@ -56,14 +56,12 @@ function useRunConvert({
   }, [])
 }
 
-type ResultType = string | Error
-
 type UseRunConvert = {
   options: Props['options']
   name: string
   input: ReturnType<typeof useInput>['input']
   inputPath: string
   outputPath: string
-  setResult: React.Dispatch<React.SetStateAction<ResultType>>
   logger: ReturnType<typeof useLogger>['logger']
+  report: ReturnType<typeof useReport>['report']
 }

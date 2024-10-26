@@ -9,7 +9,7 @@ export async function bitwardenToApplePasswords(
   options: ConvertOptions,
   context: Context,
 ) {
-  const { logger } = context
+  const { report } = context
   const { bitwarden, password } = await Bitwarden.import(inputPath, context)
   let found: Bitwarden | null = bitwarden
   let rest: Bitwarden = new Bitwarden({ ...bitwarden.root, items: [] }, context)
@@ -18,18 +18,16 @@ export async function bitwardenToApplePasswords(
     found = parts[0]
     rest = parts[1]
   }
-  if (found.root.items.length === 0) {
-    logger.warn('No items found')
-  }
+  report.set('processedCount', found.root.items.length)
   const applePasswords = await ApplePasswords.from(found, context)
   await applePasswords.export(outputPath)
-  logger.log(`Output '${outputPath}'`)
+  report.set('outputPath', outputPath)
   if (options.overwrite) {
     if (rest) {
       await rest.export(inputPath, { password })
     } else {
       await fs.writeFile(inputPath, '')
     }
-    logger.log(`Overwrite '${inputPath}'`)
+    report.set('overwritePath', inputPath)
   }
 }

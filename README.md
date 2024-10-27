@@ -53,7 +53,8 @@ bunx @gutenye/password-manager-tools convert bitwarden-to-apple <input.json> <ou
 
 ## 🙏 Special thanks
 
-- [warden](https://github.com/thewh1teagle/warden): offline bitwarden viewer
+- [Flaksp's script](https://gist.github.com/flaksp/6fe1042e12b6b6908c5193c0d6c124a7): Python script to convert Bitwarden to Apple Passwords
+- [warden](https://github.com/thewh1teagle/warden): Offline bitwarden viewer
 
 ## 🤝 Contributing
 

@@ -8,7 +8,7 @@ export type Props = {
 
 export type ConvertOptions = {
   includeUris?: string[]
-  overwrite?: boolean
+  outputRemaining?: string
 }
 
 type CLIConvertOptions = zod.infer<typeof options>

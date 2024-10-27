@@ -17,7 +17,7 @@ jobs:
       - name: Install depenencies
         run: bun install
       - name: Lint
-        run: bun run biome ci --reporter=github
+        run: bun run lint:ci
   test:
     runs-on: ubuntu-latest
     steps:

@@ -2,6 +2,8 @@ name: Main
 'on':
   pull_request: null
   workflow_dispatch: null
+permissions:
+  pull-requests: write
 jobs:
   lint:
     runs-on: ubuntu-latest

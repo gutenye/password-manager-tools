@@ -1,6 +1,5 @@
 name: Main
 'on':
-  push: null
   pull_request: null
   workflow_dispatch: null
 jobs:

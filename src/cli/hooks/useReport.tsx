@@ -61,9 +61,9 @@ const ReportComponent = ({ reportData }: Props) => {
 2. \`Find\` items ends with \`FIXWEBSITE\`
 3. \`Add\` the corresponding website information from the notes field.
 
-## 3. 🚫 Skipped Items
+## 3. 🚫 Remainig Items
 
-\`${remainingCount}\` remaining items have been overwritten in \`${outputRemainingPath}\`, password encrypted **yes/no**, can be used next for incremential export
+\`${remainingCount}\` remaining items have been saved in \`${outputRemainingPath}\` (overwriten?), password encrypted **yes/no**, can be used next for incremential export
 
 **Note:** Press keep this file secure and password protected**
 
@@ -72,10 +72,10 @@ const ReportComponent = ({ reportData }: Props) => {
 |                                 |                    |
 | ------------------------------- | ------------------ |
 | ✅ Exported Items               | ${processedCount}  |
-| ✅ Exported Items Saved In      | ${markdownEscape(outputPath)}      |
+| ✅ Exported Items Saved In      | ${escape(outputPath)}      |
 | ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
-| 🚫 Skipped Items                | ${remainingCount}    |
-| 🚫 Skipped Items Overwritten In | ${markdownEscape(outputRemainingPath || '')}   |
+| 🚫 Remainig Items                | ${remainingCount}    |
+| 🚫 Remainig Items Overwritten In | ${escape(outputRemainingPath || '')}   |
 
 
 Thank you for using our CLI app! Please [star the project](https://github.com/gutenye/password-manager-tools) on the Github if you like it. If you have any questions, please refer to the documentation or report an issue on the github.
@@ -157,6 +157,6 @@ type Props = {
 
 type SetReportData = React.Dispatch<React.SetStateAction<ReportData>>
 
-function markdownEscape(text: string) {
+function escape(text: string) {
   return text.replaceAll('__', '\\_\\_')
 }

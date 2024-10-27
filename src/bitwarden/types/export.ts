@@ -2,10 +2,10 @@ import type {
   FieldLinkedId,
   FieldType,
   ItemType,
-  TUriMatch,
+  UriMatch,
 } from '#/bitwarden/constants'
 
-export type { TUriMatch, ItemType, FieldLinkedId, FieldType }
+export type { UriMatch, ItemType, FieldLinkedId, FieldType }
 
 export type File = Root | RootEncrypted
 
@@ -129,6 +129,6 @@ export interface PasswordHistory {
 }
 
 export interface Uri {
-  match: TUriMatch
+  match: UriMatch
   uri: string
 }

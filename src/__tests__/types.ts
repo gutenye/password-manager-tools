@@ -1,1 +1,1 @@
-export * from './fixtures/types'
+export type * from './fixtures/types'

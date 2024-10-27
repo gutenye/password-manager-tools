@@ -1,3 +1,3 @@
-import * as ApplePasswordsExport from './export'
+import type * as ApplePasswordsExport from './export'
 
-export { ApplePasswordsExport }
+export type { ApplePasswordsExport }

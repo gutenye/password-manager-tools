@@ -340,3 +340,17 @@ Default = b.com
   expect(output).toEqual(outputExpected)
   expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
+
+it('field: empty name', async () => {
+  const { output, remaining, outputExpected, remainingExpected } =
+    await runTest([
+      {
+        fields: [{ name: null, value: null }],
+        __output__: {
+          notes: '[FIELDS]\nEMPTY =',
+        },
+      },
+    ])
+  expect(output).toEqual(outputExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
+})

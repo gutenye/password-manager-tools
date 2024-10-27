@@ -233,7 +233,7 @@ export class Bitwarden {
       return ''
     }
     const outFields = fields.map((field) => {
-      const name = this.#escapeField(field.name)
+      const name = this.#escapeField(field.name) || 'EMPTY'
       let out = `${name} =`
       if (field.value) {
         const value = this.#escapeField(field.value)
@@ -250,8 +250,8 @@ export class Bitwarden {
     return outFields.join('\n')
   }
 
-  #escapeField(name: string) {
-    return name.replaceAll('=', '=')
+  #escapeField(name?: string) {
+    return name?.replaceAll('=', '=')
   }
 
   #serializeNotes(notes?: string) {

@@ -14,7 +14,7 @@ export const options = zod.object({
     .string()
     .optional()
     .describe(
-      'Remaining items output file (choices: "overwrite-input-file", "<path>"',
+      'Remaining items output file (choices: "overwrite-input-file", "<path>")',
     ),
 })
 
@@ -22,7 +22,7 @@ export const args = zod.tuple([
   zod.enum(['bitwarden-to-apple']).describe(
     argument({
       name: 'app1-to-app2',
-      description: 'From one password manager to another',
+      description: 'From one app to another',
     }),
   ),
   zod.string().describe(argument({ name: 'input', description: 'Input file' })),

@@ -86,6 +86,7 @@ export class ApplePasswords {
   async export(output: string) {
     const csv = Papa.unparse(this.#root, {
       columns: ['Title', 'Username', 'Password', 'OTPAuth', 'URL', 'Notes'],
+      newline: '\n',
     })
     await fs.writeFile(output, csv)
   }

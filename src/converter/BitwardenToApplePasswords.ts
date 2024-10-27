@@ -19,7 +19,6 @@ export async function bitwardenToApplePasswords(
     const parts = bitwarden.includeUris(options.includeUris)
     found = parts[0]
     remaining = parts[1]
-    context.logger.log(':: remainCount', remaining.count)
     report.set('remainingCount', remaining.count)
   }
   const applePasswords = await ApplePasswords.from(found, context)

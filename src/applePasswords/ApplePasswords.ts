@@ -64,7 +64,6 @@ export class ApplePasswords {
       }
     }
     report.set('processedCount', processedCount)
-    logger.log(':: remainCount2', JSON.stringify(report.data))
     report.set('remainingCount', report.data.remainingCount + remainingCount)
     report.set('requireFixCount', requireFixCount)
     return new ApplePasswords(outputs, context)

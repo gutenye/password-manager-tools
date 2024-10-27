@@ -100,7 +100,7 @@ describe('options', () => {
     expect(inputFileData).toEqual(input)
   })
 
-  it.only('includeFirst: 1', async () => {
+  it('includeFirst: 1', async () => {
     const { output, outputExpected, remaining, remainingExpected } =
       await runTest(
         [
@@ -234,6 +234,7 @@ it('report: works', async () => {
     error: undefined,
     outputPath: '/output.csv',
     outputRemainingPath: '/remaining.json',
+    itOutputRemainingFileEncrypted: false,
     isInputFileOverwritten: false,
     processedCount: 1,
     remainingCount: 0,

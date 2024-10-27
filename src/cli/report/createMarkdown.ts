@@ -26,6 +26,9 @@ To import them into the \`Passwords\` app:
 **Note:** For security reasons, please delete the exported file after importing.
 **Note:** Exported data from Bitwarden does not include passkeys and file attachments.
 
+${
+  requireFixCount > 0
+    ? `
 ## 2. ⚠️ Items Requiring Manual Fixes
 
 \`${requireFixCount}\` items have multiple domains and require your attention:
@@ -33,6 +36,9 @@ To import them into the \`Passwords\` app:
 1. \`Open\` the iOS \`Passwords\` app. (macOS app has a bug)
 2. \`Find\` items ends with \`FIXWEBSITE\`
 3. \`Add\` the corresponding website from the \`Notes\` field.
+  `.trim()
+    : ''
+}
 
 ${
   outputRemainingPath
@@ -55,7 +61,13 @@ ${isInputFileOverwritten ? '**Note:** The input file has been overwritten.' : ''
 | ------------------------------- | ------------------ |
 | ✅ Exported Items               | ${processedCount}  |
 | ✅ Exported Items Saved In      | ${mdEscape(outputPath)}      |
+${
+  requireFixCount > 0
+    ? `
 | ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
+`.trim()
+    : ''
+}
 ${
   outputRemainingPath
     ? `

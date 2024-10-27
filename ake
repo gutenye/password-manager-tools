@@ -40,8 +40,12 @@ def 'main t reset' [] {
   cp src/__tests__/fixtures/bitwardenEncrypted.json data
 }
 
-def 'main t manual' [] {
+def 'main t requirefix' [] {
   password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/bitwardenToApplePasswords.csv 
+}
+
+def 'main t onlysuccess' [] {
+  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/bitwardenToApplePasswords.csv  --include-types note
 }
 
 def 'main t remaining' [] {

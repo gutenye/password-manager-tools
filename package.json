@@ -20,7 +20,7 @@
   "bin": "src/cli/cli.ts",
   "files": ["tsconfig.json", "src", "!__tests__"],
   "scripts": {
-    "lint": "biome check",
+    "lint": "biome ci",
     "test": "bun test"
   },
   "peerDependencies": {

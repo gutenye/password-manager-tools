@@ -1,5 +1,5 @@
 import { mdEscape } from './Report'
-import type { Data } from './types'
+import type { Data } from './types/TReport'
 
 export function createMarkdown({
   outputPath,

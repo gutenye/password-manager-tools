@@ -1,4 +1,4 @@
-import type { Data, Key, SetReportData } from './types'
+import type { Data, Key, SetReportData } from './types/TReport'
 
 export const initialReport: Data = {
   done: false,
@@ -48,7 +48,6 @@ export class Report {
 
   exit(error: Error) {
     this.#update({ done: true, error })
-    process.exit(1)
   }
 
   #update(report: Partial<Data>) {

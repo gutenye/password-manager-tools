@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { Text } from 'ink'
 import { useRef } from 'react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Report, createMarkdown, initialReport } from '#/cli/report'
 import type { TReport } from '#/types'
 
@@ -18,6 +18,12 @@ export function useReport() {
     () => <ReportComponent reportData={reportData} />,
     [reportData],
   )
+
+  useEffect(() => {
+    if (reportData.error) {
+      process.exit(1)
+    }
+  }, [reportData])
 
   return {
     report: report.current,

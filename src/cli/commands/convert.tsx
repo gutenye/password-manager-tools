@@ -1,2 +1,2 @@
-export * from '#/cli/convert/convert'
-export { default } from '#/cli/convert/convert'
+export * from '#/cli/convert/Convert'
+export { default } from '#/cli/convert/Convert'

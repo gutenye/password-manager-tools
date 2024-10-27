@@ -62,7 +62,9 @@ function createItem(
       }
     }
     default: {
-      throw new Error(`[crateApplePasswords.createItem] invalid type '${type}'`)
+      throw new Error(
+        `[crateApplePasswords.createItem] invalid type '${BITWARDEN.ItemType[type]}'`,
+      )
     }
   }
 }

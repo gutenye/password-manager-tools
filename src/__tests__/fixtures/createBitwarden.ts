@@ -86,7 +86,9 @@ function createItem(
       }
     }
     default: {
-      throw new Error(`[createBitwarden.createItem] invalid type '${type}'`)
+      throw new Error(
+        `[createBitwarden.createItem] invalid type '${BITWARDEN.ItemType[type]}'`,
+      )
     }
   }
 }

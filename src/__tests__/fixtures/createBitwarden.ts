@@ -19,15 +19,21 @@ function createLoginItem(
   if (item === null) {
     return
   }
-  const { uris = [], fields = [], passwordHistory = [], notes = '' } = item
+  const {
+    name,
+    uris = [],
+    fields = [],
+    passwordHistory = [],
+    notes = '',
+  } = item
   const suffix = index + 1
   return {
     id: '',
     folderId: null,
     organizationId: null,
     collectionIds: null,
-    name: `name${suffix}`,
-    notes: notes,
+    name: name || `name${suffix}`,
+    notes,
     type: 1,
     login: {
       username: `username${suffix}`,

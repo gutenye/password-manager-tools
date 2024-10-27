@@ -17,6 +17,7 @@ export function useConvert({ args, options: rawOptions }: Props) {
       const options: ConvertOptions = {
         ...rawOptions,
         includeUris: rawOptions.includeUris?.split(','),
+        includeNames: rawOptions.includeNames?.split(','),
       }
       const context: Context = {
         input,

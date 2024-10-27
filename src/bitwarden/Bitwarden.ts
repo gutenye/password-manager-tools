@@ -40,6 +40,37 @@ export class Bitwarden {
     return this.#root.items.length
   }
 
+  includeUris(domains: string[]) {
+    const parts = partition(this.#root.items, (item) => {
+      return (
+        item.type === BitwardenExport.ItemType.Login &&
+        item.login.uris.some((uriItem) => {
+          return domains.some((domain) => uriItem.uri.includes(domain))
+        })
+      )
+    })
+    return parts.map((items) => {
+      return new Bitwarden({ ...this.#root, items }, this.#context)
+    })
+  }
+
+  includeFirst(count: number) {
+    const firstItems = this.#root.items.slice(0, count)
+    const restItems = this.#root.items.slice(count)
+    return [firstItems, restItems].map((items) => {
+      return new Bitwarden({ ...this.#root, items }, this.#context)
+    })
+  }
+
+  includeNames(names: string[]) {
+    const parts = partition(this.#root.items, (item) => {
+      return names.some((name) => item.name.includes(name))
+    })
+    return parts.map((items) => {
+      return new Bitwarden({ ...this.#root, items }, this.#context)
+    })
+  }
+
   normalize() {
     this.#normalizeUris()
   }
@@ -95,28 +126,6 @@ export class Bitwarden {
 
     const common = this.serializeCommon(item)
     return `${text}\n\n${common}`.trim()
-  }
-
-  includeUris(domains: string[]) {
-    const parts = partition(this.#root.items, (item) => {
-      return (
-        item.type === BitwardenExport.ItemType.Login &&
-        item.login.uris.some((uriItem) => {
-          return domains.some((domain) => uriItem.uri.includes(domain))
-        })
-      )
-    })
-    return parts.map((items) => {
-      return new Bitwarden({ ...this.#root, items }, this.#context)
-    })
-  }
-
-  includeFirst(count: number) {
-    const firstItems = this.#root.items.slice(0, count)
-    const restItems = this.#root.items.slice(count)
-    return [firstItems, restItems].map((items) => {
-      return new Bitwarden({ ...this.#root, items }, this.#context)
-    })
   }
 
   async export(output: string, { password }: { password?: string } = {}) {

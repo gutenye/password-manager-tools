@@ -10,6 +10,10 @@ export const options = zod.object({
     .number()
     .optional()
     .describe('Include first n items (example: 10)'),
+  includeNames: zod
+    .string()
+    .optional()
+    .describe('Include names (example: a,b)'),
   outputRemaining: zod
     .string()
     .optional()

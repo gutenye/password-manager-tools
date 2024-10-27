@@ -38,6 +38,72 @@ it('encrypted: wrong password', async () => {
 })
 
 describe('options', () => {
+  it('includeUris: a.com,b.com', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest(
+        [
+          {
+            uris: [{ uri: 'https://1.a.com' }],
+          },
+          {
+            uris: [{ uri: 'https://b.com' }],
+          },
+          {
+            uris: [{ uri: 'https://c.com' }],
+            __output__: false,
+          },
+        ],
+        {
+          includeUris: ['a.com', 'b.com', 'z.com'],
+        },
+      )
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
+
+  it('includeFirst: 1', async () => {
+    const { output, outputExpected, remaining, remainingExpected } =
+      await runTest(
+        [
+          {
+            uris: [{ uri: 'a.com' }],
+          },
+          {
+            uris: [{ uri: 'b.com' }],
+            __output__: false,
+          },
+        ],
+        {
+          includeFirst: 1,
+        },
+      )
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
+
+  it('incldueNames: a,b', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest(
+        [
+          {
+            name: 'name1',
+          },
+          {
+            name: 'name2',
+          },
+          {
+            name: 'name3',
+            __output__: false,
+          },
+        ],
+        {
+          includeNames: ['1', '2', '9'],
+        },
+      )
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
+
   it('outputRemaining: overwrite-input-file', async () => {
     const {
       output,
@@ -98,26 +164,6 @@ describe('options', () => {
     expect(outputRemainingPath).toBeUndefined()
     expect(remaining).toBeUndefined()
     expect(inputFileData).toEqual(input)
-  })
-
-  it('includeFirst: 1', async () => {
-    const { output, outputExpected, remaining, remainingExpected } =
-      await runTest(
-        [
-          {
-            uris: [{ uri: 'a.com' }],
-          },
-          {
-            uris: [{ uri: 'b.com' }],
-            __output__: false,
-          },
-        ],
-        {
-          includeFirst: 1,
-        },
-      )
-    expect(output).toEqual(outputExpected)
-    expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 })
 
@@ -187,26 +233,6 @@ it('uri: invalid', async () => {
         },
       },
     ])
-  expect(output).toEqual(outputExpected)
-  expect<typeof remaining>(remaining).toEqual(remainingExpected)
-})
-
-it('option: includeUris', async () => {
-  const { output, remaining, outputExpected, remainingExpected } =
-    await runTest(
-      [
-        {
-          uris: [{ uri: 'https://1.a.com' }],
-        },
-        {
-          uris: [{ uri: 'https://c.com' }],
-          __output__: false,
-        },
-      ],
-      {
-        includeUris: ['a.com'],
-      },
-    )
   expect(output).toEqual(outputExpected)
   expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })

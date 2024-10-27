@@ -25,6 +25,11 @@ export async function bitwardenToApplePasswords(
     found = parts[0]
     remaining = parts[1]
     report.set('remainingCount', remaining.count)
+  } else if (options.includeNames) {
+    const parts = bitwarden.includeNames(options.includeNames)
+    found = parts[0]
+    remaining = parts[1]
+    report.set('remainingCount', remaining.count)
   }
   const applePasswords = await ApplePasswords.from(found, context)
   await applePasswords.export(outputPath)

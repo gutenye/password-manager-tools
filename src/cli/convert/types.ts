@@ -9,6 +9,7 @@ export type Props = {
 export type ConvertOptions = {
   includeUris?: string[]
   includeFirst?: number
+  includeNames?: string[]
   outputRemaining?: string
 }
 

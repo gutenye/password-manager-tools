@@ -1,6 +1,7 @@
 import type { BitwardenExport } from '#/types'
 
 export type Item = null | {
+  name?: string
   uris?: Uri[]
   fields?: Partial<BitwardenExport.Field>[]
   passwordHistory?: Partial<BitwardenExport.PasswordHistory>[]

@@ -226,7 +226,7 @@ export class Bitwarden {
   }
 
   #serializeNotes(notes?: string) {
-    return notes || ''
+    return notes ? notes.trim() : ''
   }
 
   #serializePasswordHistory(

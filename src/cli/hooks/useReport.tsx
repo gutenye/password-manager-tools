@@ -48,7 +48,8 @@ const ReportComponent = ({ reportData }: Props) => {
 
 \`${processedCount}\` items have been exported without issues. Saved in \`${outputPath}\`. Open \`Passwords\` app, use \`File - Import password\` to import them.
 
-**Note:** After it's used, please remove this file for saftely**
+**Note:** After it's used, please remove this file for saftely
+**Note:** Export data from Bitwarden does not contain file attachments.
 
 ## 2. ⚠️ Items Requiring Manual Fixes
 

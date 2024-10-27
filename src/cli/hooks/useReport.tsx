@@ -72,10 +72,10 @@ const ReportComponent = ({ reportData }: Props) => {
 |                                 |                    |
 | ------------------------------- | ------------------ |
 | ✅ Exported Items               | ${processedCount}  |
-| ✅ Exported Items Saved In      | ${escape(outputPath)}      |
+| ✅ Exported Items Saved In      | ${mdEscape(outputPath)}      |
 | ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
 | 🚫 Remainig Items                | ${remainingCount}    |
-| 🚫 Remainig Items Overwritten In | ${escape(outputRemainingPath || '')}   |
+| 🚫 Remainig Items Overwritten In | ${mdEscape(outputRemainingPath || '')}   |
 
 
 Thank you for using our CLI app! Please [star the project](https://github.com/gutenye/password-manager-tools) on the Github if you like it. If you have any questions, please refer to the documentation or report an issue on the github.
@@ -157,6 +157,6 @@ type Props = {
 
 type SetReportData = React.Dispatch<React.SetStateAction<ReportData>>
 
-function escape(text: string) {
+function mdEscape(text: string) {
   return text.replaceAll('__', '\\_\\_')
 }

@@ -241,3 +241,35 @@ it('report: works', async () => {
     requireFixCount: 0,
   })
 })
+
+it('empty newlines', async () => {
+  const { output, remaining, outputExpected, remainingExpected } =
+    await runTest([
+      {
+        uris: [{ uri: 'a.com' }, { uri: 'b.com', __output__: false }],
+        fields: [{}],
+        notes: 'a\nb\n  \n\n',
+        passwordHistory: [{}],
+        __output__: {
+          title: 'name1 FIXWEBSITE',
+          notes: `
+[FIELDS]
+name = value
+
+[NOTES]
+a
+b
+
+[PASSWORD_HISTORY]
+2001-01-01T01:00:00.000Z = password
+
+[URIS]
+Default = a.com
+Default = b.com
+`.trim(),
+        },
+      },
+    ])
+  expect(output).toEqual(outputExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
+})

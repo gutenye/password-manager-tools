@@ -1,7 +1,10 @@
+import type { BitwardenExport } from '#/types'
+
 export type Item = null | {
   uris?: Uri[]
-  fields?: any[]
-  passwordHistory?: any[]
+  fields?: Partial<BitwardenExport.Field>[]
+  passwordHistory?: Partial<BitwardenExport.PasswordHistory>[]
+  notes?: string
   __output__?:
     | false // skip output
     | {
@@ -14,7 +17,6 @@ export type Item = null | {
       }
 }
 
-export type Uri = {
-  uri: string
+export interface Uri extends Partial<BitwardenExport.Uri> {
   __output__?: false
 }

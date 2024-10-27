@@ -30,7 +30,7 @@ To import them into the \`Passwords\` app:
 
 \`${requireFixCount}\` items have multiple domains and require your attention:
 
-1. \`Open\` the \`Passwords\` app.
+1. \`Open\` the iOS \`Passwords\` app. (macOS app has a bug)
 2. \`Find\` items ends with \`FIXWEBSITE\`
 3. \`Add\` the corresponding website from the \`Notes\` field.
 

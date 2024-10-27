@@ -19,7 +19,7 @@ function createLoginItem(
   if (item === null) {
     return
   }
-  const { uris = [], fields = [], passwordHistory = [] } = item
+  const { uris = [], fields = [], passwordHistory = [], notes = '' } = item
   const suffix = index + 1
   return {
     id: '',
@@ -27,7 +27,7 @@ function createLoginItem(
     organizationId: null,
     collectionIds: null,
     name: `name${suffix}`,
-    notes: '',
+    notes: notes,
     type: 1,
     login: {
       username: `username${suffix}`,
@@ -46,19 +46,19 @@ function createLoginItem(
   }
 }
 
-function createUri(uri: Uri) {
+function createUri({ uri = 'uri.com', match = null }: Uri = {}) {
   return {
-    uri: uri.uri,
-    match: null,
+    uri,
+    match,
   }
 }
 
 function createField({
-  name,
-  value,
+  name = 'name',
+  value = 'value',
   type = 0,
-  linkedId = null,
-}: BitwardenExport.Field) {
+  linkedId = undefined,
+}: Partial<BitwardenExport.Field>) {
   return {
     name,
     value,
@@ -67,9 +67,12 @@ function createField({
   }
 }
 
-function createPasswordHistory() {
+function createPasswordHistory({
+  lastUsedDate = '2001-01-01T01:00:00.000Z',
+  password = 'password',
+}: Partial<BitwardenExport.PasswordHistory>) {
   return {
-    // lastUsedDate: '2024-02-24T02:56:29.772Z',
-    // password: 'OldPassword',
+    lastUsedDate,
+    password,
   }
 }

@@ -1,8 +1,11 @@
 name: Main
+
 on:
-  - pull_request
-permissions:
-  pull-requests: write
+  pull_request:
+  push:
+    branches: 
+      - main
+
 jobs:
   lint:
     runs-on: ubuntu-latest

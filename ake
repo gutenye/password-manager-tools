@@ -44,7 +44,7 @@ def 'main t requirefix' [] {
   password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/bitwardenToApplePasswords.csv 
 }
 
-def 'main t onlysuccess' [] {
+def 'main t exported' [] {
   password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/bitwardenToApplePasswords.csv  --include-types note
 }
 

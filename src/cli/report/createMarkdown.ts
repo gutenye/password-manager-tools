@@ -64,11 +64,10 @@ ${isInputFileOverwritten ? '**Note:** The input file has been overwritten.' : ''
 ${
   requireFixCount > 0
     ? `
-| ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
+| ⚠ Requiring Manual Fixes Items  | ${requireFixCount} |
 `.trim()
     : ''
-}
-${
+}${
   outputRemainingPath
     ? `
 | 🚫 Remainig Items                | ${remainingCount}    |

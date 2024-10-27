@@ -24,7 +24,7 @@ To import them into the \`Passwords\` app:
 3. Follow the on-screen instructions to complete the import.
 
 **Note:** For security reasons, please delete the exported file after importing.
-**Note:** Exported data from Bitwarden does not include file attachments.
+**Note:** Exported data from Bitwarden does not include passkeys and file attachments.
 
 ## 2. ⚠️ Items Requiring Manual Fixes
 

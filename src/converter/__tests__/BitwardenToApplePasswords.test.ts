@@ -1,5 +1,4 @@
-import { describe, expect, it } from 'bun:test'
-import type { BitwardenExport } from '#/types'
+import { describe, expect, it, spyOn } from 'bun:test'
 import { runTest, runTestConvert } from './runTests'
 
 it('encrypted: false', async () => {
@@ -215,6 +214,7 @@ it('report: works', async () => {
     error: undefined,
     outputPath: '/output.csv',
     outputRemainingPath: '/remaining.json',
+    isInputFileOverwritten: false,
     processedCount: 1,
     remainingCount: 0,
     requireFixCount: 0,

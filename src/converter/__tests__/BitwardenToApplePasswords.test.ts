@@ -99,6 +99,26 @@ describe('options', () => {
     expect(remaining).toBeUndefined()
     expect(inputFileData).toEqual(input)
   })
+
+  it.only('includeFirst: 1', async () => {
+    const { output, outputExpected, remaining, remainingExpected } =
+      await runTest(
+        [
+          {
+            uris: [{ uri: 'a.com' }],
+          },
+          {
+            uris: [{ uri: 'b.com' }],
+            __output__: false,
+          },
+        ],
+        {
+          includeFirst: 1,
+        },
+      )
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
 })
 
 it('items: empty', async () => {

@@ -107,7 +107,15 @@ export class Bitwarden {
       )
     })
     return parts.map((items) => {
-      return new Bitwarden({ ...this.#root, items })
+      return new Bitwarden({ ...this.#root, items }, this.#context)
+    })
+  }
+
+  includeFirst(count: number) {
+    const firstItems = this.#root.items.slice(0, count)
+    const restItems = this.#root.items.slice(count)
+    return [firstItems, restItems].map((items) => {
+      return new Bitwarden({ ...this.#root, items }, this.#context)
     })
   }
 

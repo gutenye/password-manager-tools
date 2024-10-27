@@ -6,6 +6,10 @@ export const options = zod.object({
     .string()
     .optional()
     .describe('Include domains (example: a.com,b.com)'),
+  includeFirst: zod
+    .number()
+    .optional()
+    .describe('Include first n items (example: 10)'),
   outputRemaining: zod
     .string()
     .optional()

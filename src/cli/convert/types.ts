@@ -3,9 +3,12 @@ import type { args, options } from './options'
 import type { CLI_INCLUDE_TYPES } from './options'
 
 export type Props = {
-  options: zod.infer<typeof options>
-  args: zod.infer<typeof args>
+  options: Options
+  args: Args
 }
+
+export type Options = zod.infer<typeof options>
+type Args = zod.infer<typeof args>
 
 export type ProcessedOptions = {
   includeUris?: string[]

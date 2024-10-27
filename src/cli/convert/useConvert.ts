@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 import { useInput, useLogger, useReport } from '#/cli/hooks'
 import { runConvert } from '#/converter'
 import { AppError } from '#/errors'
-import type { CliConvert, Context } from '#/types'
-import { CLI_INCLUDE_TYPES } from './options'
-import type { IncludeType, Props } from './types'
+import type { Context } from '#/types'
+import { processOptions } from './options'
+import type { Props } from './types'
 
 export function useConvert({ args, options: rawOptions }: Props) {
   const [name, inputPath, outputPath] = args
@@ -17,12 +17,7 @@ export function useConvert({ args, options: rawOptions }: Props) {
   useEffect(() => {
     ;(async () => {
       try {
-        const options: CliConvert.ProcessedOptions = {
-          ...rawOptions,
-          includeUris: rawOptions.includeUris?.split(','),
-          includeNames: rawOptions.includeNames?.split(','),
-          includeTypes: parseIncludeTypes(rawOptions.includeTypes),
-        }
+        const options = processOptions(rawOptions)
         const context: Context = {
           input,
           logger,
@@ -39,19 +34,4 @@ export function useConvert({ args, options: rawOptions }: Props) {
   }, [])
 
   return { inputElement, loggerElement, reportElement }
-}
-
-function parseIncludeTypes(includeTypes?: string) {
-  if (!includeTypes) {
-    return
-  }
-  const types = includeTypes.split(',')
-  for (const type of types) {
-    if (!CLI_INCLUDE_TYPES.includes(type as any)) {
-      throw new AppError(
-        `--include-types '${type}' must be one of ${CLI_INCLUDE_TYPES.join(', ')}`,
-      )
-    }
-  }
-  return types as IncludeType[]
 }

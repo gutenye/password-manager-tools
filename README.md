@@ -2,7 +2,7 @@
 
 ![Stars](https://img.shields.io/github/stars/gutenye/password-manager-tools?style=social) ![NPM Version](https://img.shields.io/npm/v/@gutenye/password-manager-tools) ![License](https://img.shields.io/github/license/gutenye/password-manager-tools)  
 
-> 🚀 **Easily transfer passwords from Bitwarden to Apple Passwords**
+> 🚀 Easily transfer passwords from Bitwarden to Apple Passwords
 
 ⚠ **Note:** Currently, only supports transferring data from Bitwarden to Apple Passwords.
 

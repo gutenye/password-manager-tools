@@ -2,6 +2,7 @@ import memfs from 'memfs'
 import Papa from 'papaparse'
 import { createApplePasswords, createBitwarden } from '#/__tests__/fixtures'
 import type { Item } from '#/__tests__/types'
+import { Bitwarden } from '#/bitwarden'
 import { Report } from '#/cli/hooks/useReport'
 import type {
   ApplePasswordsExport,
@@ -29,21 +30,26 @@ export async function runTest(
   rawOptions: RunConvertOptions = {},
 ) {
   const options = {
+    outputRemaining: '/remaining.json',
     ...rawOptions,
-    overwrite: rawOptions.overwrite === undefined ? true : rawOptions.overwrite,
   }
   const input = createBitwarden(items)
-  const { output, rest } = await runConvert(input, options)
+  const result = await runConvert(input, options)
   const outputExpected = createApplePasswords(
     items.filter((item) => item?.__output__ !== false),
   )
-  let restExpected = input
-  if (options.overwrite) {
-    restExpected = createBitwarden(
+  let remainingExpected: BitwardenExport.Root | undefined
+  if (options.outputRemaining) {
+    remainingExpected = createBitwarden(
       items.map((item) => (item?.__output__ === false ? item : null)),
     )
   }
-  return { output, rest, outputExpected, restExpected }
+  return {
+    ...result,
+    input,
+    outputExpected,
+    remainingExpected,
+  }
 }
 
 export async function runConvert(
@@ -51,9 +57,9 @@ export async function runConvert(
   rawOptions: RunConvertOptions = {},
 ) {
   const { password, ...restOptions } = rawOptions
-  const options: ConvertOptions = {
+  const options = {
+    outputRemaining: '/remaining.json',
     ...restOptions,
-    overwrite: rawOptions.overwrite === undefined ? true : rawOptions.overwrite,
   }
   const context: Context = {
     ...CONTEXT,
@@ -69,9 +75,22 @@ export async function runConvert(
   const outputText = (await fs.readFile('/output.csv', 'utf8')) as string
   const output = Papa.parse(outputText, { header: true })
     .data as ApplePasswordsExport.Root
-  const restText = (await fs.readFile('/input.json', 'utf8')) as string
-  const rest = restText ? (JSON.parse(restText) as BitwardenExport.File) : null
-  return { output, rest }
+  let remaining: BitwardenExport.File | undefined
+  const outputRemainingPath =
+    options.outputRemaining === 'overwrite-input-file'
+      ? '/input.json'
+      : options.outputRemaining
+  if (outputRemainingPath) {
+    const remainingText = (await fs.readFile(
+      outputRemainingPath,
+      'utf8',
+    )) as string
+    remaining = JSON.parse(remainingText) as BitwardenExport.File
+  }
+  const inputFileData = JSON.parse(
+    (await fs.readFile('/input.json', 'utf8')) as string,
+  )
+  return { output, remaining, outputRemainingPath, inputFileData }
 }
 
 interface RunConvertOptions extends Partial<ConvertOptions> {

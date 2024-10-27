@@ -33,7 +33,7 @@ const ReportComponent = ({ reportData }: Props) => {
   }
   const {
     outputPath,
-    overwritePath,
+    outputRemainingPath,
     processedCount,
     skippedCount,
     requireFixCount,
@@ -60,7 +60,7 @@ const ReportComponent = ({ reportData }: Props) => {
 
 ## 3. 🚫 Skipped Items
 
-\`${skippedCount}\` remaining items have been overwritten in \`${overwritePath}\`, password encrypted **yes/no**, can be used next for incremential export
+\`${skippedCount}\` remaining items have been overwritten in \`${outputRemainingPath}\`, password encrypted **yes/no**, can be used next for incremential export
 
 **Note:** Press keep this file secure and password protected**
 
@@ -72,7 +72,7 @@ const ReportComponent = ({ reportData }: Props) => {
 | ✅ Exported Items Saved In      | ${markdownEscape(outputPath)}      |
 | ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
 | 🚫 Skipped Items                | ${skippedCount}    |
-| 🚫 Skipped Items Overwritten In | ${markdownEscape(overwritePath || '')}   |
+| 🚫 Skipped Items Overwritten In | ${markdownEscape(outputRemainingPath || '')}   |
 
 
 Thank you for using our CLI app! Please [star the project](https://github.com/gutenye/password-manager-tools) on the Github if you like it. If you have any questions, please refer to the documentation or report an issue on the github.
@@ -130,7 +130,7 @@ const initialReport: ReportData = {
   done: false,
   error: undefined,
   outputPath: '',
-  overwritePath: undefined,
+  outputRemainingPath: undefined,
   processedCount: 0,
   skippedCount: 0,
   requireFixCount: 0,
@@ -140,7 +140,7 @@ type ReportData = {
   done: boolean
   error?: Error
   outputPath: string
-  overwritePath?: string
+  outputRemainingPath?: string
   processedCount: number
   skippedCount: number
   requireFixCount: number

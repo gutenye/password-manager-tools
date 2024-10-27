@@ -36,6 +36,10 @@ export class Bitwarden {
     return this.#root
   }
 
+  get count() {
+    return this.#root.items.length
+  }
+
   normalize() {
     this.#normalizeUris()
   }

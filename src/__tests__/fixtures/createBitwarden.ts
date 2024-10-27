@@ -1,7 +1,7 @@
 import type { Item, Uri } from '#/__tests__/types'
 import type { BitwardenExport } from '#/types'
 
-export function createBitwarden(items: Item[] = []) {
+export function createBitwarden(items: Item[] = []): BitwardenExport.Root {
   return {
     encrypted: false,
     folders: [],

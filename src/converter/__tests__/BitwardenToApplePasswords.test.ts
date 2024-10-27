@@ -1,4 +1,5 @@
-import { describe, expect, it, spyOn } from 'bun:test'
+import { describe, expect, it } from 'bun:test'
+import { BITWARDEN } from '#/bitwarden'
 import { runTest, runTestConvert } from './runTests'
 
 it('encrypted: false', async () => {
@@ -104,6 +105,41 @@ describe('options', () => {
     expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 
+  it('includeTypes: login,note', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest(
+        [
+          {
+            type: BITWARDEN.ItemType.Login,
+            __output__: false,
+          },
+          {
+            type: BITWARDEN.ItemType.SecureNote,
+            __output__: {
+              name: 'name2 (SecureNote)',
+            },
+          },
+          {
+            type: BITWARDEN.ItemType.Card,
+            __output__: {
+              name: 'name3 (Card)',
+            },
+          },
+          {
+            type: BITWARDEN.ItemType.Identity,
+            __output__: {
+              name: 'name4 (Identity)',
+            },
+          },
+        ],
+        {
+          includeTypes: ['note', 'card', 'identity'],
+        },
+      )
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
+
   it('outputRemaining: overwrite-input-file', async () => {
     const {
       output,
@@ -188,7 +224,7 @@ it('uris: needsFix with vaild uri', async () => {
         uris: [{ uri: 'a.com' }, { uri: 'b.com', __output__: false }],
         __output__: {
           notes: '[URIS]\nDefault = a.com\nDefault = b.com',
-          title: 'name1 FIXWEBSITE',
+          name: 'name1 FIXWEBSITE',
         },
       },
     ])
@@ -203,7 +239,7 @@ it('uris: needsFix with invalid uri', async () => {
         uris: [{ uri: 'a.com' }, { uri: 'http-invalid', __output__: false }],
         __output__: {
           notes: '[URIS]\nDefault = a.com\nDefault = http-invalid',
-          title: 'name1',
+          name: 'name1',
         },
       },
     ])
@@ -228,7 +264,7 @@ it('uri: invalid', async () => {
       {
         uris: [{ uri: 'http-invalid' }],
         __output__: {
-          title: 'name1',
+          name: 'name1',
           notes: '[URIS]\nDefault = http-invalid',
         },
       },
@@ -277,7 +313,7 @@ it('empty newlines', async () => {
         notes: 'a\nb\n  \n\n',
         passwordHistory: [{}],
         __output__: {
-          title: 'name1 FIXWEBSITE',
+          name: 'name1 FIXWEBSITE',
           notes: `
 [FIELDS]
 name = value

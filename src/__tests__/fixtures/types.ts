@@ -1,6 +1,7 @@
 import type { BitwardenExport } from '#/types'
 
 export type Item = null | {
+  type?: BitwardenExport.ItemType
   name?: string
   uris?: Uri[]
   fields?: Partial<BitwardenExport.Field>[]
@@ -9,7 +10,7 @@ export type Item = null | {
   __output__?:
     | false // skip output
     | {
-        title?: string
+        name?: string
         username?: string
         password?: string
         otpauth?: string

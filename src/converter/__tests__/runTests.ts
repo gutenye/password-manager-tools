@@ -8,8 +8,8 @@ import { runConvert } from '#/converter'
 import type {
   ApplePasswordsExport,
   BitwardenExport,
+  CliConvert,
   Context,
-  ConvertOptions,
 } from '#/types'
 
 const fs = memfs.fs.promises
@@ -35,10 +35,9 @@ export async function runTest(
     ...rawOptions,
   }
   const input = createBitwarden(items)
-  const result = await runTestConvert(input, options)
-  const outputExpected = createApplePasswords(
-    items.filter((item) => item?.__output__ !== false),
-  )
+  const { output, remaining, outputRemainingPath, inputFileData, context } =
+    await runTestConvert(input, options)
+  const outputExpected = createApplePasswords(items)
   let remainingExpected: BitwardenExport.Root | undefined
   if (options.outputRemaining) {
     remainingExpected = createBitwarden(
@@ -46,7 +45,11 @@ export async function runTest(
     )
   }
   return {
-    ...result,
+    output,
+    remaining,
+    outputRemainingPath,
+    inputFileData,
+    context,
     input,
     outputExpected,
     remainingExpected,
@@ -96,7 +99,7 @@ export async function runTestConvert(
   return { output, remaining, outputRemainingPath, inputFileData, context }
 }
 
-interface RunConvertOptions extends Partial<ConvertOptions> {
+interface RunConvertOptions extends Partial<CliConvert.ProcessedOptions> {
   password?: string
 }
 

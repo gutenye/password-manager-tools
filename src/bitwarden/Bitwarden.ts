@@ -1,10 +1,18 @@
 import fs from 'node:fs/promises'
 import { groupBy, orderBy, partition } from 'lodash-es'
 import tldts from 'tldts'
-import { BitwardenExport } from '#/types'
-import type { Context } from '#/types'
+import {
+  CLI_INCLUDE_TYPE_TO_APP_TYPE,
+  FieldLinkedId,
+  FieldType,
+  ItemType,
+  UriMatch,
+  UriMatchReverse,
+} from '#/bitwarden/constants'
+import { decrypt, encrypt } from '#/bitwarden/encryptDecrypt'
+import type { BitwardenExport } from '#/types'
+import type { CliConvert, Context } from '#/types'
 import { omitByDeep, prefixHttps } from '#/utils'
-import { decrypt, encrypt } from './encryptDecrypt'
 
 export class Bitwarden {
   static async import(inputPath: string, context: Context) {
@@ -43,7 +51,7 @@ export class Bitwarden {
   includeUris(domains: string[]) {
     const parts = partition(this.#root.items, (item) => {
       return (
-        item.type === BitwardenExport.ItemType.Login &&
+        item.type === ItemType.Login &&
         item.login.uris.some((uriItem) => {
           return domains.some((domain) => uriItem.uri.includes(domain))
         })
@@ -71,6 +79,18 @@ export class Bitwarden {
     })
   }
 
+  includeTypes(cliTypes: CliConvert.IncludeType[]) {
+    const parts = partition(this.#root.items, (item) => {
+      return cliTypes.some((cliType) => {
+        const appType = CLI_INCLUDE_TYPE_TO_APP_TYPE[cliType]
+        return appType === item.type
+      })
+    })
+    return parts.map((items) => {
+      return new Bitwarden({ ...this.#root, items }, this.#context)
+    })
+  }
+
   normalize() {
     this.#normalizeUris()
   }
@@ -80,7 +100,7 @@ export class Bitwarden {
     outs.push(
       this.#serializeSection('FIELDS', this.#seriaizeFields(item.fields)),
     )
-    if (item.type === BitwardenExport.ItemType.SecureNote) {
+    if (item.type === ItemType.SecureNote) {
       outs.push(this.#serializeNotes(item.notes))
     } else {
       outs.push(
@@ -94,7 +114,7 @@ export class Bitwarden {
       ),
     )
     if (
-      item.type === BitwardenExport.ItemType.Login &&
+      item.type === ItemType.Login &&
       item.login.__sameHostnames__?.needsNote
     ) {
       outs.push(
@@ -106,9 +126,9 @@ export class Bitwarden {
 
   serializeOther(item: BitwardenExport.Item) {
     let data: Record<string, any>
-    if (item.type === BitwardenExport.ItemType.Card) {
+    if (item.type === ItemType.Card) {
       data = item.card
-    } else if (item.type === BitwardenExport.ItemType.Identity) {
+    } else if (item.type === ItemType.Identity) {
       data = item.identity
     } else {
       throw new Error(
@@ -143,13 +163,13 @@ export class Bitwarden {
   // add __sameHostnames__
   #normalizeUris() {
     const supportedUriMatches = [
-      BitwardenExport.UriMatch.Default,
-      BitwardenExport.UriMatch.BaseDomain,
+      UriMatch.Default,
+      UriMatch.BaseDomain,
     ] as BitwardenExport.TUriMatch[]
 
     for (const item of this.#root.items) {
       switch (item.type) {
-        case BitwardenExport.ItemType.Login: {
+        case ItemType.Login: {
           const login = item.login
           const urlItems = login.uris.map((originInfo) => {
             if (supportedUriMatches.includes(originInfo.match)) {
@@ -219,11 +239,11 @@ export class Bitwarden {
         const value = this.#escapeField(field.value)
         out = `${out} ${value}`
       }
-      if (field.type !== BitwardenExport.FieldType.Text) {
-        out = `${out} TYPE=${BitwardenExport.FieldType[field.type]}`
+      if (field.type !== FieldType.Text) {
+        out = `${out} TYPE=${FieldType[field.type]}`
       }
       if (field.linkedId) {
-        out = `${out} LINKED_ID=${BitwardenExport.FieldLinkedId[field.linkedId]}`
+        out = `${out} LINKED_ID=${FieldLinkedId[field.linkedId]}`
       }
       return out
     })
@@ -257,7 +277,7 @@ export class Bitwarden {
     }
     return uris
       .map((uri) => {
-        return `${BitwardenExport.UriMatchReverse[uri.match]} = ${uri.uri}`
+        return `${UriMatchReverse[uri.match]} = ${uri.uri}`
       })
       .join('\n')
   }

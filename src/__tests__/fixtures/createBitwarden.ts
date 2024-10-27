@@ -1,4 +1,5 @@
 import type { Item, Uri } from '#/__tests__/types'
+import { BITWARDEN } from '#/bitwarden'
 import type { BitwardenExport } from '#/types'
 
 export function createBitwarden(items: Item[] = []): BitwardenExport.Root {
@@ -7,48 +8,86 @@ export function createBitwarden(items: Item[] = []): BitwardenExport.Root {
     folders: [],
     collections: [],
     items: items
-      .map((item, index) => createLoginItem(index, item))
+      .map((item, index) => createItem(index, item))
       .filter((v) => v !== undefined),
   }
 }
 
-function createLoginItem(
+function createItem(
   index: number,
   item: Item,
 ): BitwardenExport.Item | undefined {
   if (item === null) {
     return
   }
+
+  const suffix = index + 1
   const {
+    type = BITWARDEN.ItemType.Login,
     name,
-    uris = [],
     fields = [],
     passwordHistory = [],
     notes = '',
   } = item
-  const suffix = index + 1
-  return {
+
+  const output: BitwardenExport.Item = {
     id: '',
-    folderId: null,
-    organizationId: null,
-    collectionIds: null,
+    type,
     name: name || `name${suffix}`,
     notes,
-    type: 1,
-    login: {
-      username: `username${suffix}`,
-      password: `password${suffix}`,
-      uris: uris.map(createUri),
-      totp: `totp${suffix}`,
-      fido2Credentials: [],
-    },
     favorite: true,
     reprompt: 0,
     fields: fields.map(createField),
     passwordHistory: passwordHistory.map(createPasswordHistory),
-    revisionDate: '2024-10-19T00:08:08.486000061Z',
-    creationDate: '2024-07-07T04:50:27.513000011Z',
+    revisionDate: '2001-01-01T00:00:00.000000000Z',
+    creationDate: '2001-01-01T00:00:00.000000000Z',
     deletedDate: null,
+    folderId: null,
+    organizationId: null,
+    collectionIds: null,
+  }
+
+  switch (type) {
+    case BITWARDEN.ItemType.Login: {
+      const { uris = [] } = item
+      return {
+        ...output,
+        login: {
+          username: `username${suffix}`,
+          password: `password${suffix}`,
+          uris: uris.map(createUri),
+          totp: `totp${suffix}`,
+          fido2Credentials: [],
+        },
+      }
+    }
+    case BITWARDEN.ItemType.Card: {
+      return {
+        ...output,
+        card: {
+          cardholderName: `cardholderName${suffix}`,
+        },
+      }
+    }
+    case BITWARDEN.ItemType.Identity: {
+      return {
+        ...output,
+        identity: {
+          title: `title${suffix}`,
+        },
+      }
+    }
+    case BITWARDEN.ItemType.SecureNote: {
+      return {
+        ...output,
+        secureNote: {
+          type: 0,
+        },
+      }
+    }
+    default: {
+      throw new Error(`[createBitwarden.createItem] invalid type '${type}'`)
+    }
   }
 }
 

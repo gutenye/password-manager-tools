@@ -1,11 +1,11 @@
 import { ApplePasswords } from '#/applePasswords'
 import { Bitwarden } from '#/bitwarden'
-import type { Context, ConvertOptions } from '#/types'
+import type { CliConvert, Context } from '#/types'
 
 export async function bitwardenToApplePasswords(
   inputPath: string,
   outputPath: string,
-  options: ConvertOptions,
+  options: CliConvert.ProcessedOptions,
   context: Context,
 ) {
   const { report } = context
@@ -27,6 +27,11 @@ export async function bitwardenToApplePasswords(
     report.set('remainingCount', remaining.count)
   } else if (options.includeNames) {
     const parts = bitwarden.includeNames(options.includeNames)
+    found = parts[0]
+    remaining = parts[1]
+    report.set('remainingCount', remaining.count)
+  } else if (options.includeTypes) {
+    const parts = bitwarden.includeTypes(options.includeTypes)
     found = parts[0]
     remaining = parts[1]
     report.set('remainingCount', remaining.count)

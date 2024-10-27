@@ -1,4 +1,11 @@
-import { invert } from 'lodash-es'
+import type {
+  FieldLinkedId,
+  FieldType,
+  ItemType,
+  TUriMatch,
+} from '#/bitwarden/constants'
+
+export type { TUriMatch, ItemType, FieldLinkedId, FieldType }
 
 export type File = Root | RootEncrypted
 
@@ -109,30 +116,11 @@ export interface IdentityItem extends BaseItem {
   }
 }
 
-export enum ItemType {
-  Login = 1,
-  SecureNote = 2,
-  Card = 3,
-  Identity = 4,
-}
-
 export interface Field {
   name: string
   value: string
   type: FieldType
   linkedId?: FieldLinkedId
-}
-
-export enum FieldType {
-  Text = 0,
-  Hidden = 1,
-  Boolean = 2,
-  Linked = 3,
-}
-
-export enum FieldLinkedId {
-  Username = 100,
-  Password = 101,
 }
 
 export interface PasswordHistory {
@@ -143,21 +131,4 @@ export interface PasswordHistory {
 export interface Uri {
   match: TUriMatch
   uri: string
-}
-
-export const UriMatch = {
-  Default: null,
-  BaseDomain: 0,
-  Host: 1,
-  StartsWith: 2,
-  Exact: 3,
-  RegularExpression: 4,
-  Never: 5,
-} as const
-
-export type TUriMatch = (typeof UriMatch)[keyof typeof UriMatch]
-
-export const UriMatchReverse = invert(UriMatch) as {
-  null: string
-  [key: number]: string
 }

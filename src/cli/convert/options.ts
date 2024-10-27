@@ -1,6 +1,8 @@
 import { argument } from 'pastel'
 import zod from 'zod'
 
+export const CLI_INCLUDE_TYPES = ['login', 'note', 'card', 'identity'] as const
+
 export const options = zod.object({
   includeUris: zod
     .string()
@@ -14,6 +16,10 @@ export const options = zod.object({
     .string()
     .optional()
     .describe('Include names (example: a,b)'),
+  includeTypes: zod
+    .string()
+    .optional()
+    .describe('Include types (example: login,note,card,identity)'),
   outputRemaining: zod
     .string()
     .optional()

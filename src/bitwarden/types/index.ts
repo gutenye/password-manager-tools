@@ -1,4 +1,4 @@
-import { Bitwarden } from '../Bitwarden'
-import * as BitwardenExport from './export'
+import type { Bitwarden } from '../Bitwarden'
+import type * as BitwardenExport from './export'
 
-export { BitwardenExport, Bitwarden }
+export type { BitwardenExport, Bitwarden }

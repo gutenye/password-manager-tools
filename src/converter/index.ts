@@ -1,6 +1,6 @@
 import invariant from 'invariant'
 import { AppError } from '#/errors'
-import type { Context, ConvertOptions } from '#/types'
+import type { CliConvert, Context } from '#/types'
 import { bitwardenToApplePasswords } from './BitwardenToApplePasswords'
 
 const converters: Record<string, convert | undefined> = {
@@ -17,7 +17,7 @@ export async function runConvert(
   name: string,
   inputPath: string,
   outputPath: string,
-  options: ConvertOptions,
+  options: CliConvert.ProcessedOptions,
   context: Context,
 ) {
   const { report } = context
@@ -35,6 +35,6 @@ export async function runConvert(
 export type convert = (
   input: string,
   output: string,
-  options: ConvertOptions,
+  options: CliConvert.ProcessedOptions,
   context: Context,
 ) => Promise<void>

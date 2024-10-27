@@ -1,5 +1,5 @@
-import invariant from 'invariant'
 import type { Item } from '#/__tests__/types'
+import { BITWARDEN } from '#/bitwarden'
 import type { ApplePasswordsExport } from '#/types'
 import { prefixHttps } from '#/utils'
 
@@ -12,28 +12,59 @@ export function createApplePasswords(items: Item[] = []) {
 function createItem(
   index: number,
   item: Item,
-): ApplePasswordsExport.Item[] | undefined {
-  if (item === null) {
+):
+  | (ApplePasswordsExport.Item | undefined)[]
+  | ApplePasswordsExport.Item
+  | undefined {
+  if (item === null || item.__output__ === false) {
     return
   }
-  const { uris = [undefined], __output__ } = item
-  invariant(__output__ !== false, '__output__ false shows up in createItem')
   const suffix = index + 1
-  return uris
-    .map((uriInfo) => {
-      if (uriInfo?.__output__ === false) {
-        return
-      }
+  const { type = BITWARDEN.ItemType.Login, __output__ } = item
+  const output = {
+    Title: __output__?.name ?? `name${suffix}`,
+    Notes: __output__?.notes || '',
+    Username: '',
+    Password: '',
+    OTPAuth: '',
+    URL: '',
+  }
+
+  switch (type) {
+    case BITWARDEN.ItemType.Login: {
+      const { uris = [undefined] } = item
+      return uris.map((uriInfo) => {
+        if (uriInfo?.__output__ === false) {
+          return
+        }
+        return {
+          ...output,
+          Username: `username${suffix}`,
+          Password: `password${suffix}`,
+          OTPAuth: `totp${suffix}`,
+          URL: getHostname(uriInfo?.uri),
+        }
+      })
+    }
+    case BITWARDEN.ItemType.SecureNote: {
+      return output
+    }
+    case BITWARDEN.ItemType.Card: {
       return {
-        Title: __output__?.title ?? `name${suffix}`,
-        Username: `username${suffix}`,
-        Password: `password${suffix}`,
-        OTPAuth: `totp${suffix}`,
-        URL: getHostname(uriInfo?.uri),
-        Notes: __output__?.notes || '',
+        ...output,
+        Notes: `cardholderName = cardholderName${suffix}`,
       }
-    })
-    .filter((v) => v !== undefined)
+    }
+    case BITWARDEN.ItemType.Identity: {
+      return {
+        ...output,
+        Notes: `title = title${suffix}`,
+      }
+    }
+    default: {
+      throw new Error(`[crateApplePasswords.createItem] invalid type '${type}'`)
+    }
+  }
 }
 
 function getHostname(uri: string | undefined) {

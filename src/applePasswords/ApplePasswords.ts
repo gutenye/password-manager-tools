@@ -1,7 +1,8 @@
 import fs from 'node:fs/promises'
 import Papa from 'papaparse'
+import { BITWARDEN } from '#/bitwarden'
 import type { ApplePasswordsExport, Bitwarden, Context } from '#/types'
-import { BitwardenExport } from '#/types'
+import type { BitwardenExport } from '#/types'
 
 export class ApplePasswords {
   static async from(app: Bitwarden, context: Context) {
@@ -12,7 +13,7 @@ export class ApplePasswords {
     let requireFixCount = 0
     for (const item of app.root.items) {
       switch (item.type) {
-        case BitwardenExport.ItemType.Login: {
+        case BITWARDEN.ItemType.Login: {
           processedCount++
           const login = item.login
           const hostnames = login.__sameHostnames__?.value ?? [undefined]
@@ -35,7 +36,7 @@ export class ApplePasswords {
           }
           break
         }
-        case BitwardenExport.ItemType.SecureNote: {
+        case BITWARDEN.ItemType.SecureNote: {
           const notes = app.serializeCommon(item)
           const output: ApplePasswordsExport.Item = {
             Title: `${item.name} (SecureNote)`,
@@ -44,9 +45,9 @@ export class ApplePasswords {
           outputs.push(output)
           break
         }
-        case BitwardenExport.ItemType.Card:
-        case BitwardenExport.ItemType.Identity: {
-          const type = BitwardenExport.ItemType[item.type]
+        case BITWARDEN.ItemType.Card:
+        case BITWARDEN.ItemType.Identity: {
+          const type = BITWARDEN.ItemType[item.type]
           const notes = app.serializeOther(item)
           const output: ApplePasswordsExport.Item = {
             Title: `${item.name} (${type})`,

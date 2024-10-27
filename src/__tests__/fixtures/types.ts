@@ -1,7 +1,7 @@
-import type { BitwardenExport } from '#/types'
+import type { BITWARDEN, BitwardenExport } from '#/types'
 
 export type Item = null | {
-  type?: BitwardenExport.ItemType
+  type?: BITWARDEN.ItemType
   name?: string
   uris?: Uri[]
   fields?: Partial<BitwardenExport.Field>[]

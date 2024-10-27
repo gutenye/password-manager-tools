@@ -15,6 +15,7 @@ export type ProcessedOptions = {
   includeFirst?: number
   includeNames?: string[]
   includeTypes?: IncludeType[]
+  skipFields?: string[]
   outputRemaining?: string
 }
 

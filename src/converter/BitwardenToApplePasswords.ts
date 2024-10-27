@@ -9,34 +9,12 @@ export async function bitwardenToApplePasswords(
   context: Context,
 ) {
   const { report } = context
-  const { bitwarden, password } = await Bitwarden.import(inputPath, context)
-  let found: Bitwarden | null = bitwarden
-  let remaining: Bitwarden = new Bitwarden(
-    { ...bitwarden.root, items: [] },
+  const { exported, remaining, password } = await Bitwarden.import(
+    inputPath,
+    options,
     context,
   )
-  if (options.includeUris) {
-    const parts = bitwarden.includeUris(options.includeUris)
-    found = parts[0]
-    remaining = parts[1]
-    report.set('remainingCount', remaining.count)
-  } else if (options.includeFirst) {
-    const parts = bitwarden.includeFirst(options.includeFirst)
-    found = parts[0]
-    remaining = parts[1]
-    report.set('remainingCount', remaining.count)
-  } else if (options.includeNames) {
-    const parts = bitwarden.includeNames(options.includeNames)
-    found = parts[0]
-    remaining = parts[1]
-    report.set('remainingCount', remaining.count)
-  } else if (options.includeTypes) {
-    const parts = bitwarden.includeTypes(options.includeTypes)
-    found = parts[0]
-    remaining = parts[1]
-    report.set('remainingCount', remaining.count)
-  }
-  const applePasswords = await ApplePasswords.from(found, context)
+  const applePasswords = await ApplePasswords.from(exported, context)
   await applePasswords.export(outputPath)
   report.set('outputPath', outputPath)
   let outputRemainingPath: string | undefined

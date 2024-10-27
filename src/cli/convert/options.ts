@@ -1,8 +1,7 @@
 import { argument } from 'pastel'
 import zod from 'zod'
 import { AppError } from '#/errors'
-import type { CliConvert } from '#/types'
-import type { IncludeType, Options } from './types'
+import type { IncludeType, Options, ProcessedOptions } from './types'
 
 export const CLI_INCLUDE_TYPES = ['login', 'note', 'card', 'identity'] as const
 
@@ -49,11 +48,12 @@ export const options = zod.object({
 })
 
 export function processOptions(options: Options) {
-  const processedOptions: CliConvert.ProcessedOptions = {
+  const processedOptions: ProcessedOptions = {
     ...options,
     includeUris: options.includeUris?.split(','),
     includeNames: options.includeNames?.split(','),
     includeTypes: parseIncludeTypes(options.includeTypes),
+    skipFields: options.skipFields?.split(','),
   }
   return processedOptions
 }

@@ -1,5 +1,5 @@
 import { invert } from 'lodash-es'
-import type { BitwardenExport, CliConvert } from '#/types'
+import type { CliConvert } from '#/types'
 
 export const URI_MATCH = {
   Default: null,
@@ -39,7 +39,7 @@ export enum FieldType {
 
 export const CLI_INCLUDE_TYPE_TO_APP_TYPE: Record<
   CliConvert.IncludeType,
-  BitwardenExport.ItemType
+  ItemType
 > = {
   login: ItemType.Login,
   note: ItemType.SecureNote,

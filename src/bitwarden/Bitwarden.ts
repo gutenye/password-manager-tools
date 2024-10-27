@@ -15,8 +15,12 @@ import type { CliConvert, Context } from '#/types'
 import { omitByDeep, prefixHttps } from '#/utils'
 
 export class Bitwarden {
-  static async import(inputPath: string, context: Context) {
-    const { input } = context
+  static async import(
+    inputPath: string,
+    options: CliConvert.ProcessedOptions,
+    context: Context,
+  ) {
+    const { input, report } = context
     const text = await fs.readFile(inputPath, 'utf8')
     const fileData: BitwardenExport.File = JSON.parse(text)
     let root: BitwardenExport.Root
@@ -27,9 +31,37 @@ export class Bitwarden {
     } else {
       root = fileData
     }
-    const app = new Bitwarden(root, context)
-    app.normalize()
-    return { bitwarden: app, password }
+
+    const all = new Bitwarden(root, context)
+    all.normalize()
+    let exported: Bitwarden | null = all
+    let remaining: Bitwarden = new Bitwarden(
+      { ...all.root, items: [] },
+      context,
+    )
+    if (options.includeUris) {
+      const parts = all.includeUris(options.includeUris)
+      exported = parts[0]
+      remaining = parts[1]
+      report.set('remainingCount', remaining.count)
+    } else if (options.includeFirst) {
+      const parts = all.includeFirst(options.includeFirst)
+      exported = parts[0]
+      remaining = parts[1]
+      report.set('remainingCount', remaining.count)
+    } else if (options.includeNames) {
+      const parts = all.includeNames(options.includeNames)
+      exported = parts[0]
+      remaining = parts[1]
+      report.set('remainingCount', remaining.count)
+    } else if (options.includeTypes) {
+      const parts = all.includeTypes(options.includeTypes)
+      exported = parts[0]
+      remaining = parts[1]
+      report.set('remainingCount', remaining.count)
+    }
+
+    return { exported, remaining, password }
   }
 
   #root: BitwardenExport.Root
@@ -132,7 +164,7 @@ export class Bitwarden {
       data = item.identity
     } else {
       throw new Error(
-        `[bitwarden.serializeOther] type '${BitwardenExport.ItemType[item.type]}' is not supported`,
+        `[bitwarden.serializeOther] type '${ItemType[item.type]}' is not supported`,
       )
     }
 

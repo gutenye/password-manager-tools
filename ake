@@ -41,7 +41,7 @@ def 'main t reset' [] {
 }
 
 def 'main t manual' [] {
-  ./cli convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/output.csv 
+  ./cli convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/bitwardenToApplePasswords.csv 
 }
 
 def 'main convert' [includeUris: string] {

@@ -1,16 +1,16 @@
-import { expect, it } from 'bun:test'
-import { runConvert, runTest } from './runTests'
+import { describe, expect, it } from 'bun:test'
+import { runTest, runTestConvert } from './runTests'
 
 it('encrypted: false', async () => {
   const { fixtures } = globalThis.__TEST__
-  const { output, remaining } = await runConvert(fixtures.bitwarden.data)
+  const { output, remaining } = await runTestConvert(fixtures.bitwarden.data)
   expect(output).toEqual(fixtures.bitwardenToApplePasswords.data)
   expect(remaining).toEqual({ ...fixtures.bitwarden.data, items: [] })
 })
 
 it('encrypted: true', async () => {
   const { fixtures } = globalThis.__TEST__
-  const { output, remaining } = await runConvert(
+  const { output, remaining } = await runTestConvert(
     fixtures.bitwardenEncrypted.data,
     {
       password: '1',
@@ -31,72 +31,74 @@ it('encrypted: true', async () => {
 it('encrypted: wrong password', async () => {
   const { fixtures } = globalThis.__TEST__
   await expect(
-    runConvert(fixtures.bitwardenEncrypted.data, {
+    runTestConvert(fixtures.bitwardenEncrypted.data, {
       password: 'incorrect',
     }),
   ).rejects.toThrow('Incorrect password')
 })
 
-it('outputRemaining: overwrite-input-file', async () => {
-  const {
-    output,
-    remaining,
-    outputExpected,
-    remainingExpected,
-    outputRemainingPath,
-  } = await runTest(
-    [
-      {
-        uris: [{ uri: 'a.com' }],
-      },
-    ],
-    { outputRemaining: 'overwrite-input-file' },
-  )
-  expect(output).toEqual(outputExpected)
-  expect(outputRemainingPath).toEqual('/input.json')
-  expect(remaining).toEqual(remainingExpected)
-})
+describe('options', () => {
+  it('outputRemaining: overwrite-input-file', async () => {
+    const {
+      output,
+      remaining,
+      outputExpected,
+      remainingExpected,
+      outputRemainingPath,
+    } = await runTest(
+      [
+        {
+          uris: [{ uri: 'a.com' }],
+        },
+      ],
+      { outputRemaining: 'overwrite-input-file' },
+    )
+    expect(output).toEqual(outputExpected)
+    expect(outputRemainingPath).toEqual('/input.json')
+    expect(remaining).toEqual(remainingExpected)
+  })
 
-it('outputRemaining: /remaining.json', async () => {
-  const {
-    output,
-    remaining,
-    outputExpected,
-    remainingExpected,
-    outputRemainingPath,
-  } = await runTest(
-    [
-      {
-        uris: [{ uri: 'a.com' }],
-      },
-    ],
-    { outputRemaining: '/remaining.json' },
-  )
-  expect(output).toEqual(outputExpected)
-  expect(outputRemainingPath).toEqual('/remaining.json')
-  expect(remaining).toEqual(remainingExpected)
-})
+  it('outputRemaining: /remaining.json', async () => {
+    const {
+      output,
+      remaining,
+      outputExpected,
+      remainingExpected,
+      outputRemainingPath,
+    } = await runTest(
+      [
+        {
+          uris: [{ uri: 'a.com' }],
+        },
+      ],
+      { outputRemaining: '/remaining.json' },
+    )
+    expect(output).toEqual(outputExpected)
+    expect(outputRemainingPath).toEqual('/remaining.json')
+    expect(remaining).toEqual(remainingExpected)
+  })
 
-it('outputRemaining: undefined', async () => {
-  const {
-    output,
-    remaining,
-    outputExpected,
-    outputRemainingPath,
-    input,
-    inputFileData,
-  } = await runTest(
-    [
-      {
-        uris: [{ uri: 'a.com' }],
-      },
-    ],
-    { outputRemaining: undefined },
-  )
-  expect(output).toEqual(outputExpected)
-  expect(outputRemainingPath).toBeUndefined()
-  expect(remaining).toBeUndefined()
-  expect(inputFileData).toEqual(input)
+  it('outputRemaining: undefined', async () => {
+    const {
+      output,
+      remaining,
+      outputExpected,
+      outputRemainingPath,
+      input,
+      inputFileData,
+    } = await runTest(
+      [
+        {
+          uris: [{ uri: 'a.com' }],
+        },
+      ],
+      { outputRemaining: undefined },
+    )
+    expect(output).toEqual(outputExpected)
+    expect(outputRemainingPath).toBeUndefined()
+    expect(remaining).toBeUndefined()
+    expect(inputFileData).toEqual(input)
+  })
 })
 
 it('items: empty', async () => {
@@ -201,4 +203,19 @@ it('escape: title, field', async () => {
     ])
   expect(output).toEqual(outputExpected)
   expect(remaining).toEqual(remainingExpected)
+})
+
+it('report: works', async () => {
+  const {
+    context: { report },
+  } = await runTest([{ uris: [{ uri: 'a.com' }] }])
+  expect(report.data).toEqual({
+    done: true,
+    error: undefined,
+    outputPath: '/output.csv',
+    outputRemainingPath: '/remaining.json',
+    processedCount: 1,
+    remainingCount: 0,
+    requireFixCount: 0,
+  })
 })

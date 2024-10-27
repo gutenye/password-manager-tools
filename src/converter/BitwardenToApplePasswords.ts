@@ -1,4 +1,3 @@
-import fs from 'node:fs/promises'
 import { ApplePasswords } from '#/applePasswords'
 import { Bitwarden } from '#/bitwarden'
 import type { Context, ConvertOptions } from '#/types'
@@ -20,7 +19,8 @@ export async function bitwardenToApplePasswords(
     const parts = bitwarden.includeUris(options.includeUris)
     found = parts[0]
     remaining = parts[1]
-    report.set('skippedCount', remaining.count)
+    context.logger.log(':: remainCount', remaining.count)
+    report.set('remainingCount', remaining.count)
   }
   const applePasswords = await ApplePasswords.from(found, context)
   await applePasswords.export(outputPath)

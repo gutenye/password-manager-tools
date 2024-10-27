@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-__dirname=$(dirname $(realpath ${BASH_SOURCE[0]}))
+./src/cli/cli.ts "$@"
 
-cd $__dirname
-
-bun src/cli/cli.ts "$@"
+exit 0

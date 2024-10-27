@@ -22,7 +22,8 @@
   "scripts": {
     "lint": "biome check",
     "lint:ci": "biome ci --reporter=github",
-    "test": "bun test"
+    "test": "bun test",
+    "cli": "./cli"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

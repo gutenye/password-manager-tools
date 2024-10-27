@@ -6,8 +6,8 @@ import {
   FieldLinkedId,
   FieldType,
   ItemType,
-  UriMatch,
-  UriMatchReverse,
+  URI_MATCH,
+  URI_MATCH_REVERSE,
 } from '#/bitwarden/constants'
 import { decrypt, encrypt } from '#/bitwarden/encryptDecrypt'
 import type { BitwardenExport } from '#/types'
@@ -162,17 +162,17 @@ export class Bitwarden {
 
   // add __sameHostnames__
   #normalizeUris() {
-    const supportedUriMatches = [
-      UriMatch.Default,
-      UriMatch.BaseDomain,
-    ] as BitwardenExport.TUriMatch[]
+    const supportedURI_MATCHes = [
+      URI_MATCH.Default,
+      URI_MATCH.BaseDomain,
+    ] as BitwardenExport.UriMatch[]
 
     for (const item of this.#root.items) {
       switch (item.type) {
         case ItemType.Login: {
           const login = item.login
           const urlItems = login.uris.map((originInfo) => {
-            if (supportedUriMatches.includes(originInfo.match)) {
+            if (supportedURI_MATCHes.includes(originInfo.match)) {
               try {
                 const urlInfo = new URL(prefixHttps(originInfo.uri))
                 const domainInfo = tldts.parse(originInfo.uri)
@@ -277,7 +277,7 @@ export class Bitwarden {
     }
     return uris
       .map((uri) => {
-        return `${UriMatchReverse[uri.match]} = ${uri.uri}`
+        return `${URI_MATCH_REVERSE[uri.match]} = ${uri.uri}`
       })
       .join('\n')
   }

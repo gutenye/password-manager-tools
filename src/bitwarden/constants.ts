@@ -1,7 +1,7 @@
 import { invert } from 'lodash-es'
 import type { BitwardenExport, CliConvert } from '#/types'
 
-export const UriMatch = {
+export const URI_MATCH = {
   Default: null,
   BaseDomain: 0,
   Host: 1,
@@ -11,9 +11,9 @@ export const UriMatch = {
   Never: 5,
 } as const
 
-export type TUriMatch = (typeof UriMatch)[keyof typeof UriMatch]
+export type UriMatch = (typeof URI_MATCH)[keyof typeof URI_MATCH]
 
-export const UriMatchReverse = invert(UriMatch) as {
+export const URI_MATCH_REVERSE = invert(URI_MATCH) as {
   null: string
   [key: number]: string
 }

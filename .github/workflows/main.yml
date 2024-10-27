@@ -1,0 +1,28 @@
+name: Main
+'on':
+  push: null
+  pull_request: null
+  workflow_dispatch: null
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+      - name: Install depenencies
+        run: bun install
+      - name: Lint
+        run: bun run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+      - name: Install depenencies
+        run: bun install
+      - name: Test
+        run: bun run test

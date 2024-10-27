@@ -2,8 +2,9 @@ import memfs from 'memfs'
 import Papa from 'papaparse'
 import { createApplePasswords, createBitwarden } from '#/__tests__/fixtures'
 import type { Item } from '#/__tests__/types'
-import { Bitwarden } from '#/bitwarden'
+import { initialReport } from '#/cli/hooks/useReport'
 import { Report } from '#/cli/hooks/useReport'
+import { runConvert } from '#/converter'
 import type {
   ApplePasswordsExport,
   BitwardenExport,
@@ -11,18 +12,15 @@ import type {
   ConvertOptions,
 } from '#/types'
 
-import { bitwardenToApplePasswords } from '../BitwardenToApplePasswords'
-
 const fs = memfs.fs.promises
 
-const CONTEXT: Context = {
+const CONTEXT: Partial<Context> = {
   logger: {
     log: () => null,
     warn: () => null,
     error: () => null,
   },
   input: () => '',
-  report: new Report({}, () => null),
 }
 
 export async function runTest(
@@ -34,7 +32,7 @@ export async function runTest(
     ...rawOptions,
   }
   const input = createBitwarden(items)
-  const result = await runConvert(input, options)
+  const result = await runTestConvert(input, options)
   const outputExpected = createApplePasswords(
     items.filter((item) => item?.__output__ !== false),
   )
@@ -52,7 +50,7 @@ export async function runTest(
   }
 }
 
-export async function runConvert(
+export async function runTestConvert(
   input: any,
   rawOptions: RunConvertOptions = {},
 ) {
@@ -63,10 +61,12 @@ export async function runConvert(
   }
   const context: Context = {
     ...CONTEXT,
+    report: createReport(),
     input: () => password || '',
   }
   await fs.writeFile('/input.json', JSON.stringify(input))
-  await bitwardenToApplePasswords(
+  await runConvert(
+    'bitwarden-to-apple',
     '/input.json',
     '/output.csv',
     options,
@@ -90,9 +90,21 @@ export async function runConvert(
   const inputFileData = JSON.parse(
     (await fs.readFile('/input.json', 'utf8')) as string,
   )
-  return { output, remaining, outputRemainingPath, inputFileData }
+  return { output, remaining, outputRemainingPath, inputFileData, context }
 }
 
 interface RunConvertOptions extends Partial<ConvertOptions> {
   password?: string
+}
+
+function createReport() {
+  const state = {
+    ...initialReport,
+  }
+  const setState = <T>(stateFn: (value: T) => void) => {
+    const prevState = { ...state }
+    const nextState = stateFn(prevState)
+    Object.assign(state, nextState)
+  }
+  return new Report(state, setState)
 }

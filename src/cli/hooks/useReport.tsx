@@ -35,7 +35,7 @@ const ReportComponent = ({ reportData }: Props) => {
     outputPath,
     outputRemainingPath,
     processedCount,
-    skippedCount,
+    remainingCount,
     requireFixCount,
   } = reportData
   return (
@@ -61,7 +61,7 @@ const ReportComponent = ({ reportData }: Props) => {
 
 ## 3. 🚫 Skipped Items
 
-\`${skippedCount}\` remaining items have been overwritten in \`${outputRemainingPath}\`, password encrypted **yes/no**, can be used next for incremential export
+\`${remainingCount}\` remaining items have been overwritten in \`${outputRemainingPath}\`, password encrypted **yes/no**, can be used next for incremential export
 
 **Note:** Press keep this file secure and password protected**
 
@@ -72,7 +72,7 @@ const ReportComponent = ({ reportData }: Props) => {
 | ✅ Exported Items               | ${processedCount}  |
 | ✅ Exported Items Saved In      | ${markdownEscape(outputPath)}      |
 | ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
-| 🚫 Skipped Items                | ${skippedCount}    |
+| 🚫 Skipped Items                | ${remainingCount}    |
 | 🚫 Skipped Items Overwritten In | ${markdownEscape(outputRemainingPath || '')}   |
 
 
@@ -127,13 +127,13 @@ export class Report {
   }
 }
 
-const initialReport: ReportData = {
+export const initialReport: ReportData = {
   done: false,
   error: undefined,
   outputPath: '',
   outputRemainingPath: undefined,
   processedCount: 0,
-  skippedCount: 0,
+  remainingCount: 0,
   requireFixCount: 0,
 }
 
@@ -143,7 +143,7 @@ type ReportData = {
   outputPath: string
   outputRemainingPath?: string
   processedCount: number
-  skippedCount: number
+  remainingCount: number
   requireFixCount: number
 }
 

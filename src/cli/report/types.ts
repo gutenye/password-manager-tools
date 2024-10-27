@@ -3,7 +3,8 @@ export type Data = {
   error?: Error
   outputPath: string
   outputRemainingPath?: string
-  isInputFileOverwritten?: boolean
+  itOutputRemainingFileEncrypted: boolean
+  isInputFileOverwritten: boolean
   processedCount: number
   remainingCount: number
   requireFixCount: number

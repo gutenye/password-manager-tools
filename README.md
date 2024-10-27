@@ -24,9 +24,9 @@
 - ⏱️ **Incremental Transfer:** Move passwords in batches at your convenience, with remaining passwords securely stored for future transfers until all are moved.
 - 🔄 **Reverse Transfer (TODO):** Seamlessly transfer passwords from Apple Passwords back to Bitwarden, accurately setting custom fields, multiple URLs, and maintaining password history to ensure data integrity.
 
-⚠ **Note:** Currently, only supports transferring data from Bitwarden to Apple Passwords.
-
 ## 🚀 Getting Started
+
+⚠ **Note:** Currently, only supports transferring data from Bitwarden to Apple Passwords.
 
 ### 1️⃣ Export Data
 

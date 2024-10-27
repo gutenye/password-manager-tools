@@ -4,7 +4,16 @@
 
 > 🚀 Easily transfer passwords from Bitwarden to Apple Passwords
 
-⚠ **Note:** Currently, only supports transferring data from Bitwarden to Apple Passwords.
+![Terminal](./assets/Terminal.png)
+
+## 📷 Screenshots
+
+<details>
+<summary>Click to view screenshots</summary>
+
+![BitwardenToApplePasswords](./assets/BitwardenToApplePasswords.png)
+
+</details>
 
 ## 🌟 Features
 
@@ -15,6 +24,7 @@
 - ⏱️ **Incremental Transfer:** Move passwords in batches at your convenience, with remaining passwords securely stored for future transfers until all are moved.
 - 🔄 **Reverse Transfer (TODO):** Seamlessly transfer passwords from Apple Passwords back to Bitwarden, accurately setting custom fields, multiple URLs, and maintaining password history to ensure data integrity.
 
+⚠ **Note:** Currently, only supports transferring data from Bitwarden to Apple Passwords.
 
 ## 🚀 Getting Started
 

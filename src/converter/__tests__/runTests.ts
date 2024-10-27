@@ -1,9 +1,9 @@
+import { spyOn } from 'bun:test'
 import memfs from 'memfs'
 import Papa from 'papaparse'
 import { createApplePasswords, createBitwarden } from '#/__tests__/fixtures'
 import type { Item } from '#/__tests__/types'
-import { initialReport } from '#/cli/hooks/useReport'
-import { Report } from '#/cli/hooks/useReport'
+import { Report, initialReport } from '#/cli/report'
 import { runConvert } from '#/converter'
 import type {
   ApplePasswordsExport,
@@ -22,6 +22,9 @@ const CONTEXT: Partial<Context> = {
   },
   input: () => '',
 }
+
+// For report.exit
+spyOn(process, 'exit').mockReturnValue(undefined)
 
 export async function runTest(
   items: Item[],

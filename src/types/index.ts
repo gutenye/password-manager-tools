@@ -3,5 +3,7 @@ export * from '#/applePasswords/types'
 export * from '#/cli/convert/types'
 export * from '#/cli/hooks/useInput'
 export * from '#/cli/hooks/useLogger'
-export * from '#/cli/hooks/useReport'
+import * as TReport from '#/cli/report/types'
 export * from './app.types'
+
+export { TReport }

@@ -75,7 +75,7 @@ export async function runTestConvert(
   const outputText = (await fs.readFile('/output.csv', 'utf8')) as string
   const output = Papa.parse(outputText, { header: true })
     .data as ApplePasswordsExport.Root
-  let remaining: BitwardenExport.File | undefined
+  let remaining: BitwardenExport.Root | undefined
   const outputRemainingPath =
     options.outputRemaining === 'overwrite-input-file'
       ? '/input.json'
@@ -85,7 +85,7 @@ export async function runTestConvert(
       outputRemainingPath,
       'utf8',
     )) as string
-    remaining = JSON.parse(remainingText) as BitwardenExport.File
+    remaining = JSON.parse(remainingText) as BitwardenExport.Root
   }
   const inputFileData = JSON.parse(
     (await fs.readFile('/input.json', 'utf8')) as string,

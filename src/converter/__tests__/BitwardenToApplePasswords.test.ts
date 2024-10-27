@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import type { BitwardenExport } from '#/types'
 import { runTest, runTestConvert } from './runTests'
 
 it('encrypted: false', async () => {
@@ -55,7 +56,7 @@ describe('options', () => {
     )
     expect(output).toEqual(outputExpected)
     expect(outputRemainingPath).toEqual('/input.json')
-    expect(remaining).toEqual(remainingExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 
   it('outputRemaining: /remaining.json', async () => {
@@ -75,7 +76,7 @@ describe('options', () => {
     )
     expect(output).toEqual(outputExpected)
     expect(outputRemainingPath).toEqual('/remaining.json')
-    expect(remaining).toEqual(remainingExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 
   it('outputRemaining: undefined', async () => {
@@ -105,14 +106,14 @@ it('items: empty', async () => {
   const { output, remaining, outputExpected, remainingExpected } =
     await runTest([])
   expect(output).toEqual(outputExpected)
-  expect(remaining).toEqual(remainingExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
 it('uris: empty', async () => {
   const { output, remaining, outputExpected, remainingExpected } =
     await runTest([{}])
   expect(output).toEqual(outputExpected)
-  expect(remaining).toEqual(remainingExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
 it('uris: needsFix with vaild uri', async () => {
@@ -127,7 +128,7 @@ it('uris: needsFix with vaild uri', async () => {
       },
     ])
   expect(output).toEqual(outputExpected)
-  expect(remaining).toEqual(remainingExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
 it('uris: needsFix with invalid uri', async () => {
@@ -142,7 +143,7 @@ it('uris: needsFix with invalid uri', async () => {
       },
     ])
   expect(output).toEqual(outputExpected)
-  expect(remaining).toEqual(remainingExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
 it('uri: a.com', async () => {
@@ -153,7 +154,7 @@ it('uri: a.com', async () => {
       },
     ])
   expect(output).toEqual(outputExpected)
-  expect(remaining).toEqual(remainingExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
 it('uri: invalid', async () => {
@@ -168,7 +169,7 @@ it('uri: invalid', async () => {
       },
     ])
   expect(output).toEqual(outputExpected)
-  expect(remaining).toEqual(remainingExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
 it('option: includeUris', async () => {
@@ -188,7 +189,7 @@ it('option: includeUris', async () => {
       },
     )
   expect(output).toEqual(outputExpected)
-  expect(remaining).toEqual(remainingExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
 it('escape: title, field', async () => {
@@ -202,7 +203,7 @@ it('escape: title, field', async () => {
       },
     ])
   expect(output).toEqual(outputExpected)
-  expect(remaining).toEqual(remainingExpected)
+  expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
 it('report: works', async () => {

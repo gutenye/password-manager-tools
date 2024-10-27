@@ -290,7 +290,12 @@ it('escape: title, field', async () => {
 it('report: works', async () => {
   const {
     context: { report },
-  } = await runTest([{ uris: [{ uri: 'a.com' }] }])
+  } = await runTest([
+    { uris: [{ uri: 'a.com' }] },
+    { type: BITWARDEN.ItemType.SecureNote },
+    { type: BITWARDEN.ItemType.Card },
+    { type: BITWARDEN.ItemType.Identity },
+  ])
   expect(report.data).toEqual({
     done: true,
     error: undefined,
@@ -298,7 +303,7 @@ it('report: works', async () => {
     outputRemainingPath: '/remaining.json',
     itOutputRemainingFileEncrypted: false,
     isInputFileOverwritten: false,
-    processedCount: 1,
+    processedCount: 4,
     remainingCount: 0,
     requireFixCount: 0,
   })

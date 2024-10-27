@@ -37,6 +37,7 @@ export class ApplePasswords {
           break
         }
         case BITWARDEN.ItemType.SecureNote: {
+          processedCount++
           const notes = app.serializeCommon(item)
           const output: ApplePasswordsExport.Item = {
             Title: `${item.name} (SecureNote)`,
@@ -47,6 +48,7 @@ export class ApplePasswords {
         }
         case BITWARDEN.ItemType.Card:
         case BITWARDEN.ItemType.Identity: {
+          processedCount++
           const type = BITWARDEN.ItemType[item.type]
           const notes = app.serializeOther(item)
           const output: ApplePasswordsExport.Item = {
@@ -57,11 +59,11 @@ export class ApplePasswords {
           break
         }
         default: {
+          remainingCount++
           const { type, name } = item as BitwardenExport.Item
           logger.error(
             `[ApplePasswords.from] Type '${type}' from '${name}' is not supported`,
           )
-          remainingCount++
           continue
         }
       }

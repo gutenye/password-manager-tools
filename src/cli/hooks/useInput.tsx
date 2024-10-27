@@ -18,11 +18,13 @@ export function useInput() {
   const input: Input = useCallback(async (options = {}) => {
     setOptions(options)
     const result = await new Promise((resolve) => {
+      process.stdin.resume() // fix for bun
       setHandleSubmit(
         () =>
           function handleSubmit(value: string) {
             resolve(value)
             setHandleSubmit(null)
+            process.stdin.pause()
           },
       )
     })

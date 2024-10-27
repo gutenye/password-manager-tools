@@ -43,11 +43,5 @@ const ReportComponent = ({ reportData }: Props) => {
 }
 
 type Props = {
-  reportData: ReportData
-}
-
-function createReport() {
-  const report = new Report(reportData, setReportData)
-  )
-  return report
+  reportData: TReport.Data
 }

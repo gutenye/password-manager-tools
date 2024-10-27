@@ -44,6 +44,10 @@ def 'main t manual' [] {
   ./cli convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/bitwardenToApplePasswords.csv 
 }
 
+def 'main t remaining' [] {
+  ./cli convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json src/__tests__/fixtures/bitwardenToApplePasswords.csv --include-uris foo.com --output-remaining overwrite-input-file
+}
+
 def 'main convert' [includeUris: string] {
   let cmd = "./cli convert bitwarden-to-apple data/bitwarden.json data/output.csv"
 

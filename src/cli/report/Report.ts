@@ -5,6 +5,7 @@ export const initialReport: Data = {
   error: undefined,
   outputPath: '',
   outputRemainingPath: undefined,
+  itOutputRemainingFileEncrypted: false,
   isInputFileOverwritten: false,
   processedCount: 0,
   remainingCount: 0,

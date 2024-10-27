@@ -32,7 +32,8 @@ export async function bitwardenToApplePasswords(
   }
   if (outputRemainingPath) {
     await remaining.export(outputRemainingPath, { password })
+    report.set('isInputFileOverwritten', outputRemainingPath === inputPath)
+    report.set('itOutputRemainingFileEncrypted', Boolean(password))
   }
   report.set('outputRemainingPath', outputRemainingPath)
-  report.set('isInputFileOverwritten', outputRemainingPath === inputPath)
 }

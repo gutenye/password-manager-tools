@@ -7,6 +7,8 @@ export function createMarkdown({
   processedCount,
   remainingCount,
   requireFixCount,
+  itOutputRemainingFileEncrypted,
+  isInputFileOverwritten,
 }: Data) {
   return `
 # 📋 Final Report 📋
@@ -18,7 +20,7 @@ export function createMarkdown({
 To import them into the \`Passwords\` app:
 
 1. Open the \`Passwords\` app.
-2. Navigate to \`File\` {'>'} \`Import Password\`.
+2. Navigate to \`File\` > \`Import Password\`.
 3. Follow the on-screen instructions to complete the import.
 
 **Note:** For security reasons, please delete the exported file after importing.
@@ -30,7 +32,7 @@ To import them into the \`Passwords\` app:
 
 1. \`Open\` the \`Passwords\` app.
 2. \`Find\` items ends with \`FIXWEBSITE\`
-3. \`Add\` the corresponding website information from the \`Notes\` field.
+3. \`Add\` the corresponding website from the \`Notes\` field.
 
 ${
   outputRemainingPath
@@ -41,9 +43,9 @@ ${
 
 These items can be used for incremental exports in the future.
 
-**Note** (overwritten?), password encrypted **yes/no**
-**Note:** Press keep this file secure and password protected.
-`
+${isInputFileOverwritten ? '**Note:** The input file has been overwritten.' : ''} 
+**Note:** Please keep this file secure. ${itOutputRemainingFileEncrypted ? 'It has been encrypted with the same password.' : 'It is **not encrypted**. Please encrypt it.'} 
+`.trim()
     : ''
 }
 
@@ -54,8 +56,14 @@ These items can be used for incremental exports in the future.
 | ✅ Exported Items               | ${processedCount}  |
 | ✅ Exported Items Saved In      | ${mdEscape(outputPath)}      |
 | ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
+${
+  outputRemainingPath
+    ? `
 | 🚫 Remainig Items                | ${remainingCount}    |
-| 🚫 Remainig Items Saved In       | ${mdEscape(outputRemainingPath || '')}   |
+| 🚫 Remainig Items Saved In       | ${mdEscape(outputRemainingPath)}   |
+`.trim()
+    : ''
+}
 
 Thank you for using our CLI app! If you found it helpful, please [⭐️ star the project️️ ⭐](https://github.com/gutenye/password-manager-tools) on GitHub. If you have any questions or encounter issues, please refer to the documentation or report an issue on GitHub.
 `

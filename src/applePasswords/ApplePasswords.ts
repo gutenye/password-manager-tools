@@ -44,20 +44,22 @@ export class ApplePasswords {
           outputs.push(output)
           break
         }
-        // case BitwardenExport.ItemType.Card:
-        // case BitwardenExport.ItemType.Identity: {
-        //   const type = BitwardenExport.ItemType[item.type]
-        //   const notes = app.serializeOther(item)
-        //   const output: ApplePasswordsExport.Item = {
-        //     Title: `${item.name} (${type})`,
-        //     Notes: notes,
-        //   }
-        //   outputs.push(output)
-        //   break
-        // }
+        case BitwardenExport.ItemType.Card:
+        case BitwardenExport.ItemType.Identity: {
+          const type = BitwardenExport.ItemType[item.type]
+          const notes = app.serializeOther(item)
+          const output: ApplePasswordsExport.Item = {
+            Title: `${item.name} (${type})`,
+            Notes: notes,
+          }
+          outputs.push(output)
+          break
+        }
         default: {
           const { type, name } = item as BitwardenExport.Item
-          logger.error(`Type '${type}' from '${name}' is not supported`)
+          logger.error(
+            `[ApplePasswords.from] Type '${type}' from '${name}' is not supported`,
+          )
           remainingCount++
           continue
         }

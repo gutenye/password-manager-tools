@@ -3,7 +3,7 @@ import { Text } from 'ink'
 import { useRef } from 'react'
 import { useMemo, useState } from 'react'
 
-const DISBALE_MARKDOWN = true // for console.log
+const DISBALE_MARKDOWN = false // for console.log
 
 const { default: Markdown } = await import('ink-markdown')
 
@@ -46,12 +46,18 @@ const ReportComponent = ({ reportData }: Props) => {
         {`
 # 📋 Final Report 📋
 
-## 1.  ✅ Exported Passwords
+## 1. ✅ Exported Passwords
 
-\`${processedCount}\` items have been exported without issues. Saved in \`${outputPath}\`. Open \`Passwords\` app, use \`File - Import password\` to import them.
+\`${processedCount}\` items have been exported successfully and saved to \`${outputPath}\`. 
 
-**Note:** After it's used, please remove this file for saftely
-**Note:** Export data from Bitwarden does not contain file attachments.
+To import them into the \`Passwords\` app:
+
+1. Open the \`Passwords\` app.
+2. Navigate to \`File\` {'>'} \`Import Password\`.
+3. Follow the on-screen instructions to complete the import.
+
+**Note:** For security reasons, please delete the exported file after importing.
+**Note:** Exported data from Bitwarden does not include file attachments.
 
 ## 2. ⚠️ Items Requiring Manual Fixes
 
@@ -59,26 +65,27 @@ const ReportComponent = ({ reportData }: Props) => {
 
 1. \`Open\` the \`Passwords\` app.
 2. \`Find\` items ends with \`FIXWEBSITE\`
-3. \`Add\` the corresponding website information from the notes field.
+3. \`Add\` the corresponding website information from the \`Notes\` field.
 
 ## 3. 🚫 Remainig Items
 
-\`${remainingCount}\` remaining items have been saved in \`${outputRemainingPath}\` (overwriten?), password encrypted **yes/no**, can be used next for incremential export
+\`${remainingCount}\` items have been saved to \`${outputRemainingPath}\` (overwritten?), password encrypted **yes/no**
 
-**Note:** Press keep this file secure and password protected**
+These items can be used for incremental exports in the future.
+
+**Note:** Press keep this file secure and password protected.
 
 # 📊 Summary 📊
 
-|                                 |                    |
+| Feature                         | Details                   |
 | ------------------------------- | ------------------ |
 | ✅ Exported Items               | ${processedCount}  |
 | ✅ Exported Items Saved In      | ${mdEscape(outputPath)}      |
 | ⚠ Items Requiring Manual Fixes  | ${requireFixCount} |
 | 🚫 Remainig Items                | ${remainingCount}    |
-| 🚫 Remainig Items Overwritten In | ${mdEscape(outputRemainingPath || '')}   |
+| 🚫 Remainig Items Saved In       | ${mdEscape(outputRemainingPath || '')}   |
 
-
-Thank you for using our CLI app! Please [star the project](https://github.com/gutenye/password-manager-tools) on the Github if you like it. If you have any questions, please refer to the documentation or report an issue on the github.
+Thank you for using our CLI app! If you found it helpful, please [⭐️ star the project️️ ⭐](https://github.com/gutenye/password-manager-tools) on GitHub. If you have any questions or encounter issues, please refer to the documentation or report an issue on GitHub.
 `}
       </Markdown>
     </>

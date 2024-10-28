@@ -7,15 +7,13 @@ export function createBitwarden(items: Item[] = []): BitwardenExport.Root {
     encrypted: false,
     folders: [],
     collections: [],
-    items: items
-      .map((item, index) => createItem(index, item))
-      .filter((v) => v !== undefined),
+    items: items.map(createItem).filter((v) => v !== undefined),
   }
 }
 
 function createItem(
-  index: number,
   item: Item,
+  index: number,
 ): BitwardenExport.Item | undefined {
   if (item === null) {
     return
@@ -24,21 +22,21 @@ function createItem(
   const suffix = index + 1
   const {
     type = BITWARDEN.ItemType.Login,
-    name,
+    name = `name${suffix}`,
+    notes = '',
     fields = [],
     passwordHistory = [],
-    notes = '',
   } = item
 
   const output: BitwardenExport.Item = {
-    id: '',
     type,
-    name: name || `name${suffix}`,
+    name,
     notes,
+    fields: (fields || []).map(createField),
+    passwordHistory: (passwordHistory || []).map(createPasswordHistory),
+    id: `id${suffix}`,
     favorite: true,
     reprompt: 0,
-    fields: fields.map(createField),
-    passwordHistory: passwordHistory.map(createPasswordHistory),
     revisionDate: '2001-01-01T00:00:00.000000000Z',
     creationDate: '2001-01-01T00:00:00.000000000Z',
     deletedDate: null,
@@ -93,19 +91,23 @@ function createItem(
   }
 }
 
-function createUri({ uri = 'uri.com', match = null }: Uri = {}) {
+function createUri(uriInfo: Uri, index: number) {
+  const suffix = index + 1
+  const { uri = `${suffix}.example.com`, match = null } = uriInfo
   return {
     uri,
     match,
   }
 }
 
-function createField({
-  name = 'name',
-  value = 'value',
-  type = 0,
-  linkedId = undefined,
-}: Partial<BitwardenExport.Field>) {
+function createField(field: Partial<BitwardenExport.Field>, index: number) {
+  const suffix = index + 1
+  const {
+    name = `name${suffix}`,
+    value = `value${suffix}`,
+    type = 0,
+    linkedId = undefined,
+  } = field
   return {
     name,
     value,
@@ -114,10 +116,15 @@ function createField({
   }
 }
 
-function createPasswordHistory({
-  lastUsedDate = '2001-01-01T01:00:00.000Z',
-  password = 'password',
-}: Partial<BitwardenExport.PasswordHistory>) {
+function createPasswordHistory(
+  passwordHistory: Partial<BitwardenExport.PasswordHistory>,
+  index: number,
+) {
+  const suffix = index + 1
+  const {
+    lastUsedDate = `2001-01-01T00:00:00.00${suffix}Z`,
+    password = `password${suffix}`,
+  } = passwordHistory
   return {
     lastUsedDate,
     password,

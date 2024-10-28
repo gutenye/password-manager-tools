@@ -4,14 +4,12 @@ import type { ApplePasswordsExport } from '#/types'
 import { prefixHttps } from '#/utils'
 
 export function createApplePasswords(items: Item[] = []) {
-  return items
-    .flatMap((item, index) => createItem(index, item))
-    .filter((v) => v !== undefined)
+  return items.flatMap(createItem).filter((v) => v !== undefined)
 }
 
 function createItem(
-  index: number,
   item: Item,
+  index: number,
 ):
   | (ApplePasswordsExport.Item | undefined)[]
   | ApplePasswordsExport.Item
@@ -20,10 +18,12 @@ function createItem(
     return
   }
   const suffix = index + 1
-  const { type = BITWARDEN.ItemType.Login, __output__ } = item
+  const { type = BITWARDEN.ItemType.Login } = item
+  const __output__ = item.__output__ || {}
+  const { name = `name${suffix}`, notes = '' } = __output__
   const output = {
-    Title: __output__?.name ?? `name${suffix}`,
-    Notes: __output__?.notes || '',
+    Title: name,
+    Notes: notes,
     Username: '',
     Password: '',
     OTPAuth: '',
@@ -37,11 +37,16 @@ function createItem(
         if (uriInfo?.__output__ === false) {
           return
         }
+        const {
+          username = `username${suffix}`,
+          password = `password${suffix}`,
+          totp = `totp${suffix}`,
+        } = __output__
         return {
           ...output,
-          Username: `username${suffix}`,
-          Password: `password${suffix}`,
-          OTPAuth: `totp${suffix}`,
+          Username: username,
+          Password: password,
+          OTPAuth: totp,
           URL: getHostname(uriInfo?.uri),
         }
       })

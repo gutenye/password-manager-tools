@@ -13,8 +13,7 @@ export type Item = null | {
         name?: string
         username?: string
         password?: string
-        otpauth?: string
-        url?: string
+        totp?: string
         notes?: string
       }
 }

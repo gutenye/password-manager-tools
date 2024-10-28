@@ -1,8 +1,13 @@
 import fs from 'node:fs/promises'
 import Papa from 'papaparse'
 import { BITWARDEN } from '#/bitwarden'
-import type { ApplePasswordsExport, Bitwarden, Context } from '#/types'
-import type { BitwardenExport } from '#/types'
+import type {
+  ApplePasswordsExport,
+  Bitwarden,
+  BitwardenExport,
+  CliConvert,
+  Context,
+} from '#/types'
 
 export class ApplePasswords {
   static async from(app: Bitwarden, context: Context) {

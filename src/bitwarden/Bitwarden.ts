@@ -32,7 +32,7 @@ export class Bitwarden {
       root = fileData
     }
 
-    const all = new Bitwarden(root, context)
+    const all = new Bitwarden(root, options, context)
     all.normalize()
     let exported: Bitwarden | null = all
     let remaining: Bitwarden = new Bitwarden(
@@ -65,10 +65,16 @@ export class Bitwarden {
   }
 
   #root: BitwardenExport.Root
+  #options: CliConvert.ProcessedOptions
   #context: Context
 
-  constructor(root: BitwardenExport.Root, context: Context) {
+  constructor(
+    root: BitwardenExport.Root,
+    options: CliConvert.ProcessedOptions,
+    context: Context,
+  ) {
     this.#context = context
+    this.#options = options
     this.#root = root
   }
 
@@ -130,7 +136,7 @@ export class Bitwarden {
   serializeCommon(item: BitwardenExport.Item) {
     const outs = []
     outs.push(
-      this.#serializeSection('FIELDS', this.#seriaizeFields(item.fields)),
+      this.#serializeSection('FIELDS', this.#serializeFields(item.fields)),
     )
     if (item.type === ItemType.SecureNote) {
       outs.push(this.#serializeNotes(item.notes))
@@ -260,25 +266,34 @@ export class Bitwarden {
     return `[${title}]\n${value}`
   }
 
-  #seriaizeFields(fields?: BitwardenExport.Field[]) {
+  #serializeFields(fields?: BitwardenExport.Field[]) {
     if (!fields) {
       return ''
     }
-    const outFields = fields.map((field) => {
-      const name = this.#escapeField(field.name) || 'EMPTY'
-      let out = `${name} =`
-      if (field.value) {
-        const value = this.#escapeField(field.value)
-        out = `${out} ${value}`
-      }
-      if (field.type !== FieldType.Text) {
-        out = `${out} TYPE=${FieldType[field.type]}`
-      }
-      if (field.linkedId) {
-        out = `${out} LINKED_ID=${FieldLinkedId[field.linkedId]}`
-      }
-      return out
-    })
+    const outFields = fields
+      .map((field) => {
+        if (
+          this.#options.skipFields?.some((skipField) =>
+            field.name.includes(skipField),
+          )
+        ) {
+          return
+        }
+        const name = this.#escapeField(field.name) || 'EMPTY'
+        let out = `${name} =`
+        if (field.value) {
+          const value = this.#escapeField(field.value)
+          out = `${out} ${value}`
+        }
+        if (field.type !== FieldType.Text) {
+          out = `${out} TYPE=${FieldType[field.type]}`
+        }
+        if (field.linkedId) {
+          out = `${out} LINKED_ID=${FieldLinkedId[field.linkedId]}`
+        }
+        return out
+      })
+      .filter((v) => v !== undefined)
     return outFields.join('\n')
   }
 
@@ -314,3 +329,5 @@ export class Bitwarden {
       .join('\n')
   }
 }
+
+type NormalizeOptions = { skipFields?: string[] }

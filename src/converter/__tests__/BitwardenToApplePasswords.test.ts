@@ -140,6 +140,25 @@ describe('options', () => {
     expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 
+  it('skipFields: a,b', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest(
+        [
+          {
+            fields: [{ name: 'name1' }, { name: 'name2' }, { name: 'name3' }],
+            __output__: {
+              notes: '[FIELDS]\nname3 = value3',
+            },
+          },
+        ],
+        {
+          skipFields: ['1', '2'],
+        },
+      )
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
+
   it('outputRemaining: overwrite-input-file', async () => {
     const {
       output,
@@ -313,7 +332,10 @@ it('empty newlines', async () => {
   const { output, remaining, outputExpected, remainingExpected } =
     await runTest([
       {
-        uris: [{ uri: 'a.com' }, { uri: 'b.com', __output__: false }],
+        uris: [
+          { uri: 'example1.com' },
+          { uri: 'example2.com', __output__: false },
+        ],
         fields: [{}],
         notes: 'a\nb\n  \n\n',
         passwordHistory: [{}],
@@ -321,18 +343,18 @@ it('empty newlines', async () => {
           name: 'name1 FIXWEBSITE',
           notes: `
 [FIELDS]
-name = value
+name1 = value1
 
 [NOTES]
 a
 b
 
 [PASSWORD_HISTORY]
-2001-01-01T01:00:00.000Z = password
+2001-01-01T00:00:00.001Z = password1
 
 [URIS]
-Default = a.com
-Default = b.com
+Default = example1.com
+Default = example2.com
 `.trim(),
         },
       },

@@ -1,3 +1,4 @@
+import { AppError } from '#/errors'
 import type { Data, Key, SetReportData } from './types/TReport'
 
 export const initialReport: Data = {
@@ -37,7 +38,7 @@ export class Report {
       } else if (Array.isArray(prevValue)) {
         nextValue = [...prevValue, value]
       } else {
-        throw new Error(
+        throw new AppError(
           `[report.add] the value of the key '${key}' is not Set or Array`,
         )
       }

@@ -10,6 +10,7 @@ import {
   URI_MATCH_REVERSE,
 } from '#/bitwarden/constants'
 import { decrypt, encrypt } from '#/bitwarden/encryptDecrypt'
+import { AppError } from '#/errors'
 import type { BitwardenExport } from '#/types'
 import type { CliConvert, Context } from '#/types'
 import { extractHost, omitByDeep } from '#/utils'
@@ -187,8 +188,13 @@ export class Bitwarden {
     } else if (item.type === ItemType.Identity) {
       data = item.identity
     } else {
-      throw new Error(
+      throw new AppError(
         `[bitwarden.serializeOther] type '${ItemType[item.type]}' is not supported`,
+      )
+    }
+    if (!data) {
+      throw new AppError(
+        `[bitwarden.serializeOther] no data found for type '${ItemType[item.type]}'`,
       )
     }
 

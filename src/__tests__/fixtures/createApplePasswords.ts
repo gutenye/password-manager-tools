@@ -1,5 +1,6 @@
 import type { Item } from '#/__tests__/types'
 import { BITWARDEN } from '#/bitwarden'
+import { AppError } from '#/errors'
 import type { ApplePasswordsExport } from '#/types'
 import { extractHost } from '#/utils'
 
@@ -67,7 +68,7 @@ function createItem(
       }
     }
     default: {
-      throw new Error(
+      throw new AppError(
         `[crateApplePasswords.createItem] invalid type '${BITWARDEN.ItemType[type]}'`,
       )
     }

@@ -1,5 +1,6 @@
 import type { Item, Uri } from '#/__tests__/types'
 import { BITWARDEN } from '#/bitwarden'
+import { AppError } from '#/errors'
 import type { BitwardenExport } from '#/types'
 
 export function createBitwarden(items: Item[] = []): BitwardenExport.Root {
@@ -84,7 +85,7 @@ function createItem(
       }
     }
     default: {
-      throw new Error(
+      throw new AppError(
         `[createBitwarden.createItem] invalid type '${BITWARDEN.ItemType[type]}'`,
       )
     }

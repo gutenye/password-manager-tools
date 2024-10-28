@@ -10,7 +10,7 @@ export type { UriMatch, ItemType, FieldLinkedId, FieldType }
 export type File = Root | RootEncrypted
 
 export interface Root {
-  encrypted: false
+  encrypted?: false
   folders?: Array<Folder>
   collections?: Array<Collection>
   items: Array<Item>

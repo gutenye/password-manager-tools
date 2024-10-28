@@ -20,6 +20,10 @@
       "name": "HelloCard",
       "notes": "notes",
       "favorite": false,
+      "fields": [
+        { "name": "name1", "value": "value1" },
+        { "name": "skip2", "value": "value2" }
+      ],
       "card": {
         "cardholderName": "cardholderName",
         "brand": "Visa",

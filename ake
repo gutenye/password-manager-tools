@@ -40,8 +40,12 @@ def 'main t reset' [] {
   cp src/__tests__/fixtures/bitwardenEncrypted.json data
 }
 
+def 'main t all' [] {
+  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --skip-fields skip
+}
+
 def 'main t requirefix' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv 
+  main t all
 }
 
 def 'main t exported' [] {

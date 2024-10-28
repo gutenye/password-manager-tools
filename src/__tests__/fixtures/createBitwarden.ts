@@ -34,7 +34,7 @@ function createItem(
     notes,
     fields: (fields || []).map(createField),
     passwordHistory: (passwordHistory || []).map(createPasswordHistory),
-    id: `id${suffix}`,
+    id: 'id',
     favorite: true,
     reprompt: 0,
     revisionDate: '2001-01-01T00:00:00.000000000Z',

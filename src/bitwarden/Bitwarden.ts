@@ -285,7 +285,7 @@ export class Bitwarden {
           const value = this.#escapeField(field.value)
           out = `${out} ${value}`
         }
-        if (field.type !== FieldType.Text) {
+        if (field.type && field.type !== FieldType.Text) {
           out = `${out} TYPE=${FieldType[field.type]}`
         }
         if (field.linkedId) {

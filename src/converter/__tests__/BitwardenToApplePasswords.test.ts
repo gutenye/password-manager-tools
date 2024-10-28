@@ -2,14 +2,14 @@ import { describe, expect, it } from 'bun:test'
 import { BITWARDEN } from '#/bitwarden'
 import { runTest, runTestConvert } from './runTests'
 
-it('encrypted: false', async () => {
+it('file: encrypted false', async () => {
   const { fixtures } = globalThis.__TEST__
   const { output, remaining } = await runTestConvert(fixtures.bitwarden.data)
   expect(output).toEqual(fixtures.bitwardenToApplePasswords.data)
   expect(remaining).toEqual({ ...fixtures.bitwarden.data, items: [] })
 })
 
-it('encrypted: true', async () => {
+it('file: encrypted true', async () => {
   const { fixtures } = globalThis.__TEST__
   const { output, remaining } = await runTestConvert(
     fixtures.bitwardenEncrypted.data,
@@ -29,7 +29,7 @@ it('encrypted: true', async () => {
   })
 })
 
-it('encrypted: wrong password', async () => {
+it('file: encrypted wrong password', async () => {
   const { fixtures } = globalThis.__TEST__
   await expect(
     runTestConvert(fixtures.bitwardenEncrypted.data, {
@@ -37,6 +37,8 @@ it('encrypted: wrong password', async () => {
     }),
   ).rejects.toThrow('Incorrect password')
 })
+
+it('all: null case', () => {})
 
 describe('options', () => {
   it('includeUris: a.com,b.com', async () => {
@@ -367,9 +369,9 @@ it('field: empty name', async () => {
   const { output, remaining, outputExpected, remainingExpected } =
     await runTest([
       {
-        fields: [{ name: null, value: null }],
+        fields: [{ name: null, value: null }, {}],
         __output__: {
-          notes: '[FIELDS]\nEMPTY =',
+          notes: '[FIELDS]\nEMPTY =\nname2 = value2',
         },
       },
     ])

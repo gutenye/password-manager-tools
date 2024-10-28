@@ -37,6 +37,7 @@ export class Bitwarden {
     let exported: Bitwarden | null = all
     let remaining: Bitwarden = new Bitwarden(
       { ...all.root, items: [] },
+      options,
       context,
     )
     if (options.includeUris) {
@@ -96,7 +97,11 @@ export class Bitwarden {
       )
     })
     return parts.map((items) => {
-      return new Bitwarden({ ...this.#root, items }, this.#context)
+      return new Bitwarden(
+        { ...this.#root, items },
+        this.#options,
+        this.#context,
+      )
     })
   }
 
@@ -104,7 +109,11 @@ export class Bitwarden {
     const firstItems = this.#root.items.slice(0, count)
     const restItems = this.#root.items.slice(count)
     return [firstItems, restItems].map((items) => {
-      return new Bitwarden({ ...this.#root, items }, this.#context)
+      return new Bitwarden(
+        { ...this.#root, items },
+        this.#options,
+        this.#context,
+      )
     })
   }
 
@@ -113,7 +122,11 @@ export class Bitwarden {
       return names.some((name) => item.name.includes(name))
     })
     return parts.map((items) => {
-      return new Bitwarden({ ...this.#root, items }, this.#context)
+      return new Bitwarden(
+        { ...this.#root, items },
+        this.#options,
+        this.#context,
+      )
     })
   }
 
@@ -125,7 +138,11 @@ export class Bitwarden {
       })
     })
     return parts.map((items) => {
-      return new Bitwarden({ ...this.#root, items }, this.#context)
+      return new Bitwarden(
+        { ...this.#root, items },
+        this.#options,
+        this.#context,
+      )
     })
   }
 
@@ -163,6 +180,7 @@ export class Bitwarden {
   }
 
   serializeOther(item: BitwardenExport.Item) {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     let data: Record<string, any>
     if (item.type === ItemType.Card) {
       data = item.card
@@ -190,6 +208,7 @@ export class Bitwarden {
     const newRoot = omitByDeep(this.#root, (_, key) => {
       return Boolean(key.match(/^__.*__$/))
     })
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     let result: any = newRoot
     if (password) {
       result = await encrypt(result, password)
@@ -285,7 +304,7 @@ export class Bitwarden {
           const value = this.#escapeField(field.value)
           out = `${out} ${value}`
         }
-        if (field.type && field.type !== FieldType.Text) {
+        if (field.type !== FieldType.Text && field.type) {
           out = `${out} TYPE=${FieldType[field.type]}`
         }
         if (field.linkedId) {
@@ -324,10 +343,9 @@ export class Bitwarden {
     }
     return uris
       .map((uri) => {
-        return `${URI_MATCH_REVERSE[uri.match]} = ${uri.uri}`
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        return `${URI_MATCH_REVERSE[uri.match as any]} = ${uri.uri}`
       })
       .join('\n')
   }
 }
-
-type NormalizeOptions = { skipFields?: string[] }

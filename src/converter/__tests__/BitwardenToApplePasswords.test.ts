@@ -161,6 +161,45 @@ describe('options', () => {
     expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 
+  it.only('skipFields: and includeXX', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest(
+        [
+          {
+            name: 'name1',
+            fields: [{ name: 'name1' }, { name: 'name2' }],
+            __output__: {
+              notes: '[FIELDS]\nname2 = value2',
+            },
+          },
+          {
+            name: 'name2',
+            fields: [{ name: 'name1' }, { name: 'name2' }],
+            __output__: false,
+          },
+        ],
+        {
+          skipFields: ['1'],
+          includeNames: ['name1'],
+        },
+      )
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+    // skipFields should not apply to remaining items
+    expect(remaining?.items[0].fields).toEqual([
+      {
+        name: 'name1',
+        value: 'value1',
+        type: 0,
+      },
+      {
+        name: 'name2',
+        value: 'value2',
+        type: 0,
+      },
+    ])
+  })
+
   it('outputRemaining: overwrite-input-file', async () => {
     const {
       output,

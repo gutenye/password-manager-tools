@@ -119,7 +119,7 @@ export interface IdentityItem extends BaseItem {
 export interface Field {
   name: string
   value: string
-  type: FieldType
+  type?: FieldType
   linkedId?: FieldLinkedId
 }
 

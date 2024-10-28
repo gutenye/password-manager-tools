@@ -59,7 +59,6 @@ export class Bitwarden {
       const parts = all.includeTypes(options.includeTypes)
       exported = parts[0]
       remaining = parts[1]
-      console.log(':: 1', exported.count, remaining.count)
       report.set('remainingCount', remaining.count)
     }
 
@@ -294,7 +293,7 @@ export class Bitwarden {
       .map((field) => {
         if (
           this.#options.skipFields?.some((skipField) =>
-            field.name.includes(skipField),
+            field.name?.includes(skipField),
           )
         ) {
           return
@@ -317,7 +316,7 @@ export class Bitwarden {
     return outFields.join('\n')
   }
 
-  #escapeField(name?: string) {
+  #escapeField(name?: string | null) {
     return name?.replaceAll('=', '=')
   }
 

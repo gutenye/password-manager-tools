@@ -117,10 +117,10 @@ export interface IdentityItem extends BaseItem {
 }
 
 export interface Field {
-  name: string
-  value: string
-  type?: FieldType
-  linkedId?: FieldLinkedId
+  name?: string | null
+  value?: string | null
+  type?: FieldType | null
+  linkedId?: FieldLinkedId | null
 }
 
 export interface PasswordHistory {

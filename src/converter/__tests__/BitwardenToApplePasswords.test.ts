@@ -147,21 +147,21 @@ describe('options', () => {
       await runTest(
         [
           {
-            fields: [{ name: 'name1' }, { name: 'name2' }, { name: 'name3' }],
+            fields: [{ name: 'name1' }, { name: 'name2' }, { name: null }],
             __output__: {
-              notes: '[FIELDS]\nname3 = value3',
+              notes: '[FIELDS]\nname1 = value1\nEMPTY = value3',
             },
           },
         ],
         {
-          skipFields: ['1', '2'],
+          skipFields: ['2', '9'],
         },
       )
     expect(output).toEqual(outputExpected)
     expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 
-  it.only('skipFields: and includeXX', async () => {
+  it('skipFields: and includeXX', async () => {
     const { output, remaining, outputExpected, remainingExpected } =
       await runTest(
         [

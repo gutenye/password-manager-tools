@@ -5,8 +5,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Report, createMarkdown, initialReport } from '#/cli/report'
 import type { TReport } from '#/types'
 
-const DISBALE_MARKDOWN = false // for console.log
-
 const { default: Markdown } = await import('ink-markdown')
 
 export function useReport() {
@@ -37,9 +35,6 @@ const ReportComponent = ({ reportData }: Props) => {
   }
   if (reportData.error) {
     return <Text color="red">Error: {reportData.error.message}</Text>
-  }
-  if (DISBALE_MARKDOWN) {
-    return
   }
   return (
     <>

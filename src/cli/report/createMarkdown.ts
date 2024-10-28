@@ -1,6 +1,9 @@
 import { mdEscape } from './Report'
 import type { Data } from './types/TReport'
 
+const DISBALE_MARKDOWN = false // for console.log
+// const DISBALE_MARKDOWN = true
+
 export function createMarkdown({
   outputPath,
   outputRemainingPath,
@@ -10,6 +13,9 @@ export function createMarkdown({
   itOutputRemainingFileEncrypted,
   isInputFileOverwritten,
 }: Data) {
+  if (DISBALE_MARKDOWN) {
+    return ''
+  }
   return `
 # 📋 Final Report 📋
 
@@ -41,11 +47,16 @@ ${
 }
 
 ${
-  outputRemainingPath
+  remainingCount > 0
     ? `
 ## 3. 🚫 Remainig Items
 
-\`${remainingCount}\` items have been saved to \`${outputRemainingPath}\`.
+${
+  outputRemainingPath
+    ? `
+\`${remainingCount}\` remaining items have been saved to \`${outputRemainingPath}\`.`
+    : `\`${remainingCount}\` remaining items has not been saved, use \`--output-remaining\` option to save them.`
+}
 
 These items can be used for incremental exports in the future.
 
@@ -67,11 +78,11 @@ ${
 | ⚠ Requiring Manual Fixes Items  | ${requireFixCount} |
 `.trim()
     : ''
-}${
-  outputRemainingPath
+}${requireFixCount > 0 && remainingCount > 0 ? '\n' : ''}${
+  remainingCount > 0
     ? `
 | 🚫 Remainig Items                | ${remainingCount}    |
-| 🚫 Remainig Items Saved In       | ${mdEscape(outputRemainingPath)}   |
+| 🚫 Remainig Items Saved In       | ${mdEscape(outputRemainingPath || '(not saved)')}   |
 `.trim()
     : ''
 }

@@ -40,20 +40,28 @@ def 'main t reset' [] {
   cp src/__tests__/fixtures/bitwardenEncrypted.json data
 }
 
-def 'main t all' [] {
+def 'main t manual' [] {
   password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --skip-fields skip
 }
 
-def 'main t requirefix' [] {
-  main t all
+# Summary: exported + requirefix + remaining
+def 'main t all' [] {
+  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-types login
 }
 
+# Summary: exported 
 def 'main t exported' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-types note
+  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv 
 }
 
+# Summary: exported + requirefix
+def 'main t requirefix' [] {
+  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv 
+}
+
+# Summary: exported + reamining
 def 'main t remaining' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-uris foo.com --output-remaining overwrite-input-file
+  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-uris foo.com 
 }
 
 def 'main t password' [] {

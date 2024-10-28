@@ -59,6 +59,7 @@ export class Bitwarden {
       const parts = all.includeTypes(options.includeTypes)
       exported = parts[0]
       remaining = parts[1]
+      console.log(':: 1', exported.count, remaining.count)
       report.set('remainingCount', remaining.count)
     }
 

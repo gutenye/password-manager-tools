@@ -208,8 +208,7 @@ export class Bitwarden {
     const newRoot = omitByDeep(this.#root, (_, key) => {
       return Boolean(key.match(/^__.*__$/))
     })
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    let result: any = newRoot
+    let result = newRoot as BitwardenExport.File
     if (password) {
       result = await encrypt(result, password)
     }

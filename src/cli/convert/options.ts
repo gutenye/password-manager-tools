@@ -64,6 +64,7 @@ function parseIncludeTypes(includeTypes?: string) {
   }
   const types = includeTypes.split(',')
   for (const type of types) {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     if (!CLI_INCLUDE_TYPES.includes(type as any)) {
       throw new AppError(
         `--include-types '${type}' must be one of ${CLI_INCLUDE_TYPES.join(', ')}`,

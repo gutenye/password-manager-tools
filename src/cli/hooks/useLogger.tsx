@@ -18,6 +18,7 @@ export function useLogger() {
 
   const logger = useMemo(() => {
     const createLogFn = (level: Level) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       return function log(...messages: any[]) {
         let message = messages.join(' ')
         if (level === 'error') {

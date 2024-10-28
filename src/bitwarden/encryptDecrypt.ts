@@ -1,5 +1,6 @@
 const { crypto } = globalThis
 import { AppError } from '#/errors'
+import type { BitwardenExport } from '#/types'
 
 const ITERLATIONS = 600000
 
@@ -29,6 +30,7 @@ export async function decrypt(
   }
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export async function encrypt(data: Record<string, any>, password: string) {
   const salt = generateSalt()
   const key = await deriveKey({
@@ -38,7 +40,7 @@ export async function encrypt(data: Record<string, any>, password: string) {
   })
   const text = JSON.stringify(data)
   const encryptedText = await encryptText(text, key)
-  return {
+  const encrypted: BitwardenExport.File = {
     encrypted: true,
     passwordProtected: true,
     salt: uint8ArrayToString(salt),
@@ -47,6 +49,7 @@ export async function encrypt(data: Record<string, any>, password: string) {
     encKeyValidation_DO_NOT_EDIT: '',
     data: encryptedText,
   }
+  return encrypted
 }
 
 async function deriveKey({

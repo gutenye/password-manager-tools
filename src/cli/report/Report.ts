@@ -21,12 +21,15 @@ export class Report {
     this.#setReportData = setReportData
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   set(key: Key, value: any) {
     this.#setReportData((prev) => ({ ...prev, [key]: value }))
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   add(key: Key, value: any) {
     this.#setReportData((prev) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let nextValue: any
       const prevValue = prev[key]
       if (prevValue instanceof Set) {

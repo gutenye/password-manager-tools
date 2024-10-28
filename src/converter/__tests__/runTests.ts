@@ -24,7 +24,9 @@ const CONTEXT: Partial<Context> = {
 }
 
 // For report.exit
-spyOn(process, 'exit').mockReturnValue(undefined)
+spyOn(process, 'exit').mockImplementation(() => {
+  while (true) {}
+})
 
 export async function runTest(
   items: Item[],
@@ -57,7 +59,7 @@ export async function runTest(
 }
 
 export async function runTestConvert(
-  input: any,
+  input: BitwardenExport.Root,
   rawOptions: RunConvertOptions = {},
 ) {
   const { password, ...restOptions } = rawOptions

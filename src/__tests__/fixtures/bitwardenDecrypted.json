@@ -15,7 +15,9 @@
       "name": "HelloLogin1",
       "notes": "notes1",
       "favorite": false,
-      "fields": [{ "name": "field1", "value": "value1", "type": 0, "linkedId": null }],
+      "fields": [
+        { "name": "field1", "value": "value1", "type": 0, "linkedId": null }
+      ],
       "login": {
         "fido2Credentials": [],
         "uris": [{ "match": null, "uri": "a.com" }],

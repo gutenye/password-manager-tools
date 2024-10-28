@@ -190,7 +190,7 @@
           },
           {
             "match": 0,
-            "uri": "BaseDomain"
+            "uri": "https://base.com"
           },
           {
             "match": 1,

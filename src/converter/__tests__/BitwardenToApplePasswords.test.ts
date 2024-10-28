@@ -270,67 +270,130 @@ it('items: empty', async () => {
   expect<typeof remaining>(remaining).toEqual(remainingExpected)
 })
 
-it('uris: empty', async () => {
-  const { output, remaining, outputExpected, remainingExpected } =
-    await runTest([{}])
-  expect(output).toEqual(outputExpected)
-  expect<typeof remaining>(remaining).toEqual(remainingExpected)
-})
-
-it('uris: needsFix with vaild uri', async () => {
-  const { output, remaining, outputExpected, remainingExpected } =
-    await runTest([
-      {
-        uris: [{ uri: 'a.com' }, { uri: 'b.com', __output__: false }],
-        __output__: {
-          notes: '[URIS]\nDefault = a.com\nDefault = b.com',
-          name: 'name1 FIXWEBSITE',
+describe('uri', () => {
+  it('uri: works', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest([
+        {
+          uris: [
+            {
+              uri: 'example',
+              match: BITWARDEN.URI_MATCH.Default,
+              __output__: false,
+            },
+            {
+              uri: '2.example.com',
+              match: BITWARDEN.URI_MATCH.Default,
+            },
+            {
+              uri: 'https://3.example.com',
+              match: BITWARDEN.URI_MATCH.Default,
+            },
+            {
+              uri: 'app://4.example.com',
+              match: BITWARDEN.URI_MATCH.Default,
+              __output__: false,
+            },
+            {
+              uri: 'domain.example.com',
+              match: BITWARDEN.URI_MATCH.BaseDomain,
+            },
+            {
+              uri: 'host.example.com',
+              match: BITWARDEN.URI_MATCH.Host,
+            },
+            {
+              uri: 'exact.example.com',
+              match: BITWARDEN.URI_MATCH.Exact,
+            },
+            {
+              uri: 'starts.example.com',
+              match: BITWARDEN.URI_MATCH.StartsWith,
+              __output__: false,
+            },
+            {
+              uri: 'regular.example.com',
+              match: BITWARDEN.URI_MATCH.RegularExpression,
+              __output__: false,
+            },
+            {
+              uri: 'never.example.com',
+              match: BITWARDEN.URI_MATCH.Never,
+              __output__: false,
+            },
+          ],
+          __output__: {
+            notes:
+              '[URIS]\nDefault = example\nDefault = 2.example.com\nDefault = https://3.example.com\nDefault = app://4.example.com\nBaseDomain = domain.example.com\nHost = host.example.com\nExact = exact.example.com\nStartsWith = starts.example.com\nRegularExpression = regular.example.com\nNever = never.example.com',
+          },
         },
-      },
-    ])
-  expect(output).toEqual(outputExpected)
-  expect<typeof remaining>(remaining).toEqual(remainingExpected)
-})
+      ])
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
 
-it('uris: needsFix with invalid uri', async () => {
-  const { output, remaining, outputExpected, remainingExpected } =
-    await runTest([
-      {
-        uris: [{ uri: 'a.com' }, { uri: 'http-invalid', __output__: false }],
-        __output__: {
-          notes: '[URIS]\nDefault = a.com\nDefault = http-invalid',
-          name: 'name1',
+  it('uri: empty', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest([{}])
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
+
+  it('uri: needsFix with vaild uri', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest([
+        {
+          uris: [{ uri: 'a.com' }, { uri: 'b.com', __output__: false }],
+          __output__: {
+            notes: '[URIS]\nDefault = a.com\nDefault = b.com',
+            name: 'name1 FIXWEBSITE',
+          },
         },
-      },
-    ])
-  expect(output).toEqual(outputExpected)
-  expect<typeof remaining>(remaining).toEqual(remainingExpected)
-})
+      ])
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
 
-it('uri: a.com', async () => {
-  const { output, remaining, outputExpected, remainingExpected } =
-    await runTest([
-      {
-        uris: [{ uri: 'a.com' }],
-      },
-    ])
-  expect(output).toEqual(outputExpected)
-  expect<typeof remaining>(remaining).toEqual(remainingExpected)
-})
-
-it('uri: invalid', async () => {
-  const { output, remaining, outputExpected, remainingExpected } =
-    await runTest([
-      {
-        uris: [{ uri: 'http-invalid' }],
-        __output__: {
-          name: 'name1',
-          notes: '[URIS]\nDefault = http-invalid',
+  it('uri: needsFix with invalid uri', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest([
+        {
+          uris: [{ uri: 'a.com' }, { uri: 'http-invalid', __output__: false }],
+          __output__: {
+            notes: '[URIS]\nDefault = a.com\nDefault = http-invalid',
+            name: 'name1',
+          },
         },
-      },
-    ])
-  expect(output).toEqual(outputExpected)
-  expect<typeof remaining>(remaining).toEqual(remainingExpected)
+      ])
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
+
+  it('uri: a.com', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest([
+        {
+          uris: [{ uri: 'a.com' }],
+        },
+      ])
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
+
+  it('uri: invalid', async () => {
+    const { output, remaining, outputExpected, remainingExpected } =
+      await runTest([
+        {
+          uris: [{ uri: 'http-invalid' }],
+          __output__: {
+            name: 'name1',
+            notes: '[URIS]\nDefault = http-invalid',
+          },
+        },
+      ])
+    expect(output).toEqual(outputExpected)
+    expect<typeof remaining>(remaining).toEqual(remainingExpected)
+  })
 })
 
 it('escape: title, field', async () => {

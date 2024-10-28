@@ -6,13 +6,13 @@ import {
   FieldLinkedId,
   FieldType,
   ItemType,
-  URI_MATCH,
+  NORMALIZE_URI_SUPPORTED_MATCHES,
   URI_MATCH_REVERSE,
 } from '#/bitwarden/constants'
 import { decrypt, encrypt } from '#/bitwarden/encryptDecrypt'
 import type { BitwardenExport } from '#/types'
 import type { CliConvert, Context } from '#/types'
-import { omitByDeep, prefixHttps } from '#/utils'
+import { extractHost, omitByDeep } from '#/utils'
 
 export class Bitwarden {
   static async import(
@@ -219,25 +219,23 @@ export class Bitwarden {
 
   // add __sameHostnames__
   #normalizeUris() {
-    const supportedURI_MATCHes = [
-      URI_MATCH.Default,
-      URI_MATCH.BaseDomain,
-    ] as BitwardenExport.UriMatch[]
-
     for (const item of this.#root.items) {
       switch (item.type) {
         case ItemType.Login: {
           const login = item.login
           const urlItems = login.uris.map((originInfo) => {
-            if (supportedURI_MATCHes.includes(originInfo.match)) {
-              try {
-                const urlInfo = new URL(prefixHttps(originInfo.uri))
-                const domainInfo = tldts.parse(originInfo.uri)
-                return { hostname: urlInfo.hostname, domain: domainInfo.domain }
-              } catch {
+            if (!NORMALIZE_URI_SUPPORTED_MATCHES.includes(originInfo.match)) {
+              return
+            }
+            try {
+              const host = extractHost(originInfo.uri)
+              if (!host) {
                 return
               }
-            } else {
+              const urlInfo = new URL(host)
+              const domainInfo = tldts.parse(host)
+              return { hostname: urlInfo.hostname, domain: domainInfo.domain }
+            } catch {
               return
             }
           })

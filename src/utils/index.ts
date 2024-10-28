@@ -1,2 +1,2 @@
 export * from './omitByDeep'
-export * from './prefixHttps'
+export * from './extractHost'

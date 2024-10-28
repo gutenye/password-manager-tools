@@ -46,3 +46,10 @@ export const CLI_INCLUDE_TYPE_TO_APP_TYPE: Record<
   card: ItemType.Card,
   identity: ItemType.Identity,
 }
+
+export const NORMALIZE_URI_SUPPORTED_MATCHES = [
+  URI_MATCH.Default,
+  URI_MATCH.BaseDomain,
+  URI_MATCH.Host,
+  URI_MATCH.Exact,
+] as UriMatch[]

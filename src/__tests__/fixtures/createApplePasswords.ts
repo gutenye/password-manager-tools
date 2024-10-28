@@ -1,7 +1,7 @@
 import type { Item } from '#/__tests__/types'
 import { BITWARDEN } from '#/bitwarden'
 import type { ApplePasswordsExport } from '#/types'
-import { prefixHttps } from '#/utils'
+import { extractHost } from '#/utils'
 
 export function createApplePasswords(items: Item[] = []) {
   return items.flatMap(createItem).filter((v) => v !== undefined)
@@ -79,7 +79,11 @@ function getHostname(uri: string | undefined) {
     return ''
   }
   try {
-    return new URL(prefixHttps(uri)).hostname
+    const host = extractHost(uri)
+    if (!host) {
+      return ''
+    }
+    return new URL(host).hostname
   } catch {
     return ''
   }

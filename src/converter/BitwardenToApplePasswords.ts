@@ -16,7 +16,10 @@ export async function bitwardenToApplePasswords(
   report.set('outputPath', outputPath)
 
   if (output.needsFix.root.length > 0) {
-    const afterImportedCheckPath = pathUtils.suffix(outputPath, '-needs-fix')
+    const afterImportedCheckPath = pathUtils.suffix(
+      outputPath,
+      '-check-after-imported',
+    )
     await output.needsFix.export(afterImportedCheckPath)
     report.set('afterImportedCheckPath', afterImportedCheckPath)
   }

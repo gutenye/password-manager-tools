@@ -428,6 +428,7 @@ it('report: works', async () => {
     processedCount: 4,
     remainingCount: 0,
     requireFixCount: 0,
+    afterImportedCheckCount: 0,
   })
 })
 

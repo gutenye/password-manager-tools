@@ -6,7 +6,11 @@ alias password-manager-tools = bun run cli
 
 def help [] {
   $'
-test manual
+ake t all
+ake t exported
+ake t requirefix
+ake t remaining
+ake t password
   '
   | str trim
 }
@@ -22,13 +26,15 @@ def 'main l' [] {
   bun run lint
 }
 
+def 'main t' [...args: string] {
+  main l
+  bun run test ...$args
+}
+
 def 'main edit' [path: string] {
   vi -u NONE -U NONE $path
 }
 
-def 'main t' [...args: string] {
-  bun run test ...$args
-}
 
 def 'main t watch' [...args: string] {
   bun run test --watch ...$args
@@ -45,7 +51,8 @@ def 'main t manual' [] {
 
 # Summary: exported + requirefix + remaining
 def 'main t all' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-types login
+  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-names foobar
+  # password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-types login
 }
 
 # Summary: exported 

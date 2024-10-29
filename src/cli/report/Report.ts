@@ -4,13 +4,12 @@ import type { Data, Key, SetReportData } from './types/TReport'
 
 export const initialReport: Data = {
   outputPath: '',
-  outputRemainingPath: undefined,
+  command: '',
   itOutputRemainingFileEncrypted: false,
   isInputFileOverwritten: false,
   processedCount: 0,
   remainingCount: 0,
   requireFixCount: 0,
-  command: '',
 }
 
 export class Report {
@@ -47,11 +46,14 @@ export class Report {
   }
 
   async exit(arg?: string | Error) {
+    if (typeof arg === 'string' && arg.length === 0) {
+      throw new AppError('[Report#exit] is called with an empty string')
+    }
+    this.set('result', arg)
     if (arg instanceof AppError) {
-      console.error(chalk.red(`Error: ${arg.message}`))
-      process.exit(1)
-    } else if (arg instanceof Error) {
-      console.error(chalk.red(arg))
+      const message =
+        arg instanceof AppError ? chalk.red(`Error: ${arg.message}`) : arg
+      console.error(message)
       process.exit(1)
     } else {
       console.log(arg)

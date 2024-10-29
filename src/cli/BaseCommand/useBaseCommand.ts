@@ -30,7 +30,9 @@ async function runAndCatchError({ runCommand, ...rest }: any) {
   try {
     report.set('command', rest.name)
     await runCommand(rest)
+    report.set('result', true)
   } catch (error) {
+    report.set('result', error)
     if (error instanceof AppError) {
       report.exit(error)
     }

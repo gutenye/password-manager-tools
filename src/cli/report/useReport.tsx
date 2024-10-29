@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Report, initialReport } from '#/cli/report'
 import type { TReport } from '#/types'
 import { ReportComponent } from './ReportComponent'

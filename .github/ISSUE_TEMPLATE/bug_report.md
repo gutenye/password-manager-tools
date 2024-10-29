@@ -49,10 +49,6 @@ Please include a minimal version of your `bitwarden.json` file that reproduces t
       "name": "Name",
       "username": "Username",
       "password": "Password",
-      "totp": null,
-      "notes": null,
-      "passwordHistory": null,
-      "fields": [],
       "login": {
         "uris": [
           {

@@ -37,7 +37,7 @@ export async function runTest(
     ...rawOptions,
   }
   const input = createBitwarden(items)
-  const { output, remaining, outputRemainingPath, inputFileData, context } =
+  const { output, remaining, remainingPath, inputFileData, context } =
     await runTestConvert(input, options)
   const outputExpected = createApplePasswords(items)
   let remainingExpected: BitwardenExport.Root | undefined
@@ -49,7 +49,7 @@ export async function runTest(
   return {
     output,
     remaining,
-    outputRemainingPath,
+    remainingPath,
     inputFileData,
     context,
     input,
@@ -82,21 +82,18 @@ export async function runTestConvert(
   const output = Papa.parse(outputText, { header: true })
     .data as ApplePasswordsExport.Root
   let remaining: BitwardenExport.Root | undefined
-  const outputRemainingPath =
+  const remainingPath =
     options.outputRemaining === 'overwrite-input-file'
       ? '/input.json'
       : options.outputRemaining
-  if (outputRemainingPath) {
-    const remainingText = (await fs.readFile(
-      outputRemainingPath,
-      'utf8',
-    )) as string
+  if (remainingPath) {
+    const remainingText = (await fs.readFile(remainingPath, 'utf8')) as string
     remaining = JSON.parse(remainingText) as BitwardenExport.Root
   }
   const inputFileData = JSON.parse(
     (await fs.readFile('/input.json', 'utf8')) as string,
   )
-  return { output, remaining, outputRemainingPath, inputFileData, context }
+  return { output, remaining, remainingPath, inputFileData, context }
 }
 
 interface RunConvertOptions extends Partial<CliConvert.Options> {

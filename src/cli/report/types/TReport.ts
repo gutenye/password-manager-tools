@@ -1,11 +1,13 @@
 export type Data = {
-  outputPath: string
   result?: true | string | Error // true is success, string | Error is error
-  outputRemainingPath?: string
-  itOutputRemainingFileEncrypted: boolean
   isInputFileOverwritten: boolean
-  processedCount: number
+  outputPath: string
   remainingCount: number
+  remainingPath?: string
+  isRemainingFileEncrypted: boolean
+  afterImportedCheckPath?: string
+  afterImportedCheckCount: number
+  processedCount: number
   requireFixCount: number
   command: string
 }

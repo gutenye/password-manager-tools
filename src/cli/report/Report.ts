@@ -5,10 +5,11 @@ import type { Data, Key, SetReportData } from './types/TReport'
 export const initialReport: Data = {
   outputPath: '',
   command: '',
-  itOutputRemainingFileEncrypted: false,
+  isRemainingFileEncrypted: false,
   isInputFileOverwritten: false,
   processedCount: 0,
   remainingCount: 0,
+  afterImportedCheckCount: 0,
   requireFixCount: 0,
 }
 

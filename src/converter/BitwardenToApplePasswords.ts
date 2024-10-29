@@ -1,6 +1,7 @@
 import { ApplePasswords } from '#/applePasswords'
 import { Bitwarden } from '#/bitwarden'
 import type { CliConvert, Context } from '#/types'
+import { pathUtils } from '#/utils'
 
 export async function bitwardenToApplePasswords(
   inputPath: string,
@@ -9,24 +10,28 @@ export async function bitwardenToApplePasswords(
   context: Context,
 ) {
   const { report } = context
-  const { exported, remaining, password } = await Bitwarden.import(
-    inputPath,
-    options,
-    context,
-  )
-  const applePasswords = await ApplePasswords.from(exported, context)
-  await applePasswords.export(outputPath)
+  const input = await Bitwarden.import(inputPath, options, context)
+  const output = await ApplePasswords.from(input.exported, context)
+  await output.exported.export(outputPath)
   report.set('outputPath', outputPath)
-  let outputRemainingPath: string | undefined
+
+  if (output.needsFix.root.length > 0) {
+    const afterImportedCheckPath = pathUtils.suffix(outputPath, '-needs-fix')
+    await output.needsFix.export(afterImportedCheckPath)
+    report.set('afterImportedCheckPath', afterImportedCheckPath)
+  }
+
+  let remainingPath: string | undefined
   if (options.outputRemaining === 'overwrite-input-file') {
-    outputRemainingPath = inputPath
+    remainingPath = inputPath
   } else if (options.outputRemaining) {
-    outputRemainingPath = options.outputRemaining
+    remainingPath = options.outputRemaining
   }
-  if (outputRemainingPath) {
-    await remaining.export(outputRemainingPath, { password })
-    report.set('isInputFileOverwritten', outputRemainingPath === inputPath)
-    report.set('itOutputRemainingFileEncrypted', Boolean(password))
+  if (remainingPath) {
+    const { password } = input
+    await input.remaining.export(remainingPath, { password })
+    report.set('isInputFileOverwritten', remainingPath === inputPath)
+    report.set('isRemainingFileEncrypted', Boolean(password))
   }
-  report.set('outputRemainingPath', outputRemainingPath)
+  report.set('remainingPath', remainingPath)
 }

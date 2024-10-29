@@ -6,20 +6,25 @@ const DISBALE_MARKDOWN = false // for console.log
 
 export function createMarkdown({
   outputPath,
-  outputRemainingPath,
-  processedCount,
   remainingCount,
+  remainingPath,
+  afterImportedCheckPath,
+  afterImportedCheckCount,
+  processedCount,
   requireFixCount,
-  itOutputRemainingFileEncrypted,
+  isRemainingFileEncrypted,
   isInputFileOverwritten,
 }: Data) {
   if (DISBALE_MARKDOWN) {
     return ''
   }
-  return `
+
+  let index = 1
+
+  let report = `
 # 📋 Final Report 📋
 
-## 1. ✅ Exported Passwords
+## ${index++}. ✅ Exported Passwords
 
 \`${processedCount}\` items have been exported successfully and saved to \`${outputPath}\`. 
 
@@ -31,62 +36,79 @@ To import them into the \`Passwords\` app:
 
 **Note:** For security reasons, please delete the exported file after importing.
 **Note:** Exported data from Bitwarden does not include passkeys and file attachments.
+  `.trimEnd()
 
-${
-  requireFixCount > 0
-    ? `
-## 2. ⚠️ Items Requiring Manual Fixes
+  let summaryTable = `
+|                                 |                    |
+| ------------------------------- | ------------------ |
+| ✅ Exported Items               | ${processedCount}  |
+| ✅ Exported Items Saved In      | ${mdEscape(outputPath)}      |
+  `.trimEnd()
+
+  if (requireFixCount > 0) {
+    report += `
+## ${index++}. ⚠️ Items Requiring Manual Fixes
 
 \`${requireFixCount}\` items have multiple domains and require your attention:
 
 1. \`Open\` the iOS \`Passwords\` app. (macOS app has a bug)
 2. \`Find\` items ends with \`FIXWEBSITE\`
 3. \`Add\` the corresponding website from the \`Notes\` field.
-  `.trim()
-    : ''
-}
+    `.trimEnd()
+
+    summaryTable += `
+| ⚠ Requiring Manual Fixes Items  | ${requireFixCount} |
+| ⚠ Requiring Manual Fixes Items Saved In  | ${outputPath}  |
+    `.trimEnd()
+  }
+
+  if (afterImportedCheckCount > 0) {
+    report += `
+## ${index++}. ⚠️ Items Requiring Checking After Import
+
+\`${afterImportedCheckCount}\` items lack a username but contain a password and website that require your attention. These items are already present in the \`${outputPath}\` file. After you import, the \`Apple Passwords\` app indicates they have been successfully imported, but they may not have been updated.
+
+1. \`Check\` each item in the \`${afterImportedCheckPath}\` file.
+2. \`Compare\` each item with the corresponding entry in the \`Apple Passwords\` app.
+3. Verify if they are identical; if not, \`Update\` the item in the app.
+    `.trimEnd()
+
+    summaryTable += `
+| ⚠ After Imported Check Items  | ${afterImportedCheckCount} |
+| ⚠ After Imported Check Items Saved In | ${afterImportedCheckPath} |
+    `.trimEnd()
+  }
+
+  if (remainingCount > 0) {
+    report += `
+## ${index++}. 🚫 Remainig Items
 
 ${
-  remainingCount > 0
+  remainingPath
     ? `
-## 3. 🚫 Remainig Items
-
-${
-  outputRemainingPath
-    ? `
-\`${remainingCount}\` remaining items have been saved to \`${outputRemainingPath}\`.`
+\`${remainingCount}\` remaining items have been saved to \`${remainingPath}\`.`
     : `\`${remainingCount}\` remaining items has not been saved, use \`--output-remaining\` option to save them.`
 }
 
 These items can be used for incremental exports in the future.
 
 ${isInputFileOverwritten ? '**Note:** The input file has been overwritten.' : ''} 
-**Note:** Please keep this file secure. ${itOutputRemainingFileEncrypted ? 'It has been encrypted with the same password.' : 'It is **not encrypted**. Please encrypt it.'} 
-`.trim()
-    : ''
-}
+**Note:** Please keep this file secure. ${isRemainingFileEncrypted ? 'It has been encrypted with the same password.' : 'It is **not encrypted**. Please encrypt it.'} 
+    `.trimEnd()
+
+    summaryTable += `
+| 🚫 Remaining Items                | ${remainingCount}    |
+| 🚫 Remaining Items Saved In       | ${mdEscape(remainingPath || '(not saved)')}   |
+    `.trimEnd()
+  }
+
+  return `
+${report}
 
 # 📊 Summary 📊
 
-|                                 |                    |
-| ------------------------------- | ------------------ |
-| ✅ Exported Items               | ${processedCount}  |
-| ✅ Exported Items Saved In      | ${mdEscape(outputPath)}      |
-${
-  requireFixCount > 0
-    ? `
-| ⚠ Requiring Manual Fixes Items  | ${requireFixCount} |
-`.trim()
-    : ''
-}${requireFixCount > 0 && remainingCount > 0 ? '\n' : ''}${
-  remainingCount > 0
-    ? `
-| 🚫 Remainig Items                | ${remainingCount}    |
-| 🚫 Remainig Items Saved In       | ${mdEscape(outputRemainingPath || '(not saved)')}   |
-`.trim()
-    : ''
-}
+${summaryTable}
 
 Thank you for using our CLI app! If you found it helpful, please [⭐️ star the project️️ ⭐](https://github.com/gutenye/password-manager-tools) on GitHub. If you have any questions or encounter issues, please refer to the documentation or report an issue on GitHub.
-`
+  `.trimEnd()
 }

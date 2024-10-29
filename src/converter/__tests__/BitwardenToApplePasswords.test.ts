@@ -206,7 +206,7 @@ describe('options', () => {
       remaining,
       outputExpected,
       remainingExpected,
-      outputRemainingPath,
+      remainingPath,
     } = await runTest(
       [
         {
@@ -216,7 +216,7 @@ describe('options', () => {
       { outputRemaining: 'overwrite-input-file' },
     )
     expect(output).toEqual(outputExpected)
-    expect(outputRemainingPath).toEqual('/input.json')
+    expect(remainingPath).toEqual('/input.json')
     expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 
@@ -226,7 +226,7 @@ describe('options', () => {
       remaining,
       outputExpected,
       remainingExpected,
-      outputRemainingPath,
+      remainingPath,
     } = await runTest(
       [
         {
@@ -236,7 +236,7 @@ describe('options', () => {
       { outputRemaining: '/remaining.json' },
     )
     expect(output).toEqual(outputExpected)
-    expect(outputRemainingPath).toEqual('/remaining.json')
+    expect(remainingPath).toEqual('/remaining.json')
     expect<typeof remaining>(remaining).toEqual(remainingExpected)
   })
 
@@ -245,7 +245,7 @@ describe('options', () => {
       output,
       remaining,
       outputExpected,
-      outputRemainingPath,
+      remainingPath,
       input,
       inputFileData,
     } = await runTest(
@@ -257,7 +257,7 @@ describe('options', () => {
       { outputRemaining: undefined },
     )
     expect(output).toEqual(outputExpected)
-    expect(outputRemainingPath).toBeUndefined()
+    expect(remainingPath).toBeUndefined()
     expect(remaining).toBeUndefined()
     expect(inputFileData).toEqual(input)
   })
@@ -422,8 +422,8 @@ it('report: works', async () => {
   expect(report.data).toEqual({
     command: '',
     outputPath: '/output.csv',
-    outputRemainingPath: '/remaining.json',
-    itOutputRemainingFileEncrypted: false,
+    remainingPath: '/remaining.json',
+    isRemainingFileEncrypted: false,
     isInputFileOverwritten: false,
     processedCount: 4,
     remainingCount: 0,

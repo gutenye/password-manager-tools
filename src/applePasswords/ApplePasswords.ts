@@ -13,9 +13,11 @@ export class ApplePasswords {
   static async from(app: Bitwarden, context: Context) {
     const { report, logger } = context
     const outputs = []
+    const needsFix = []
     let processedCount = 0
     let remainingCount = 0
     let requireFixCount = 0
+    let afterImportedCheckCount = 0
     for (const item of app.root.items) {
       switch (item.type) {
         case BITWARDEN.ItemType.Login: {
@@ -38,6 +40,10 @@ export class ApplePasswords {
               Notes: notes,
             }
             outputs.push(output)
+            if (!output.Username && output.Password && output.URL) {
+              afterImportedCheckCount++
+              needsFix.push(output)
+            }
           }
           break
         }
@@ -76,7 +82,11 @@ export class ApplePasswords {
     report.set('processedCount', processedCount)
     report.set('remainingCount', report.data.remainingCount + remainingCount)
     report.set('requireFixCount', requireFixCount)
-    return new ApplePasswords(outputs, context)
+    report.set('afterImportedCheckCount', afterImportedCheckCount)
+    return {
+      exported: new ApplePasswords(outputs, context),
+      needsFix: new ApplePasswords(needsFix, context),
+    }
   }
 
   #root: ApplePasswordsExport.Root

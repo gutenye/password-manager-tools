@@ -51,8 +51,7 @@ def 'main t manual' [] {
 
 # Summary: exported + requirefix + remaining
 def 'main t all' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-names foobar
-  # password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-types login
+  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-types login
 }
 
 # Summary: exported 

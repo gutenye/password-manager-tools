@@ -15,12 +15,11 @@ def main [
   -h
   ...args: string
 ] {
-  if $h {
-    help | less --RAW-CONTROL-CHARS
-    return
-  }
+  help | less --RAW-CONTROL-CHARS
+}
 
-  echo ...$args
+def 'main l' [] {
+  bun run lint
 }
 
 def 'main edit' [path: string] {

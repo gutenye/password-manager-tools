@@ -57,7 +57,7 @@ describe('options', () => {
           },
         ],
         {
-          includeUris: ['a.com', 'b.com', 'z.com'],
+          includeUris: 'a.com,b.com,z.com',
         },
       )
     expect(output).toEqual(outputExpected)
@@ -100,7 +100,7 @@ describe('options', () => {
           },
         ],
         {
-          includeNames: ['1', '2', '9'],
+          includeNames: '1,2,9',
         },
       )
     expect(output).toEqual(outputExpected)
@@ -135,7 +135,7 @@ describe('options', () => {
           },
         ],
         {
-          includeTypes: ['note', 'card', 'identity'],
+          includeTypes: 'note,card,identity',
         },
       )
     expect(output).toEqual(outputExpected)
@@ -154,7 +154,7 @@ describe('options', () => {
           },
         ],
         {
-          skipFields: ['2', '9'],
+          skipFields: '2,9',
         },
       )
     expect(output).toEqual(outputExpected)
@@ -179,8 +179,8 @@ describe('options', () => {
           },
         ],
         {
-          skipFields: ['1'],
-          includeNames: ['name1'],
+          skipFields: '1',
+          includeNames: 'name1',
         },
       )
     expect(output).toEqual(outputExpected)
@@ -420,8 +420,7 @@ it('report: works', async () => {
     { type: BITWARDEN.ItemType.Identity },
   ])
   expect(report.data).toEqual({
-    done: true,
-    error: undefined,
+    command: '',
     outputPath: '/output.csv',
     outputRemainingPath: '/remaining.json',
     itOutputRemainingFileEncrypted: false,

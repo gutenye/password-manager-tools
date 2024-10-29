@@ -5,14 +5,11 @@ import type { BitwardenExport } from '#/types'
 const ITERLATIONS = 600000
 
 export async function decrypt(
-  {
-    data,
-    salt,
-    kdfIterations,
-  }: { data: string; salt: string; kdfIterations: number },
+  fileData: BitwardenExport.RootEncrypted,
   password: string,
 ) {
   try {
+    const { data, salt, kdfIterations } = fileData
     const key = await deriveKey({
       password: Buffer.from(password),
       salt: Buffer.from(salt),

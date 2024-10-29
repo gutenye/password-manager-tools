@@ -1,15 +1,10 @@
 type Predicate<T, K extends keyof T> = (value: T[K], key: K) => boolean
 
-export function omitByDeep<T>(
-  obj: T,
-  predicate: Predicate<T, keyof T>,
-): Partial<T> {
+export function omitByDeep<T>(obj: T, predicate: Predicate<T, keyof T>): T {
   if (Array.isArray(obj)) {
-    return obj.map((item) =>
-      omitByDeep(item, predicate),
-    ) as unknown as Partial<T>
+    return obj.map((item) => omitByDeep(item, predicate)) as unknown as T
   } else if (obj !== null && typeof obj === 'object') {
-    const result: Partial<T> = {}
+    const result: T = {} as T
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
         const value = obj[key]

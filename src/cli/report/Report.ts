@@ -1,9 +1,8 @@
+import chalk from 'chalk'
 import { AppError } from '#/errors'
 import type { Data, Key, SetReportData } from './types/TReport'
 
 export const initialReport: Data = {
-  done: false,
-  error: undefined,
   outputPath: '',
   outputRemainingPath: undefined,
   itOutputRemainingFileEncrypted: false,
@@ -11,6 +10,7 @@ export const initialReport: Data = {
   processedCount: 0,
   remainingCount: 0,
   requireFixCount: 0,
+  command: '',
 }
 
 export class Report {
@@ -46,12 +46,17 @@ export class Report {
     })
   }
 
-  done() {
-    this.set('done', true)
-  }
-
-  exit(error: Error) {
-    this.#update({ done: true, error })
+  async exit(arg?: string | Error) {
+    if (arg instanceof AppError) {
+      console.error(chalk.red(`Error: ${arg.message}`))
+      process.exit(1)
+    } else if (arg instanceof Error) {
+      console.error(chalk.red(arg))
+      process.exit(1)
+    } else {
+      console.log(arg)
+      process.exit(0)
+    }
   }
 
   #update(report: Partial<Data>) {

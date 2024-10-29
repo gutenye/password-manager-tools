@@ -3,8 +3,8 @@ import memfs from 'memfs'
 import Papa from 'papaparse'
 import { createApplePasswords, createBitwarden } from '#/__tests__/fixtures'
 import type { Item } from '#/__tests__/types'
+import { runConvertCommand } from '#/cli/ConvertCommand/ConvertCommand'
 import { Report, initialReport } from '#/cli/report'
-import { runConvert } from '#/converter'
 import type {
   ApplePasswordsExport,
   BitwardenExport,
@@ -73,13 +73,11 @@ export async function runTestConvert(
     input: () => password || '',
   }
   await fs.writeFile('/input.json', JSON.stringify(input))
-  await runConvert(
-    'bitwarden-to-apple',
-    '/input.json',
-    '/output.csv',
+  await runConvertCommand({
+    args: ['bitwarden-to-apple', '/input.json', '/output.csv'],
     options,
     context,
-  )
+  })
   const outputText = (await fs.readFile('/output.csv', 'utf8')) as string
   const output = Papa.parse(outputText, { header: true })
     .data as ApplePasswordsExport.Root
@@ -101,7 +99,7 @@ export async function runTestConvert(
   return { output, remaining, outputRemainingPath, inputFileData, context }
 }
 
-interface RunConvertOptions extends Partial<CliConvert.ProcessedOptions> {
+interface RunConvertOptions extends Partial<CliConvert.Options> {
   password?: string
 }
 

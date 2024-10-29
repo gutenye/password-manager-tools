@@ -17,13 +17,12 @@ import { extractHost, omitByDeep } from '#/utils'
 
 export class Bitwarden {
   static async import(
-    inputPath: string,
+    path: string,
     options: CliConvert.ProcessedOptions,
     context: Context,
   ) {
     const { input, report } = context
-    const text = await fs.readFile(inputPath, 'utf8')
-    const fileData: BitwardenExport.File = JSON.parse(text)
+    const fileData = await Bitwarden.readFile(path)
     let root: BitwardenExport.Root
     let password = ''
     if (fileData.encrypted) {
@@ -64,6 +63,27 @@ export class Bitwarden {
     }
 
     return { exported, remaining, password }
+  }
+
+  static async readFile(path: string) {
+    const text = await fs.readFile(path, 'utf8')
+    let data: BitwardenExport.File
+    try {
+      data = JSON.parse(text)
+    } catch (error) {
+      throw new AppError(
+        `[Bitwarden#readFile] invalid json file '${path}' '${error.message}'`,
+      )
+    }
+    if (!('encrypted' in data)) {
+      throw new AppError(`[Bitwarden#import] invalid format '${path}'`)
+    }
+    return data
+  }
+
+  static async writeFile(path: string, data: BitwardenExport.File) {
+    const text = JSON.stringify(data, null, 2)
+    await fs.writeFile(path, text)
   }
 
   #root: BitwardenExport.Root
@@ -189,12 +209,12 @@ export class Bitwarden {
       data = item.identity
     } else {
       throw new AppError(
-        `[bitwarden.serializeOther] type '${ItemType[item.type]}' is not supported`,
+        `[Bitwarden#serializeOther] type '${ItemType[item.type]}' is not supported`,
       )
     }
     if (!data) {
       throw new AppError(
-        `[bitwarden.serializeOther] no data found for type '${ItemType[item.type]}'`,
+        `[Bitwarden#serializeOther] no data found for type '${ItemType[item.type]}'`,
       )
     }
 
@@ -210,16 +230,16 @@ export class Bitwarden {
     return `${text}\n\n${common}`.trim()
   }
 
-  async export(output: string, { password }: { password?: string } = {}) {
+  async export(path: string, { password }: { password?: string } = {}) {
     const newRoot = omitByDeep(this.#root, (_, key) => {
       return Boolean(key.match(/^__.*__$/))
     })
-    let result = newRoot as BitwardenExport.File
+    let result: BitwardenExport.File = newRoot
     if (password) {
       result = await encrypt(result, password)
     }
     const text = JSON.stringify(result, null, 2)
-    await fs.writeFile(output, text)
+    await fs.writeFile(path, text)
   }
 
   // add __sameHostnames__

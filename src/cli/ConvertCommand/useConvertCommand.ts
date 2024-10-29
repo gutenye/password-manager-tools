@@ -6,7 +6,7 @@ import type { Context } from '#/types'
 import { processOptions } from './options'
 import type { Props } from './types'
 
-export function useConvert({ args, options: rawOptions }: Props) {
+export function useConvertCommand({ args, options: rawOptions }: Props) {
   const [name, inputPath, outputPath] = args
 
   const { input, inputElement } = useInput()

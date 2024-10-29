@@ -9,7 +9,7 @@ export const args = zod.tuple([
   zod.enum(['bitwarden-to-apple']).describe(
     argument({
       name: 'app1-to-app2',
-      description: 'From one app to another',
+      description: 'App names',
     }),
   ),
   zod.string().describe(argument({ name: 'input', description: 'Input file' })),

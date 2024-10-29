@@ -1,7 +1,16 @@
 export type * from '#/cli/hooks/useInput'
 export type * from '#/cli/hooks/useLogger'
-import type * as CliConvert from '#/cli/convert/types'
 export type * from '#/cli/report/types'
-export type * from '#/cli/report/Report'
 
+import type * as CliConvert from '#/cli/ConvertCommand/types'
 export type { CliConvert }
+
+import type { Input } from '#/cli/hooks/useInput'
+import type { Logger } from '#/cli/hooks/useLogger'
+import type { Report } from '#/cli/report/types'
+
+export type Context = {
+  logger: Logger
+  input: Input
+  report: Report
+}

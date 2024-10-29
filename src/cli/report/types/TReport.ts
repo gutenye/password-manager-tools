@@ -1,6 +1,4 @@
 export type Data = {
-  done: boolean
-  error?: Error
   outputPath: string
   outputRemainingPath?: string
   itOutputRemainingFileEncrypted: boolean
@@ -8,6 +6,7 @@ export type Data = {
   processedCount: number
   remainingCount: number
   requireFixCount: number
+  command: string
 }
 
 export type Key = keyof Data

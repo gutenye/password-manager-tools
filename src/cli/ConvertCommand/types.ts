@@ -1,10 +1,12 @@
 import type zod from 'zod'
+import type { Context } from '#/types'
 import type { args, options } from './options'
 import type { CLI_INCLUDE_TYPES } from './options'
 
-export type Props = {
+export type RunConvertCommandOptions = {
   options: Options
   args: Args
+  context: Context
 }
 
 export type Options = zod.infer<typeof options>

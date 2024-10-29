@@ -4,5 +4,5 @@ import filePath from 'node:path'
 // a.js -> a-b.js
 export function suffix(path: string, suffix: string) {
   const { dir, name, ext } = filePath.parse(path)
-  return `${dir}/${name}${suffix}${ext}`
+  return filePath.join(dir, `${name}${suffix}${ext}`)
 }

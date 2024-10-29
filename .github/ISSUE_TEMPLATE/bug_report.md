@@ -8,34 +8,37 @@ assignees: ''
 ---
 
 **Check if you're using the latest version**
+> Bugs may have been fixed in the latest version.
 
-Check the version and paste output from `bunx @gutenye/password-manager-tools version` here
+Please provide the output of the following command:
 
-- Version: <PASTE_HERE>
+```sh
+bunx @gutenye/password-manager-tools version
+```
 
-<detail>
-<summary>How to use the latest version?</summary>
+```text
+<PASTE_OUTPUT_HERE>
+```
 
-1. Bugs may get fixed in the latest version
-1. Find the [latest version](https://www.npmjs.com/package/@gutenye/password-manager-tools) on npm
-2. Print your version: `bunx @gutenye/password-manager-tools version`.
-3. If it's not the latest, run the latest version with `bunx @gutenye/password-manager-tools@9.9.9 version`. (In this example, 9.9.9 is the latest version)
+<details>
+<summary>How to Update to the Latest Version</summary>
 
-</detail>
+1. Find the [latest version on npm](https://www.npmjs.com/package/@gutenye/password-manager-tools)
+2. If you’re not using the latest version, run it with `bunx @gutenye/password-manager-tools@<LATEST_VERSION> version`, and replace `<LATEST_VERSION>` with the latest version number.
+</details>
 
 **Describe the bug**
-A clear and concise description of what the bug is.
-If applicable, add screenshots to help explain your problem.
+> Provide a clear and concise description of the issue you’re experiencing.
 
 **To Reproduce**
 
-Provided a minimal bitwarden.json file, please edit it to protect your privacy.
+Please include a minimal version of your `bitwarden.json` file that reproduces the issue. Ensure you remove or modify any sensitive information to protect your privacy.
 
 ```json
-<PASTE_HERE>
+<PASTE_FILE_CONTENT_HERE>
 ```
 
-<detail>
+<details>
 <summary>example file</summary>
 
 ```json
@@ -62,26 +65,28 @@ Provided a minimal bitwarden.json file, please edit it to protect your privacy.
   ]
 }
 ```
-
-</detail>
+</details>
 
 **Output behavior**
 
-Paste `output.csv` file content from `bunx @gutenye/password-manager-tools@VERSION bitwarden.json output.csv`
+Please provide the content of the `output.csv` file. You can generate it by running the following command:
 
-```csv
-<PASTE_HERE>
+```sh
+bunx @gutenye/password-manager-tools@<LATEST_VERSION> bitwarden.json output.csv 
 ```
 
-<detail>
-<summary>example file</sumary>
+```csv
+<PASTE_FILE_CONTENT_HERE>
+```
+
+<details>
+<summary>example file</summary>
 
 ```csv
 Title,Username,Password,OTPAuth,URL,Notes
 Name,,,,example.com,
 ```
-
-</detail>
+</details>
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+> A clear and concise description of what you expected to happen.

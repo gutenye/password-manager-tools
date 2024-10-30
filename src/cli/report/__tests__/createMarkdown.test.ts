@@ -1,7 +1,9 @@
 import { expect, it } from 'bun:test'
+import { initialReport } from '#/cli/report'
 import { createMarkdown } from '../createMarkdown'
 
 const props = {
+  ...initialReport,
   processedCount: 1,
   requireFixCount: 2,
   afterImportedCheckCount: 3,
@@ -11,7 +13,6 @@ const props = {
   afterImportedCheckPath: 'output-check-after-import.csv',
   isRemainingFileEncrypted: true,
   isInputFileOverwritten: true,
-  command: 'command',
 }
 
 it('works', () => {

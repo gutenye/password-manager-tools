@@ -2,9 +2,10 @@ import chalk from 'chalk'
 import { createMarkdown } from '#/cli/report'
 import type { TReport } from '#/types'
 
-const { default: Markdown } = await import('ink-markdown')
+const inkMarkdown = await import('ink-markdown')
 
 export const ReportComponent = ({ reportData }: Props) => {
+  const Markdown = inkMarkdown.default
   const { command, result } = reportData
   if (result === true && command === 'convert') {
     return (

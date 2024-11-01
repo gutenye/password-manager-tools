@@ -16,7 +16,7 @@ it('command: convert, result: string', async () => {
   expect(text).toEqual('')
 })
 
-it.only('command: convert, result: true', async () => {
+it('command: convert, result: true', async () => {
   const text = await runTest({ result: true, command: 'convert' })
   expect(text).toEqual('markdown')
 })

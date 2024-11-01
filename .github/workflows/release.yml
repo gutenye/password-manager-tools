@@ -25,6 +25,10 @@ jobs:
           fetch-depth: 0
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
       - name: Install dependencies
         run: bun install
       - name: Release

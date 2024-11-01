@@ -72,3 +72,4 @@ Please ensure your code follows our Code of Conduct and passes all tests.
 ---
 
 Thank you for using PasswordManagerTools! 🔐 ✨ If you found it helpful, please ⭐️ star the project ️️⭐ on GitHub. If you have any questions or encounter issues, please refer to the documentation or report an issue on GitHub.
+

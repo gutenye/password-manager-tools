@@ -42,6 +42,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/bun": "^1.1.12",
     "@types/invariant": "^2.2.37",
     "@types/lodash-es": "^4.17.12",

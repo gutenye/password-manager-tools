@@ -5,6 +5,8 @@
 
 > 🚀 Easily transfer passwords from Bitwarden to Apple Passwords
 
+**Kindly take a moment to follow the project’s author, [Guten Ye](https://github.com/gutenye) , and star the project to show your ❤️ and support.**
+
 ![Terminal](./assets/Terminal.png)
 
 ## 📷 Screenshots

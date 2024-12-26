@@ -2,7 +2,7 @@
   "name": "@gutenye/password-manager-tools",
   "version": "1.4.0",
   "description": "Easily move/transfer/import/convert passwords from one password manager to another, including Bitwarden and Apple Passwords/iCloud Keychain.",
-  "keywards": [
+  "keywords": [
     "move passwords",
     "transfer passwords",
     "import passwords",

@@ -3,7 +3,7 @@
 
 > 🚀 Easily transfer passwords from Bitwarden to Apple Passwords
 
-[![Stars](https://img.shields.io/github/stars/gutenye/password-manager-tools?style=social)](https://github.com/gutenye/password-manager-tools) [![NPM Version](https://img.shields.io/npm/v/@gutenye/password-manager-tools)](https://www.npmjs.com/package/@gutenye/password-manager-tools) [![License](https://img.shields.io/github/license/gutenye/password-manager-tools?color=blue)](https://github.com/gutenye/password-manager-tools/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue)](https://github.com/gutenye/password-manager-tools#-contributing)
+[![Stars](https://img.shields.io/github/stars/gutenye/password-manager-tools?style=social)](https://github.com/gutenye/password-manager-tools) [![NPM Version](https://img.shields.io/npm/v/@gutenye/password-manager-tools)](https://www.npmjs.com/package/@gutenye/password-manager-tools) [![License](https://img.shields.io/github/license/gutenye/password-manager-tools?color=blue)](https://github.com/gutenye/password-manager-tools/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue)](https://github.com/gutenye/password-manager-tools#-contribute)
 
 **Kindly take a moment to follow the project’s author, [Guten Ye](https://github.com/gutenye) , and star the project to show your ❤️ and support.**
 

@@ -1,18 +1,16 @@
 # 🔒 PasswordManagerTools 🔒
 
 
-[![Stars](https://img.shields.io/github/stars/gutenye/password-manager-tools?style=social)](https://github.com/gutenye/password-manager-tools) [![NPM Version](https://img.shields.io/npm/v/@gutenye/password-manager-tools)](https://www.npmjs.com/package/@gutenye/password-manager-tools) [![License](https://img.shields.io/github/license/gutenye/password-manager-tools)](https://github.com/gutenye/password-manager-tools/blob/main/LICENSE)
-
 > 🚀 Easily transfer passwords from Bitwarden to Apple Passwords
+
+[![Stars](https://img.shields.io/github/stars/gutenye/password-manager-tools?style=social)](https://github.com/gutenye/password-manager-tools) [![NPM Version](https://img.shields.io/npm/v/@gutenye/password-manager-tools)](https://www.npmjs.com/package/@gutenye/password-manager-tools) [![License](https://img.shields.io/github/license/gutenye/password-manager-tools?color=blue)](https://github.com/gutenye/password-manager-tools/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue)](https://github.com/gutenye/password-manager-tools#-contributing)
 
 **Kindly take a moment to follow the project’s author, [Guten Ye](https://github.com/gutenye) , and star the project to show your ❤️ and support.**
 
 ![Terminal](./assets/Terminal.png)
 
-## 📷 Screenshots
-
 <details>
-<summary>Click to view screenshots</summary>
+<summary>Click to view more screenshots</summary>
 
 ![BitwardenToApplePasswords](./assets/BitwardenToApplePasswords.png)
 
@@ -26,6 +24,7 @@
 - 🎯 **Selective Transfer:** Filter passwords by URL or count to transfer only the items you need.
 - ⏱️ **Incremental Transfer:** Move passwords in batches at your convenience, with remaining passwords securely stored for future transfers until all are moved.
 - 🔄 **Reverse Transfer (TODO):** Seamlessly transfer passwords from Apple Passwords back to Bitwarden, accurately setting custom fields, multiple URLs, and maintaining password history to ensure data integrity.
+
 
 ## 🚀 Getting Started
 
@@ -59,7 +58,7 @@ bunx @gutenye/password-manager-tools convert bitwarden-to-apple <input.json> <ou
 - [Flaksp's script](https://gist.github.com/flaksp/6fe1042e12b6b6908c5193c0d6c124a7): Python script to convert Bitwarden to Apple Passwords
 - [warden](https://github.com/thewh1teagle/warden): Offline bitwarden viewer
 
-## 🤝 Contributing
+## 🤝 Contribute
 
 We welcome contributions from the community! Whether it’s reporting bugs, suggesting features, or submitting pull requests, your help is appreciated.
 
@@ -75,3 +74,8 @@ Please ensure your code follows our Code of Conduct and passes all tests.
 
 Thank you for using PasswordManagerTools! 🔐 ✨ If you found it helpful, please ⭐️ star the project ️️⭐ on GitHub. If you have any questions or encounter issues, please refer to the documentation or report an issue on GitHub.
 
+**Thanks to all the people who contribute:**
+
+[![](https://contrib.rocks/image?repo=gutenye/password-manager-tools)](https://github.com/gutenye/password-manager-tools/graphs/contributors)
+
+[⬆ Back to top ⬆](#readme)

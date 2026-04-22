@@ -1,84 +1,82 @@
-#!/usr/bin/env nu
+#!/usr/bin/env bun
 
-use utils.nu *
+import { app, $ } from "@gutenye/script.js";
 
-alias password-manager-tools = bun run cli
-
-def help [] {
-  $'
+const HELP = `
 ake t all
 ake t exported
 ake t requirefix
 ake t remaining
 ake t password
-  '
-  | str trim
-}
+`;
 
-def main [
-  -h
-  ...args: string
-] {
-  help | less --RAW-CONTROL-CHARS
-}
+app.help(HELP);
 
-def 'main l' [] {
-  bun run lint
-}
+const CLI = "bun run cli";
 
-def 'main t' [...args: string] {
-  main l
-  bun run test ...$args
-}
+app.cmd("l", "Lint").add(async () => {
+  await $`bun run lint`;
+});
 
-def 'main edit' [path: string] {
-  vi -u NONE -U NONE $path
-}
+app.cmd("t", "Lint and run tests").add(async ({ argv }) => {
+  await app.invoke("l");
+  await $`bun run test ${argv}`;
+});
 
+app
+  .cmd("edit", "Edit file without user config")
+  .add("<path>", "Path", ["$files"])
+  .add(async (path) => {
+    await $`vi -u NONE -U NONE ${path}`;
+  });
 
-def 'main t watch' [...args: string] {
-  bun run test --watch ...$args
-}
+app.cmd("t watch", "Run tests in watch mode").add(async ({ argv }) => {
+  await $`bun run test --watch ${argv}`;
+});
 
-def 'main t reset' [] {
-  cp src/__tests__/fixtures/bitwarden.json data
-  cp src/__tests__/fixtures/bitwardenEncrypted.json data
-}
+app.cmd("t reset", "Reset test fixtures").add(async () => {
+  await $`
+    cp src/__tests__/fixtures/bitwarden.json data
+    cp src/__tests__/fixtures/bitwardenEncrypted.json data
+  `;
+});
 
-def 'main t manual' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --skip-fields skip
-}
+app.cmd("t manual", "Run manual bitwarden->apple conversion").add(async () => {
+  await $`${CLI} convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --skip-fields skip`;
+});
 
-# Summary: exported + requirefix + remaining
-def 'main t all' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-types login
-}
+// Summary: exported + requirefix + remaining
+app.cmd("t all", "Convert all entries").add(async () => {
+  await $`${CLI} convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-types login`;
+});
 
-# Summary: exported 
-def 'main t exported' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv 
-}
+// Summary: exported
+app.cmd("t exported", "Convert exported entries").add(async () => {
+  await $`${CLI} convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv`;
+});
 
-# Summary: exported + requirefix
-def 'main t requirefix' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv 
-}
+// Summary: exported + requirefix
+app.cmd("t requirefix", "Convert requirefix entries").add(async () => {
+  await $`${CLI} convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv`;
+});
 
-# Summary: exported + reamining
-def 'main t remaining' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-uris foo.com 
-}
+// Summary: exported + reamining
+app.cmd("t remaining", "Convert remaining entries").add(async () => {
+  await $`${CLI} convert bitwarden-to-apple src/__tests__/fixtures/bitwarden.json data/output.csv --include-uris foo.com`;
+});
 
-def 'main t password' [] {
-  password-manager-tools convert bitwarden-to-apple src/__tests__/fixtures/bitwardenEncrypted.json data/output.csv
-}
+app.cmd("t password", "Convert password entries").add(async () => {
+  await $`${CLI} convert bitwarden-to-apple src/__tests__/fixtures/bitwardenEncrypted.json data/output.csv`;
+});
 
-def 'main convert' [includeUris: string] {
-  let cmd = "password-manager-tools convert bitwarden-to-apple data/bitwarden.json data/output.csv"
-
-  if $includeUris != null {
-    run-cmd $'($cmd) --include-uris ($includeUris)'
-  } else {
-    run-cmd $cmd 
-  }
-}
+app
+  .cmd("convert", "Convert")
+  .add("[includeUris]", "Include URIs")
+  .add(async (includeUris) => {
+    const base = `${CLI} convert bitwarden-to-apple data/bitwarden.json data/output.csv`;
+    if (includeUris) {
+      await $`${base} --include-uris ${includeUris}`;
+    } else {
+      await $`${base}`;
+    }
+  });

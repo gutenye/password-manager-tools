@@ -23,9 +23,7 @@ export class ApplePasswords {
         case BITWARDEN.ItemType.Login: {
           processedCount++
           const login = item.login
-          // const hostnames = login.__sameHostnames__?.value ?? [undefined]
           const uris = login.uris ?? []
-          // for (const hostname of hostnames) {
           for (const uri of uris) {
             const notes = app.serializeCommon(item)
             let name = item.name

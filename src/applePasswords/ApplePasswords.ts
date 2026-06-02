@@ -38,13 +38,12 @@ export class ApplePasswords {
     const output: ApplePasswordsExport.Item[] = app.root.items.reduce((acc, item) => {
       const strategy = ApplePasswords.getStrategy(item)
       const { items, needsFix } = strategy.transform(item, app, stats, logger)
+
       acc.push(...items)
 
       if (needsFix) {
         needsFixes.push(...items)
       }
-
-      // needsFix && needsFixes.push(...items)
 
       stats.incProcessed()
       return acc
@@ -57,29 +56,6 @@ export class ApplePasswords {
       needsFix: new ApplePasswords(needsFixes, context),
     }
   }
-
-  // static async from(app: Bitwarden, context: Context) {
-  //   const { report, logger, stats } = context
-  //   const needsFix: ApplePasswordsExport.Item[] = []
-
-  //   const output: ApplePasswordsExport.Item[] = app.root.items.reduce((acc, item) => {
-  //     const strategy = ApplePasswords.getStrategy(item)
-  //     const { items, requiresFix } = strategy.transform(item, app, stats, logger)
-  //     acc.push(...items)
-  //     if (requiresFix) {
-  //       needsFix.push(...requiresFix)
-  //     }
-  //     stats.incProcessed()
-  //     return acc
-  //   }, [] as ApplePasswordsExport.Item[])
-
-  //   stats.applyToReport(report)
-
-  //   return {
-  //     exported: new ApplePasswords(output, context),
-  //     needsFix: new ApplePasswords(needsFix, context),
-  //   }
-  // }
 
   static getStrategy(item: BitwardenExport.Item): ConversionStrategy {
     const strategy = ApplePasswords.#STRATEGIES[item.type]
@@ -134,7 +110,7 @@ export class ApplePasswords {
         name = `${item.name} FIXWEBSITE`
         stats.incRequiresFix()
       }
-      //const name = login.__sameHostnames__?.needsFix ? `${item.name} FIXWEBSITE` : item.name
+
       return {
         Title: name,
         Username: login.username,
@@ -160,46 +136,6 @@ export class ApplePasswords {
   static checkAfterImport(items: ApplePasswordsExport.Item[]): boolean {
     return items.filter(i => !i.Username && i.Password && i.URL).length > 0
   }
-
-  // static loginItemToApplePasswords(item: BitwardenExport.Item, app: Bitwarden, stats: Stats, logger: Logger): StrategyResult {
-  //   if (item.type !== BITWARDEN.ItemType.Login) {
-  //     throw new Error(`Item type must be Login`)
-  //   }
-
-  //   const login = item.login
-  //   const loginItems = login.uris.map(uri =>
-  //     ({
-  //       Title: ApplePasswords.requiresFix(item, stats),
-  //       Username: login.username,
-  //       Password: login.password,
-  //       OTPAuth: login.totp,
-  //       URL: uri.uri ? uri.uri : undefined,
-  //       Notes: app.serializeCommon(item),
-  //     }) as ApplePasswordsExport.Item
-  //   )
-  //   return {
-  //     items: loginItems,
-  //     requiresFix: ApplePasswords.validateAfterImport(loginItems, stats)
-  //   }
-  // }
-
-  // static requiresFix(item: BitwardenExport.LoginItem, stats: Stats): string {
-  //   if (item.login.__sameHostnames__?.needsFix) {
-  //     stats.incRequiresFix()
-  //     return `${item.name} FIXWEBSITE`
-  //   }
-  //   return item.name
-  // }
-
-  // static validateAfterImport(items: ApplePasswordsExport.Item[], stats: Stats): ApplePasswordsExport.Item[] {
-  //   return items.filter(item => {
-  //     if (!item.Username && item.Password && item.URL) {
-  //       stats.incAfterImportCheck()
-  //       return true
-  //     }
-  //     return false
-  //   })
-  // }
 
   get root() {
     return this.#root

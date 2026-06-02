@@ -367,7 +367,7 @@ export class Bitwarden {
     return uris
       .map((uri) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        return `${URI_MATCH_REVERSE[uri.match as any ?? null]} = ${uri.uri}`
+        return `${URI_MATCH_REVERSE[(uri.match as any) ?? null]} = ${uri.uri}`
       })
       .join('\n')
   }

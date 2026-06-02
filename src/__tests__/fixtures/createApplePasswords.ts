@@ -2,7 +2,6 @@ import type { Item } from '#/__tests__/types'
 import { BITWARDEN } from '#/bitwarden'
 import { AppError } from '#/errors'
 import type { ApplePasswordsExport } from '#/types'
-import { extractHost } from '#/utils'
 
 export function createApplePasswords(items: Item[] = []) {
   return items.flatMap(createItem).filter((v) => v !== undefined)
@@ -33,22 +32,19 @@ function createItem(
 
   switch (type) {
     case BITWARDEN.ItemType.Login: {
-      const { uris = [undefined] } = item
+      const { uris = [] } = item
+      const {
+        username = `username${suffix}`,
+        password = `password${suffix}`,
+        totp = `totp${suffix}`,
+      } = __output__
       return uris.map((uriInfo) => {
-        if (uriInfo?.__output__ === false) {
-          return
-        }
-        const {
-          username = `username${suffix}`,
-          password = `password${suffix}`,
-          totp = `totp${suffix}`,
-        } = __output__
         return {
           ...output,
           Username: username,
           Password: password,
           OTPAuth: totp,
-          URL: getHostname(uriInfo?.uri),
+          URL: uriInfo?.uri || '',
         }
       })
     }
@@ -72,20 +68,5 @@ function createItem(
         `[crateApplePasswords.createItem] invalid type '${BITWARDEN.ItemType[type]}'`,
       )
     }
-  }
-}
-
-function getHostname(uri: string | undefined) {
-  if (!uri) {
-    return ''
-  }
-  try {
-    const host = extractHost(uri)
-    if (!host) {
-      return ''
-    }
-    return new URL(host).hostname
-  } catch {
-    return ''
   }
 }

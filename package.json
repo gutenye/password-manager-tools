@@ -30,10 +30,11 @@
   },
   "dependencies": {
     "ink": "^5.0.1",
-    "ink-markdown": "^1.0.4",
     "ink-text-input": "^6.0.0",
     "invariant": "^2.2.4",
     "lodash-es": "^4.17.21",
+    "marked": "^9.1.6",
+    "marked-terminal": "^6.3.0",
     "papaparse": "^5.4.1",
     "pastel": "^3.0.0",
     "react": "^18.3.1",
@@ -45,6 +46,7 @@
     "@gutenye/script.js": "^7.2.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^13.1.0",
     "@types/bun": "^1.1.12",
     "@types/invariant": "^2.2.37",
     "@types/lodash-es": "^4.17.12",
@@ -52,6 +54,7 @@
     "@types/react": "^18.3.12",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "ink-testing-library": "^4.0.0",
-    "memfs": "^4.14.0"
+    "memfs": "^4.14.0",
+    "semantic-release": "^25.0.0"
   }
 }

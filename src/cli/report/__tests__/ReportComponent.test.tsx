@@ -1,33 +1,28 @@
-import { expect, it, mock } from 'bun:test'
-import { Text } from 'ink'
+import { expect, it } from 'bun:test'
 import { render } from 'ink-testing-library'
 import { initialReport } from '#/cli/report'
 import type { TReport } from '#/types'
+import { ReportComponent } from '../ReportComponent'
 
-mock.module('ink-markdown', () => ({ default: () => <Text>markdown</Text> }))
-
-it('command: convert, result: undefined', async () => {
-  const text = await runTest({ result: undefined, command: 'convert' })
-  expect(text).toEqual('')
+it('command: convert, result: undefined', () => {
+  expect(runTest({ result: undefined, command: 'convert' })).toEqual('')
 })
 
-it('command: convert, result: string', async () => {
-  const text = await runTest({ result: 'success', command: 'convert' })
-  expect(text).toEqual('')
+it('command: convert, result: string', () => {
+  expect(runTest({ result: 'success', command: 'convert' })).toEqual('')
 })
 
-it('command: convert, result: true', async () => {
-  const text = await runTest({ result: true, command: 'convert' })
-  expect(text).toEqual('markdown')
+it('command: convert, result: true', () => {
+  expect(runTest({ result: true, command: 'convert' })).toContain(
+    'Final Report',
+  )
 })
 
-it('command: other, result: true', async () => {
-  const text = await runTest({ result: true, command: 'other' })
-  expect(text).toEqual('')
+it('command: other, result: true', () => {
+  expect(runTest({ result: true, command: 'other' })).toEqual('')
 })
 
-async function runTest(reportData: Partial<TReport.Data>) {
-  const { ReportComponent } = await import('../ReportComponent')
+function runTest(reportData: Partial<TReport.Data>) {
   const newReportData = { ...initialReport, ...reportData }
   const { lastFrame } = render(<ReportComponent reportData={newReportData} />)
   return lastFrame()

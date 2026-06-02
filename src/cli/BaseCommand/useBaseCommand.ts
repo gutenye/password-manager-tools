@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useInput, useLogger, useReport } from '#/cli/hooks'
+import { useInput, useLogger, useReport, useStats } from '#/cli/hooks'
 import { AppError } from '#/errors'
 import type { Context } from '#/types'
 
@@ -8,6 +8,7 @@ export function useBaseCommand(props: any) {
   const { input, inputElement } = useInput()
   const { logger, loggerElement } = useLogger()
   const { report, reportElement } = useReport()
+  const stats = useStats()
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -15,10 +16,11 @@ export function useBaseCommand(props: any) {
       input,
       logger,
       report,
+      stats,
     }
-    ;(async () => {
-      await runAndCatchError({ ...props, context })
-    })()
+      ; (async () => {
+        await runAndCatchError({ ...props, context })
+      })()
   }, [])
 
   return { inputElement, loggerElement, reportElement }

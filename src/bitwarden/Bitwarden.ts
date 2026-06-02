@@ -272,9 +272,9 @@ export class Bitwarden {
             urlItems,
             (urlItem) => urlItem?.hostname,
           ) as unknown as [
-            { hostname: string; domain: string }[],
-            { hostname: undefined }[],
-          ]
+              { hostname: string; domain: string }[],
+              { hostname: undefined }[],
+            ]
           const needsNote = invalidUrlItems.length > 0
           if (validUrlItems.length === 0) {
             login.__sameHostnames__ = {
@@ -367,7 +367,7 @@ export class Bitwarden {
     return uris
       .map((uri) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        return `${URI_MATCH_REVERSE[uri.match as any]} = ${uri.uri}`
+        return `${URI_MATCH_REVERSE[uri.match as any ?? null]} = ${uri.uri}`
       })
       .join('\n')
   }

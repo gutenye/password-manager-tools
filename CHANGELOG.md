@@ -1,3 +1,9 @@
+## [1.4.3](https://github.com/gutenye/password-manager-tools/compare/v1.4.2...v1.4.3) (2026-06-02)
+
+### Bug Fixes
+
+* ink@5-incompatible ink-markdown + align converter test fixtures ([#8](https://github.com/gutenye/password-manager-tools/issues/8)) ([f167a91](https://github.com/gutenye/password-manager-tools/commit/f167a91a889b7dc15ea374dd7bb59389abdefe19)), closes [#6](https://github.com/gutenye/password-manager-tools/issues/6) [#6](https://github.com/gutenye/password-manager-tools/issues/6)
+
 ## [1.4.2](https://github.com/gutenye/password-manager-tools/compare/v1.4.1...v1.4.2) (2024-12-26)
 
 ### Bug Fixes

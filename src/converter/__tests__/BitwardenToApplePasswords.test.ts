@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { BITWARDEN } from '#/bitwarden'
 import { runTest, runTestConvert } from './runTests'
+import type { Stats } from '#/types'
 
 it('file: encrypted false', async () => {
   const { fixtures } = globalThis.__TEST__
@@ -38,7 +39,7 @@ it('file: encrypted wrong password', async () => {
   ).rejects.toThrow('Incorrect password')
 })
 
-it('all: null case', () => {})
+it('all: null case', () => { })
 
 describe('options', () => {
   it('includeUris: a.com,b.com', async () => {
@@ -411,10 +412,11 @@ it('escape: title, field', async () => {
 })
 
 it('report: works', async () => {
+
   const {
     context: { report },
   } = await runTest([
-    { uris: [{ uri: 'a.com' }] },
+    { type: BITWARDEN.ItemType.Login, uris: [{ uri: 'a.com' }] },
     { type: BITWARDEN.ItemType.SecureNote },
     { type: BITWARDEN.ItemType.Card },
     { type: BITWARDEN.ItemType.Identity },

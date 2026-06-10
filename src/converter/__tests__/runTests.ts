@@ -1,6 +1,7 @@
 import { spyOn } from 'bun:test'
 import memfs from 'memfs'
 import Papa from 'papaparse'
+
 import { createApplePasswords, createBitwarden } from '#/__tests__/fixtures'
 import type { Item } from '#/__tests__/types'
 import { runConvertCommand } from '#/cli/ConvertCommand/ConvertCommand'
@@ -11,6 +12,7 @@ import type {
   CliConvert,
   Context,
 } from '#/types'
+import MockStats from './MockStats'
 
 const fs = memfs.fs.promises
 
@@ -25,7 +27,7 @@ const CONTEXT: Partial<Context> = {
 
 // For report.exit
 spyOn(process, 'exit').mockImplementation(() => {
-  while (true) {}
+  while (true) { }
 })
 
 export async function runTest(
@@ -70,6 +72,7 @@ export async function runTestConvert(
   const context: Context = {
     ...CONTEXT,
     report: createReport(),
+    stats: new MockStats(),
     input: () => password || '',
   }
   await fs.writeFile('/input.json', JSON.stringify(input))

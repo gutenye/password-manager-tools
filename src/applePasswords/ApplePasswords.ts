@@ -104,22 +104,19 @@ export class ApplePasswords {
     }
 
     const login = item.login
-    const items = login.uris.map(uri => {
-      let name = item.name
-      if (login.__sameHostnames__?.needsFix) {
-        name = `${item.name} FIXWEBSITE`
-        stats.incRequiresFix()
-      }
-
-      return {
-        Title: name,
-        Username: login.username,
-        Password: login.password,
-        OTPAuth: login.totp,
-        URL: uri.uri ? uri.uri : undefined,
-        Notes: app.serializeCommon(item),
-      } as ApplePasswordsExport.Item
+    if (login.__sameHostnames__?.needsFix) {
+      stats.incRequiresFix()
     }
+
+    const items = login.uris.map(uri =>
+    ({
+      Title: login.__sameHostnames__?.needsFix ? `${item.name} FIXWEBSITE` : item.name,
+      Username: login.username,
+      Password: login.password,
+      OTPAuth: login.totp,
+      URL: uri.uri ? uri.uri : undefined,
+      Notes: app.serializeCommon(item),
+    } as ApplePasswordsExport.Item)
     )
 
     const needsFix = ApplePasswords.checkAfterImport(items)

@@ -1,7 +1,7 @@
-import type { Bitwarden } from "#/bitwarden"
-import type { ApplePasswordsExport } from "."
-import type { Stats } from "#/types"
-import type { Logger } from "#/types"
+import type { Bitwarden } from '#/bitwarden'
+import type { Logger } from '#/types'
+import type { Stats } from '#/types'
+import type { ApplePasswordsExport } from '.'
 
 export type Root = Array<Item>
 
@@ -15,10 +15,10 @@ export type Item = {
 }
 
 export interface ConversionStrategy {
-  transform(item: any, app: Bitwarden, stats: Stats, logger: Logger): StrategyResult
+  transform(item, app: Bitwarden, stats: Stats, logger: Logger): StrategyResult
 }
 
-export type StrategyResult {
+export type StrategyResult = {
   items: ApplePasswordsExport.Item[]
   needsFix: boolean
 }

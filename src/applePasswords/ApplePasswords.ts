@@ -6,21 +6,25 @@ import type {
   Bitwarden,
   BitwardenExport,
   Context,
-  Stats,
   Logger,
+  Stats,
 } from '#/types'
-import type {
-  ConversionStrategy,
-  StrategyResult,
-} from './types/export'
+import type { ConversionStrategy, StrategyResult } from './types/export'
 
 export class ApplePasswords {
-
   static #STRATEGIES: Record<string, ConversionStrategy> = {
-    [BITWARDEN.ItemType.Login]: { transform: ApplePasswords.loginStrategy },
-    [BITWARDEN.ItemType.SecureNote]: { transform: ApplePasswords.secureNoteStrategy },
-    [BITWARDEN.ItemType.Card]: { transform: ApplePasswords.cardIdentityStrategy },
-    [BITWARDEN.ItemType.Identity]: { transform: ApplePasswords.cardIdentityStrategy },
+    [BITWARDEN.ItemType.Login]: {
+      transform: ApplePasswords.loginStrategy,
+    },
+    [BITWARDEN.ItemType.SecureNote]: {
+      transform: ApplePasswords.secureNoteStrategy,
+    },
+    [BITWARDEN.ItemType.Card]: {
+      transform: ApplePasswords.cardIdentityStrategy,
+    },
+    [BITWARDEN.ItemType.Identity]: {
+      transform: ApplePasswords.cardIdentityStrategy,
+    },
   }
 
   #root: ApplePasswordsExport.Root
@@ -35,19 +39,22 @@ export class ApplePasswords {
     const { report, logger, stats } = context
     const needsFixes: ApplePasswordsExport.Item[] = []
 
-    const output: ApplePasswordsExport.Item[] = app.root.items.reduce((acc, item) => {
-      const strategy = ApplePasswords.getStrategy(item)
-      const { items, needsFix } = strategy.transform(item, app, stats, logger)
+    const output: ApplePasswordsExport.Item[] = app.root.items.reduce(
+      (acc, item) => {
+        const strategy = ApplePasswords.getStrategy(item)
+        const { items, needsFix } = strategy.transform(item, app, stats, logger)
 
-      acc.push(...items)
+        acc.push(...items)
 
-      if (needsFix) {
-        needsFixes.push(...items)
-      }
+        if (needsFix) {
+          needsFixes.push(...items)
+        }
 
-      stats.incProcessed()
-      return acc
-    }, [] as ApplePasswordsExport.Item[])
+        stats.incProcessed()
+        return acc
+      },
+      [] as ApplePasswordsExport.Item[],
+    )
 
     stats.applyToReport(report)
 
@@ -62,45 +69,74 @@ export class ApplePasswords {
     return strategy ?? { transform: ApplePasswords.unsupportedStrategy }
   }
 
-  static unsupportedStrategy(item: BitwardenExport.Item, app: Bitwarden, stats: Stats, logger: Logger): StrategyResult {
+  static unsupportedStrategy(
+    item: BitwardenExport.Item,
+    app: Bitwarden,
+    stats: Stats,
+    logger: Logger,
+  ): StrategyResult {
     stats.incRemaining()
-    logger.error(`[ApplePasswords.unsupportedStrategy] Type '${item.type}' is not supported`);
+    logger.error(
+      `[ApplePasswords.unsupportedStrategy] Type '${item.type}' is not supported`,
+    )
     return {
       items: [],
       needsFix: false,
     }
   }
 
-  static cardIdentityStrategy(item: BitwardenExport.Item, app: Bitwarden, stats: Stats, logger: Logger): StrategyResult {
-    if (item.type !== BITWARDEN.ItemType.Card && item.type !== BITWARDEN.ItemType.Identity) {
-      throw new Error(`Item type must be Card or Identity`)
+  static cardIdentityStrategy(
+    item: BitwardenExport.Item,
+    app: Bitwarden,
+    stats: Stats,
+    logger: Logger,
+  ): StrategyResult {
+    if (
+      item.type !== BITWARDEN.ItemType.Card &&
+      item.type !== BITWARDEN.ItemType.Identity
+    ) {
+      throw new Error('Item type must be Card or Identity')
     }
     const type = BITWARDEN.ItemType[item.type]
     return {
-      items: [{
-        Title: `${item.name} (${type})`,
-        Notes: app.serializeOther(item),
-      }] as ApplePasswordsExport.Item[],
+      items: [
+        {
+          Title: `${item.name} (${type})`,
+          Notes: app.serializeOther(item),
+        },
+      ] as ApplePasswordsExport.Item[],
       needsFix: false,
     }
   }
 
-  static secureNoteStrategy(item: BitwardenExport.Item, app: Bitwarden, stats: Stats, logger: Logger): StrategyResult {
+  static secureNoteStrategy(
+    item: BitwardenExport.Item,
+    app: Bitwarden,
+    stats: Stats,
+    logger: Logger,
+  ): StrategyResult {
     if (item.type !== BITWARDEN.ItemType.SecureNote) {
-      throw new Error(`Item type must be SecureNote`)
+      throw new Error('Item type must be SecureNote')
     }
     return {
-      items: [{
-        Title: `${item.name} (SecureNote)`,
-        Notes: app.serializeCommon(item),
-      }] as ApplePasswordsExport.Item[],
+      items: [
+        {
+          Title: `${item.name} (SecureNote)`,
+          Notes: app.serializeCommon(item),
+        },
+      ] as ApplePasswordsExport.Item[],
       needsFix: false,
     }
   }
 
-  static loginStrategy(item: BitwardenExport.Item, app: Bitwarden, stats: Stats, logger: Logger): StrategyResult {
+  static loginStrategy(
+    item: BitwardenExport.Item,
+    app: Bitwarden,
+    stats: Stats,
+    logger: Logger,
+  ): StrategyResult {
     if (item.type !== BITWARDEN.ItemType.Login) {
-      throw new Error(`Item type must be Login`)
+      throw new Error('Item type must be Login')
     }
 
     const login = item.login
@@ -108,15 +144,18 @@ export class ApplePasswords {
       stats.incRequiresFix()
     }
 
-    const items = login.uris.map(uri =>
-    ({
-      Title: login.__sameHostnames__?.needsFix ? `${item.name} FIXWEBSITE` : item.name,
-      Username: login.username,
-      Password: login.password,
-      OTPAuth: login.totp,
-      URL: uri.uri ? uri.uri : undefined,
-      Notes: app.serializeCommon(item),
-    } as ApplePasswordsExport.Item)
+    const items = login.uris.map(
+      (uri) =>
+        ({
+          Title: login.__sameHostnames__?.needsFix
+            ? `${item.name} FIXWEBSITE`
+            : item.name,
+          Username: login.username,
+          Password: login.password,
+          OTPAuth: login.totp,
+          URL: uri.uri ? uri.uri : undefined,
+          Notes: app.serializeCommon(item),
+        }) as ApplePasswordsExport.Item,
     )
 
     const needsFix = ApplePasswords.checkAfterImport(items)
@@ -131,7 +170,7 @@ export class ApplePasswords {
   }
 
   static checkAfterImport(items: ApplePasswordsExport.Item[]): boolean {
-    return items.filter(i => !i.Username && i.Password && i.URL).length > 0
+    return items.filter((i) => !i.Username && i.Password && i.URL).length > 0
   }
 
   get root() {

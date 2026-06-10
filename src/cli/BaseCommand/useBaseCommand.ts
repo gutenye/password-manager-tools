@@ -18,9 +18,9 @@ export function useBaseCommand(props: any) {
       report,
       stats,
     }
-      ; (async () => {
-        await runAndCatchError({ ...props, context })
-      })()
+    ;(async () => {
+      await runAndCatchError({ ...props, context })
+    })()
   }, [])
 
   return { inputElement, loggerElement, reportElement }

@@ -27,7 +27,7 @@ const CONTEXT: Partial<Context> = {
 
 // For report.exit
 spyOn(process, 'exit').mockImplementation(() => {
-  while (true) { }
+  while (true) {}
 })
 
 export async function runTest(

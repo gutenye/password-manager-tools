@@ -16,7 +16,7 @@ export function useConvertCommand({ args, options: rawOptions }: Props) {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       try {
         const options = processOptions(rawOptions)
         const context: Context = {

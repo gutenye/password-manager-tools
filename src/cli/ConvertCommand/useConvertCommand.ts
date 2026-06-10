@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useInput, useLogger, useReport } from '#/cli/hooks'
+import { useInput, useLogger, useReport, useStats } from '#/cli/hooks'
 import { runConvert } from '#/converter'
 import { AppError } from '#/errors'
 import type { Context } from '#/types'
@@ -12,6 +12,7 @@ export function useConvertCommand({ args, options: rawOptions }: Props) {
   const { input, inputElement } = useInput()
   const { logger, loggerElement } = useLogger()
   const { report, reportElement } = useReport()
+  const stats = useStats()
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -22,6 +23,7 @@ export function useConvertCommand({ args, options: rawOptions }: Props) {
           input,
           logger,
           report,
+          stats,
         }
         await runConvert(name, inputPath, outputPath, options, context)
       } catch (error) {

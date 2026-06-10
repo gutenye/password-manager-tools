@@ -414,7 +414,7 @@ it('report: works', async () => {
   const {
     context: { report },
   } = await runTest([
-    { uris: [{ uri: 'a.com' }] },
+    { type: BITWARDEN.ItemType.Login, uris: [{ uri: 'a.com' }] },
     { type: BITWARDEN.ItemType.SecureNote },
     { type: BITWARDEN.ItemType.Card },
     { type: BITWARDEN.ItemType.Identity },
